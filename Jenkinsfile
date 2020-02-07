@@ -9,5 +9,11 @@ pipeline {
       }
     }
 
+    stage('Save') {
+      steps {
+        archiveArtifacts 'API.dll'
+      }
+    }
+
   }
 }
