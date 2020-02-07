@@ -11,7 +11,7 @@ pipeline {
 
     stage('Save') {
       steps {
-        archiveArtifacts 'BikeShopAnalyticsAPI.dll'
+        archiveArtifacts 'BikeShopAnalytics/bin/Debug/netcoreapp3.0/BikeShopAnalyticsAPI.dll'
       }
     }
 
