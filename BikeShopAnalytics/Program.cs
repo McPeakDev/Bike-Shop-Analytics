@@ -21,7 +21,6 @@ namespace BikeShopAnalytics
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    var irrelevant = "meh";
                 });
     }
 }
