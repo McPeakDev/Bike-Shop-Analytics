@@ -1,13 +1,10 @@
 pipeline {
   agent any
-  triggers{ 
-    pollSCM('H/15 * * * *') 
-  }
   stages {
     stage('Build') {
       steps {
         echo 'Changing Directory...'
-        sh 'cd BikeShopAnalytics/ && dotnet build'
+        sh 'cd BikeShopAnalyticsAPI/ && dotnet build'
         echo 'Building API ...'
       }
     }
@@ -18,5 +15,8 @@ pipeline {
       }
     }
 
+  }
+  triggers {
+    pollSCM('H/15 * * * *')
   }
 }
