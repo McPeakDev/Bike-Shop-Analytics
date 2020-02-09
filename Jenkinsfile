@@ -14,14 +14,8 @@ pipeline {
 
     stage('Save') {
       steps {
+        archiveArtifacts 'BikeShopAnalyticsAPI/bin/Debug/netcoreapp3.0/BikeShopAnalyticsAPI.dll'
         archiveArtifacts 'BikeShopAnalyticsWebPage/bin/Debug/netcoreapp3.0/BikeShopAnalyticsWebPage.dll'
-        archiveArtifacts 'BikeShopAnalyticsWebPage/bin/Debug/netcoreapp3.0/BikeShopAnalyticsWebPage.dll'
-      }
-    }
-
-    stage('') {
-      steps {
-        copyArtifacts 'boek'
       }
     }
 
