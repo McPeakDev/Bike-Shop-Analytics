@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Merge') {
       steps {
-        checkout checkout([$class: 'GitSCM', branches: [[name: '*/McPeakML']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'PreBuildMerge', options: [mergeRemote: 'origin', mergeTarget: 'master']]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'bitbucket-cloud', url: 'https://bitbucket.org/McPeakML/bike-shop-analytics']]])
+        checkout(scm: checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'PreBuildMerge', options: [mergeRemote: 'origin', mergeTarget: 'McPeakML']]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'bitbucket-cloud', url: 'https://bitbucket.org/McPeakML/bike-shop-analytics']]]), changelog: true, poll: true)
       }
     }
 
