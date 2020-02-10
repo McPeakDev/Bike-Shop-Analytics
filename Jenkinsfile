@@ -1,17 +1,6 @@
 pipeline {
   agent any
   stages {
-    stage('Merge') {
-      steps {
-        echo 'Merging McPeakML...'
-        git(url: 'https://McPeakML@bitbucket.org/McPeakML/bike-shop-analytics.git', branch: 'McPeakML')
-        sh '''git checkout master
-git pull origin McPeakML
-git merge McPeakML'''
-        echo 'Merge Successful'
-      }
-    }
-
     stage('Build') {
       steps {
         echo 'Changing Directory...'
