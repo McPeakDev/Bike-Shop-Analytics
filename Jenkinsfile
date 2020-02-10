@@ -9,6 +9,7 @@ pipeline {
         echo 'Changing Directory...'
         sh 'cd BikeShopAnalyticsWebPage/ && dotnet build'
         echo 'Building WebApp...'
+        echo 'Build Successful'
       }
     }
 
