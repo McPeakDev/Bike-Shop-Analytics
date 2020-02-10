@@ -1,6 +1,12 @@
 pipeline {
   agent any
   stages {
+    stage('Merge') {
+      steps {
+        echo 'Merging McPeakML...'
+        sh 'git merge McPeakML'
+        echo 'Merge Successful'
+      }
     stage('Build') {
       steps {
         echo 'Changing Directory...'
@@ -9,9 +15,9 @@ pipeline {
         echo 'Changing Directory...'
         sh 'cd BikeShopAnalyticsWebPage/ && dotnet build'
         echo 'Building WebApp...'
+        echo 'Build Successful'
       }
     }
-
     stage('Save') {
       steps {
         archiveArtifacts 'BikeShopAnalyticsAPI/bin/Debug/netcoreapp3.0/BikeShopAnalyticsAPI.dll'
