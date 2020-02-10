@@ -8,6 +8,7 @@ pipeline {
 git pull origin McPeakML
 git merge McPeakML'''
         echo 'Merge Successful'
+        git(url: 'https://McPeakML@bitbucket.org/McPeakML/bike-shop-analytics.git', branch: 'McPeakML')
       }
     }
 
