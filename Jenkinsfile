@@ -4,10 +4,14 @@ pipeline {
     stage('Merge') {
       steps {
         echo 'Merging McPeakML...'
-        sh 'git merge McPeakML'
+        sh '''git fetch --all
+git checkout master
+git checkout McPeakML
+git merge McPeakML'''
         echo 'Merge Successful'
       }
     }
+
     stage('Build') {
       steps {
         echo 'Changing Directory...'
@@ -19,6 +23,7 @@ pipeline {
         echo 'Build Successful'
       }
     }
+
     stage('Save') {
       steps {
         archiveArtifacts 'BikeShopAnalyticsAPI/bin/Debug/netcoreapp3.0/BikeShopAnalyticsAPI.dll'
