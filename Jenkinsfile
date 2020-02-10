@@ -7,6 +7,7 @@ pipeline {
         sh 'git merge McPeakML'
         echo 'Merge Successful'
       }
+    }
     stage('Build') {
       steps {
         echo 'Changing Directory...'
