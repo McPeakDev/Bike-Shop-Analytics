@@ -4,8 +4,7 @@ pipeline {
     stage('Merge') {
       steps {
         echo 'Merging McPeakML...'
-        sh '''git fetch --all
-git checkout master
+        sh '''git checkout master
 git checkout McPeakML
 git merge McPeakML'''
         echo 'Merge Successful'
