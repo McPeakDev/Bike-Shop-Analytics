@@ -5,7 +5,7 @@ pipeline {
       steps {
         echo 'Merging McPeakML...'
         sh '''git checkout master
-git checkout McPeakML
+git pull origin McPeakML
 git merge McPeakML'''
         echo 'Merge Successful'
       }
