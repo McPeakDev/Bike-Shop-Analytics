@@ -1,18 +1,6 @@
 pipeline {
   agent any
   stages {
-    stage('Merge') {
-      environment {
-        GIT_AUTH = credentials('bitbucket-cloud')
-      }
-      steps {
-        sh '''git checkout master
-git merge McPeakML
-git push origin master
-        '''
-      }
-    }
-
     stage('Build') {
       steps {
         echo 'Changing Directory...'
