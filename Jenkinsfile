@@ -1,14 +1,6 @@
 pipeline {
   agent any
   stages {
-    stage('Merge') {
-      steps {
-        sh '''git config --global user.name "Jenkins"
-git config --global user.email "jenkins@redjenkins.duckdns.org"'''
-        checkout(scm: checkout([$class: 'GitSCM', branches: [[name: '*/McPeakML']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'PreBuildMerge', options: [mergeRemote: 'origin', mergeTarget: 'master']]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'bitbucket-cloud', url: 'https://bitbucket.org/McPeakML/bike-shop-analytics']]]), changelog: true, poll: true)
-      }
-    }
-
     stage('Build') {
       steps {
         echo 'Changing Directory...'
