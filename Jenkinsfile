@@ -6,7 +6,6 @@ pipeline {
         GIT_AUTH = credentials('bitbucket-cloud')
       }
       steps {
-        checkout([$class: 'GitSCM', branches: [[name: 'McPeakML']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'PreBuildMerge', options: [mergeRemote: 'origin', mergeTarget: 'master']]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'bitbucket-cloud', url: 'https://bitbucket.org/McPeakML/bike-shop-analytics/']]])
         sh '''
           git config --local credential.helper "!f() { echo username=\\$GIT_AUTH_USR; echo password=\\$GIT_AUTH_PSW; }; f"
           git checkout master
