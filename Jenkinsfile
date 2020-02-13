@@ -6,11 +6,10 @@ pipeline {
         GIT_AUTH = credentials('bitbucket-cloud')
       }
       steps {
-        sh '''
-          git config --local credential.helper "!f() { echo username=\\$GIT_AUTH_USR; echo password=\\$GIT_AUTH_PSW; }; f"
-          git checkout master
-          git merge McPeakML
-          git push origin master
+        sh '''git config --local credential.helper "!f() { echo username=\\$GIT_AUTH_USR; echo password=\\$GIT_AUTH_PSW; }; f"
+git checkout master
+git merge McPeakML
+git push origin master
         '''
       }
     }
