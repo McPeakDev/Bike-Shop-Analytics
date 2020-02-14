@@ -1,6 +1,14 @@
 pipeline {
   agent any
-  stages {
+  stages {  
+    stage('Merge') {
+      steps {
+        sh 'git config --global credential.helper cache'
+        sh 'git config --global push.default simple'
+        checkout([$class: 'GitSCM', branches: [[name: '*/McPeakML']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'PreBuildMerge', options: [mergeRemote: 'origin', mergeTarget: 'master']]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'bitbucket-cloud', url: 'https://bitbucket.org/McPeakML/bike-shop-analytics/']]])       
+        sh "git push ${master}" //To get a local branch tracking remote
+      }
+    }
     stage('Build') {
       steps {
         echo 'Changing Directory...'
@@ -10,12 +18,6 @@ pipeline {
         sh 'cd BikeShopAnalyticsWebPage/ && dotnet build'
         echo 'Building WebApp...'
         echo 'Build Successful'
-      }
-    }
-    
-    stage('Merge') {
-      steps {
-        checkout([$class: 'GitSCM', branches: [[name: '*/McPeakML']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'PreBuildMerge', options: [mergeRemote: 'origin', mergeTarget: 'master']]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'bitbucket-cloud', url: 'https://bitbucket.org/McPeakML/bike-shop-analytics/']]])
       }
     }
     
