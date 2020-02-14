@@ -5,6 +5,7 @@ pipeline {
       steps {
         sh 'git config --global credential.helper cache'
         sh 'git config --global push.default simple'
+        sh "git branch -a"
         sh "git checkout master"
         sh "git merge McPeakML" 
         sh "git push origin master"
