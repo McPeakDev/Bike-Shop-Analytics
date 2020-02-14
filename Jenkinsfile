@@ -6,7 +6,7 @@ pipeline {
         sh 'git config --global credential.helper cache'
         sh 'git config --global push.default simple'
         checkout([$class: 'GitSCM', branches: [[name: '*/McPeakML']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'PreBuildMerge', options: [mergeRemote: 'origin', mergeTarget: 'master']]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'bitbucket-cloud', url: 'https://bitbucket.org/McPeakML/bike-shop-analytics/']]])       
-        sh "ll" //To get a local branch tracking remote
+        sh "ls -a" //To get a local branch tracking remote
        // sh "git push master" //To get a local branch tracking remote
       }
     }
