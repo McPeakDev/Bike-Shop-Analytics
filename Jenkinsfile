@@ -5,8 +5,9 @@ pipeline {
       steps {
         sh 'git config --global credential.helper cache'
         sh 'git config --global push.default simple'
-        sh "git status" //To get a local branch tracking remote
-       // sh "git push master" //To get a local branch tracking remote
+        sh "git checkout master"
+        sh "git merge McPeakML" 
+        sh "git push origin master"
       }
     }
     stage('Build') {
