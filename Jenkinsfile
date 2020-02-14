@@ -5,7 +5,7 @@ pipeline {
       steps {
         sh 'git config --global credential.helper cache'
         sh 'git config --global push.default simple'
-        sh "git checkout origin/master"
+        sh "git checkout master --track origin/master"
         sh "git merge McPeakML" 
         sh "git status"
         sh "git push HEAD:master"
