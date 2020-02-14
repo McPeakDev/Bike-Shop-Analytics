@@ -7,7 +7,8 @@ pipeline {
         sh 'git config --global push.default simple'
         sh "git checkout origin/master"
         sh "git merge McPeakML" 
-        sh "git push origin/master HEAD:master"
+        sh "git status"
+        sh "git push HEAD:master"
       }
     }
     stage('Build') {
