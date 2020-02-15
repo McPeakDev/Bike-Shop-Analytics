@@ -10,7 +10,7 @@ pipeline {
         sh "git checkout master"
         sh "git merge McPeakML" 
         sh "git status"
-        sh "git push HEAD:master"
+        sh "git push origin master"
       }
     }
     stage('Build') {
