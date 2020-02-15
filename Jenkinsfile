@@ -1,18 +1,6 @@
 pipeline {
   agent any
   stages {  
-    stage('Merge') {
-      steps {
-        sh 'git config --global credential.helper cache'
-        sh 'git config --global push.default simple'
-        sh "git remote set-branches --add origin master"
-        sh "git fetch"
-        sh "git checkout master"
-        sh "git merge McPeakML" 
-        sh "git status"
-        sh "git push origin master"
-      }
-    }
     stage('Build') {
       steps {
         echo 'Changing Directory...'
