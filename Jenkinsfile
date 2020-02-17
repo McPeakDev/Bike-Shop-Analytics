@@ -15,8 +15,12 @@ pipeline {
     
     stage('Save') {
       steps {
-        archiveArtifacts 'BikeShopAnalyticsAPI/bin/Debug/netcoreapp3.0/BikeShopAnalyticsAPI.dll'
-        archiveArtifacts 'BikeShopAnalyticsWebPage/bin/Debug/netcoreapp3.0/BikeShopAnalyticsWebPage.dll'
+        echo 'Changing Directory...'
+        sh 'cd BikeShopAnalyticsAPI/bin/Debug/netcoreapp3.0/'
+        archiveArtifacts 'BikeShopAnalyticsAPI.dll'
+        echo 'Changing Directory...'
+        sh 'cd BikeShopAnalyticsWebPage/bin/Debug/netcoreapp3.0/'
+        archiveArtifacts 'BikeShopAnalyticsWebPage.dll'
       }
     }
 
