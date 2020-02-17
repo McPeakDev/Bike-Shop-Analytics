@@ -34,7 +34,9 @@ pipeline {
         sh "git fetch"
         sh "git checkout master"
 	    sh "git pull"
-        sh "git merge McPeakML" 
+        sh "git merge McPeakML"
+        sh "git checkout Jenkinsfile master"
+        sh "git commit -m "Keep Old Jenkins File""
         sh "git status"
         sh "git push origin master"
       }
