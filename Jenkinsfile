@@ -1,19 +1,6 @@
 pipeline {
-  agent any
-  stages {  
-    stage('Merge') {
-      steps {
-        sh 'git config --global credential.helper cache'
-        sh 'git config --global push.default simple'
-        sh "git remote set-branches --add origin master"
-        sh "git fetch"
-        sh "git checkout master"
-	sh "git pull"
-        sh "git merge McPeakML" 
-        sh "git status"
-        sh "git push origin master"
-      }
-    }
+  agent an
+  stages { 
     stage('Build') {
       steps {
         echo 'Changing Directory...'
@@ -26,10 +13,30 @@ pipeline {
       }
     }
     
+    stage('Test') {
+      steps {
+        echo "TODO: Implement"
+      }
+    }
+ 
     stage('Save') {
       steps {
         archiveArtifacts 'BikeShopAnalyticsAPI/bin/Debug/netcoreapp3.0/BikeShopAnalyticsAPI.dll'
         archiveArtifacts 'BikeShopAnalyticsWebPage/bin/Debug/netcoreapp3.0/BikeShopAnalyticsWebPage.dll'
+      }
+    }
+    
+    stage('Merge') {
+      steps {
+        sh 'git config --global credential.helper cache'
+        sh 'git config --global push.default simple'
+        sh "git remote set-branches --add origin master"
+        sh "git fetch"
+        sh "git checkout master"
+	    sh "git pull"
+        sh "git merge McPeakML" 
+        sh "git status"
+        sh "git push origin master"
       }
     }
 
