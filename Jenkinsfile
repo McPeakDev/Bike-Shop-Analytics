@@ -8,6 +8,7 @@ pipeline {
         sh "git remote set-branches --add origin master"
         sh "git fetch"
         sh "git checkout master"
+	sh "git pull"
         sh "git merge McPeakML" 
         sh "git status"
         sh "git push origin master"
