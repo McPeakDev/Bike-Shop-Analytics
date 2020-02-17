@@ -35,7 +35,9 @@ pipeline {
         sh "git checkout master"
 	    sh "git pull"
         sh "git config --global merge.ours.driver true"
-        sh "git merge McPeakML"
+        sh "git merge --no-commit McPeakML"
+        sh "git checkout HEAD"
+        sh "git commit -m 'Merge McPeakML to master'"
         sh "git status"
         sh "git push origin master"
       }
