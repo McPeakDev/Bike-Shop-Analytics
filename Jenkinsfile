@@ -4,11 +4,11 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Changing Directory...'
-        sh '''cd BikeShopAnalyticsAPI/ && dotnet publish --self-contained true --runtime linux-x64
+        sh '''cd BikeShopAnalyticsAPI/ && dotnet publish --runtime linux-x64
 '''
         echo 'Building API ...'
         echo 'Changing Directory...'
-        sh '''cd BikeShopAnalyticsWebPage/ && dotnet publish --self-contained true --runtime linux-x64
+        sh '''cd BikeShopAnalyticsWebPage/ && dotnet publish --runtime linux-x64
 '''
         echo 'Building WebApp...'
         echo 'Build Successful'
