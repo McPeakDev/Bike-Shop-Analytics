@@ -1,6 +1,5 @@
 pipeline {
-  agent any
-  stages { 
+  agent any  stages { 
     stage('Build') {
       steps {
         echo 'Changing Directory...'
@@ -24,7 +23,9 @@ pipeline {
     
     stage('Deploy') {
       steps {
-        ftpPublisher alwaysPublishFromMaster: false, continueOnError: false, failOnError: false, publishers: [[configName: 'Deployment', transfers: [[asciiMode: false, cleanRemote: false, excludes: '', flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.jar']], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false]]
+        withCredentials([usernamePassword(credentialsId: 'ad99e083-f143-411f-81b1-a87f62c2a72b', usernameVariable: 'FTPUserName', passwordVariable: 'FTPPassword')]) {
+          sh "ftp $FTPUserName:$FTPPassword@192.168.1.105 -command 'mput BikeShopAnalyticsWebPage/bin/Debug/netcoreapp3.0/BikeShopAnalyticsWebPage.dll BikeShopAnalyticsAPI/bin/Debug/netcoreapp3.0/BikeShopAnalyticsAPI.dll'        
+        }
       }
     }
 
