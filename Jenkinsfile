@@ -31,9 +31,9 @@ pipeline {
         sh 'git checkout master'
         sh 'git pull'
         sh 'git config --global merge.ours.driver true'
-        sh 'git merge --no-commit McPeakML'
+        sh 'git merge --no-commit hudTest'
         sh 'git checkout HEAD Jenkinsfile'
-        sh 'git commit -m \'Merge McPeakML to master\''
+        sh 'git commit -m \'Merge hudTest to master\''
         sh 'git status'
         sh 'git push origin master'
       }
