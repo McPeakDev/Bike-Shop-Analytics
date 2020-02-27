@@ -29,7 +29,7 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         public int Units { get; set; }
 
 
-        /*  To be added later.
+        /*  TODO: Implement
         [ForeignKey("Customer")]
         public int CustomerID { get; set; }
 
@@ -43,7 +43,7 @@ namespace BikeShopAnalyticsAPI.Models.Entities
 
         public virtual Bike Bike { get; set; }
         
-        /*  TO be added later.
+        /*  TODO: Implement
         public virtual Customer Customer { get; set; }
         public virtual Employee Employee { get; set; }
         public virtual Store Store { get; set; }

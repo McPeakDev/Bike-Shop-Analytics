@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using BikeShopAnalyticsAPI.Services;
+using BikeShopAnalyticsAPI.Models.Entities;
 
 namespace BikeShopAnalytics
 {
@@ -27,11 +29,11 @@ namespace BikeShopAnalytics
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var name = Configuration.GetConnectionString("DevDatabase");
-
             services.AddControllers();
             services.AddDbContext<BikeShopContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DevDatabase")));
+            services.AddScoped<IRepository<Bike>, DbRepository<Bike>>();
+            services.AddScoped<IRepository<SalesOrder>, DbRepository<SalesOrder>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,7 +44,7 @@ namespace BikeShopAnalytics
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

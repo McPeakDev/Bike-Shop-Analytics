@@ -1,14 +1,6 @@
 pipeline {
   agent any
-  stages {
-    stage('Merge') {
-      steps {
-        sh '''git config --global user.name "Jenkins"
-git config --global user.email "jenkins@redjenkins.duckdns.org"'''
-        checkout(scm: checkout([$class: 'GitSCM', branches: [[name: '*/McPeakML']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'PreBuildMerge', options: [mergeRemote: 'origin', mergeTarget: 'master']]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'bitbucket-cloud', url: 'https://bitbucket.org/McPeakML/bike-shop-analytics']]]), changelog: true, poll: true)
-      }
-    }
-
+  stages { 
     stage('Build') {
       steps {
         echo 'Changing Directory...'
@@ -20,11 +12,13 @@ git config --global user.email "jenkins@redjenkins.duckdns.org"'''
         echo 'Build Successful'
       }
     }
-
+  
     stage('Save') {
       steps {
-        archiveArtifacts 'BikeShopAnalyticsAPI/bin/Debug/netcoreapp3.0/BikeShopAnalyticsAPI.dll'
-        archiveArtifacts 'BikeShopAnalyticsWebPage/bin/Debug/netcoreapp3.0/BikeShopAnalyticsWebPage.dll'
+        sh "cp BikeShopAnalyticsAPI/bin/Debug/netcoreapp3.0/BikeShopAnalyticsAPI.dll ../ "
+        archiveArtifacts 'BikeShopAnalyticsAPI.dll'
+        sh "cp BikeShopAnalyticsWebPage/bin/Debug/netcoreapp3.0/BikeShopAnalyticsWebPage.dll ../ "
+        archiveArtifacts 'BikeShopAnalyticsWebPage.dll'
       }
     }
 
