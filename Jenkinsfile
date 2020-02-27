@@ -4,25 +4,42 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Changing Directory...'
-        sh '''cd BikeShopAnalyticsAPI/ && dotnet publish -c Release --self-contained true --runtime linux-x64
-'''
+        sh 'cd BikeShopAnalyticsAPI/ && dotnet build'
         echo 'Building API ...'
         echo 'Changing Directory...'
-        sh '''cd BikeShopAnalyticsWebPage/ && dotnet publish -c Release --self-contained true --runtime linux-x64
-'''
+        sh 'cd BikeShopAnalyticsWebPage/ && dotnet build'
         echo 'Building WebApp...'
         echo 'Build Successful'
       }
     }
 
-    stage('Save & Deploy') {
+    stage('Test') {
       steps {
-        archiveArtifacts 'BikeShopAnalyticsWebPage/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsWebPage.dll, BikeShopAnalyticsWebPage/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsWebPage.deps.json, BikeShopAnalyticsWebPage/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsWebPage.runtimeconfig.json '
-        archiveArtifacts 'BikeShopAnalyticsAPI/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsAPI.dll, BikeShopAnalyticsAPI/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsAPI.deps.json, BikeShopAnalyticsAPI/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsAPI.runtimeconfig.json'
-        withCredentials(bindings: [usernamePassword(credentialsId: 'ad99e083-f143-411f-81b1-a87f62c2a72b', usernameVariable: 'FTPUserName', passwordVariable: 'FTPPassword')]) {
-          sh "lftp -e 'mput BikeShopAnalyticsAPI/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsAPI.dll BikeShopAnalyticsAPI/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsAPI.deps.json BikeShopAnalyticsAPI/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsAPI.runtimeconfig.json BikeShopAnalyticsWebPage/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsWebPage.dll BikeShopAnalyticsWebPage/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsWebPage.deps.json BikeShopAnalyticsWebPage/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsWebPage.runtimeconfig.json; bye' -u $FTPUserName,$FTPPassword 192.168.1.105"
-        }
+        echo 'TODO: Implement'
+      }
+    }
 
+    stage('Save') {
+      steps {
+        archiveArtifacts 'BikeShopAnalyticsAPI/bin/Debug/netcoreapp3.0/BikeShopAnalyticsAPI.dll'
+        archiveArtifacts 'BikeShopAnalyticsWebPage/bin/Debug/netcoreapp3.0/BikeShopAnalyticsWebPage.dll'
+      }
+    }
+
+    stage('Merge') {
+      steps {
+        sh 'git config --global credential.helper cache'
+        sh 'git config --global push.default simple'
+        sh 'git remote set-branches --add origin master'
+        sh 'git fetch'
+        sh 'git checkout master'
+        sh 'git pull'
+        sh 'git config --global merge.ours.driver true'
+        sh 'git merge --no-commit McPeakML'
+        sh 'git checkout HEAD Jenkinsfile'
+        sh 'git commit -m \'Merge McPeakML to master\''
+        sh 'git status'
+        sh 'git push origin master'
       }
     }
 
