@@ -4,7 +4,7 @@
 *.aab
 *.dll
 obj/
-Jenkinsfile
+Jenkinsfile.file
 
 # Cache Files
 *.cache
