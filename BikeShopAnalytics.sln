@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BikeShopAnalyticsWebPage", "BikeShopAnalyticsWebPage\BikeShopAnalyticsWebPage.csproj", "{D53323E2-7CA8-4E0C-B213-3298020A7CBF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BikeShopAnalyticsAPI", "BikeShopAnalyticsAPI\BikeShopAnalyticsAPI.csproj", "{D91DCD67-462B-47A2-8B9A-B5B55A9D7366}"
 EndProject
 Global
@@ -13,10 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D53323E2-7CA8-4E0C-B213-3298020A7CBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D53323E2-7CA8-4E0C-B213-3298020A7CBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D53323E2-7CA8-4E0C-B213-3298020A7CBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D53323E2-7CA8-4E0C-B213-3298020A7CBF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D91DCD67-462B-47A2-8B9A-B5B55A9D7366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D91DCD67-462B-47A2-8B9A-B5B55A9D7366}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D91DCD67-462B-47A2-8B9A-B5B55A9D7366}.Release|Any CPU.ActiveCfg = Release|Any CPU

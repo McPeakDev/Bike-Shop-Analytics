@@ -14,6 +14,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using BikeShopAnalyticsAPI.Services;
 using BikeShopAnalyticsAPI.Models.Entities;
+using Microsoft.AspNetCore.HttpOverrides;
+using System.Net;
 
 namespace BikeShopAnalytics
 {
@@ -34,6 +36,10 @@ namespace BikeShopAnalytics
                 options.UseSqlServer(Configuration.GetConnectionString("DevDatabase")));
             services.AddScoped<IRepository<Bike>, DbRepository<Bike>>();
             services.AddScoped<IRepository<SalesOrder>, DbRepository<SalesOrder>>();
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.KnownProxies.Add(IPAddress.Parse("127.0.0.1"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +49,11 @@ namespace BikeShopAnalytics
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             //app.UseHttpsRedirection();
 
