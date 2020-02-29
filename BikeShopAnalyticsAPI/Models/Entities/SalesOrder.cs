@@ -22,7 +22,9 @@ namespace BikeShopAnalyticsAPI.Models.Entities
 
         public decimal Discount { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime OrderDate { get; set; }
+
+        public DateTime ShipDate { get; set; }
 
         public string State { get; set; }
 
