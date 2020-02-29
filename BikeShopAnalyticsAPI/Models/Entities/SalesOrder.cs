@@ -16,17 +16,23 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         [ForeignKey("Bike")]
         public int BikeID { get; set; }
 
-        public decimal SalesPrice { get; set; }
+        public decimal ListPrice { get; set; }
+
+        public decimal SalePrice { get; set; }
 
         public decimal Tax { get; set; }
 
         public decimal Discount { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime OrderDate { get; set; }
+
+        public DateTime StartDate { get; set; }
+
+        public DateTime ShipDate { get; set; }
+
+        public int StoreID { get; set; }
 
         public string State { get; set; }
-
-        public int Units { get; set; }
 
 
         /*  TODO: Implement

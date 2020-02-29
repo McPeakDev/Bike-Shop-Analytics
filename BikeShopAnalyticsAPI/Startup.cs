@@ -36,6 +36,7 @@ namespace BikeShopAnalytics
                 options.UseSqlServer(Configuration.GetConnectionString("DevDatabase")));
             services.AddScoped<IRepository<Bike>, DbRepository<Bike>>();
             services.AddScoped<IRepository<SalesOrder>, DbRepository<SalesOrder>>();
+            services.AddScoped<IRepository<Category>, DbRepository<Category>>();
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.KnownProxies.Add(IPAddress.Parse("127.0.0.1"));
