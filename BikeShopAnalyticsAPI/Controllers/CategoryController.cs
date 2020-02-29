@@ -32,9 +32,9 @@ namespace BikeShopAnalyticsAPI.Controllers
             if (ModelState.IsValid)
             {
                 _categoryRepo.Create(category);
-                return Ok("Success! Sales Order Created!");
+                return Ok("Success! Category Created!");
             }
-            return Problem("Error! Could not create the sales order..");
+            return Problem("Error! Could not create the category..");
         }
 
         [HttpPut("[action]")]
@@ -43,7 +43,7 @@ namespace BikeShopAnalyticsAPI.Controllers
             if (ModelState.IsValid)
             {
                 _categoryRepo.Update(category);
-                return Ok("Success! Sales Order Updated!");
+                return Ok("Success! Category Updated!");
             }
             return Problem("Error! Could not update the sales order..");
         }
@@ -55,10 +55,10 @@ namespace BikeShopAnalyticsAPI.Controllers
             if (!(category is null))
             {
                 _categoryRepo.Delete(category);
-                return Ok("Success! Sales Order Deleted!");
+                return Ok("Success! Category Deleted!");
 
             }
-            return Problem("Error! Could not delete the sales order..");
+            return Problem("Error! Could not delete the category..");
         }
     }
 }
