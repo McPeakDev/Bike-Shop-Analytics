@@ -17,5 +17,7 @@ namespace BikeShopAnalyticsAPI.Models
         public DbSet<Bike> Bikes { get; set; }
         public DbSet<SalesOrder> SalesOrders { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+
     }
 }
