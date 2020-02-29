@@ -60,5 +60,11 @@ namespace BikeShopAnalytics.Controllers
             }
             return Problem("Error! Could not delete the sales order..");
         }
+
+        [HttpGet("[action]")]
+        public List<SalesOrder> ReadAll()
+        {
+            return _salesOrderRepo.ReadAll().ToList();
+        }
     }
 }

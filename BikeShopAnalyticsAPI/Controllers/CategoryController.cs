@@ -60,5 +60,11 @@ namespace BikeShopAnalyticsAPI.Controllers
             }
             return Problem("Error! Could not delete the category..");
         }
+
+        [HttpGet("[action]")]
+        public List<Category> ReadAll()
+        {
+            return _categoryRepo.ReadAll().ToList();
+        }
     }
 }

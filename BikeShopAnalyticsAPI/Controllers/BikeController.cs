@@ -60,5 +60,11 @@ namespace BikeShopAnalytics.Controllers
             }
             return Problem("Error! Could not delete the Bike..");
         }
+
+        [HttpGet("[action]")]
+        public List<Bike> ReadAll()
+        {
+            return _bikeRepo.ReadAll().ToList();
+        }
     }
 }
