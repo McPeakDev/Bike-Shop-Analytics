@@ -12,6 +12,7 @@ pipeline {
         sh 'git checkout JohnsonZD'
         sh 'git checkout McNabbMR'
         sh 'git checkout hudTest'
+        sh 'git checkout master'
         sh 'git config --global merge.ours.driver true'
         sh 'git merge origin/McPeakML origin/JohnsonZD origin/McNabbMR origin/hudTest --no-commit'
         sh 'git checkout HEAD Jenkinsfile'
