@@ -1,11 +1,26 @@
 pipeline {
   agent any
   stages {
+    stage('Merge') {
+      steps {
+        sh 'git config --global credential.helper cache'
+        sh 'git config --global push.default simple'
+        sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
+        sh 'git fetch'
+        sh 'git pull'
+        sh 'git config --global merge.ours.driver true'
+        sh 'git merge McPeakML JohnsonZD McNabbMR hudTest --no-commit'
+        sh 'git checkout HEAD Jenkinsfile'
+        sh 'git commit -m \'Merge all dev branches to master\''
+        sh 'git status'
+        sh 'git push origin master'
+      }
+    }
+  
     stage('Build') {
       steps {
         echo 'Changing Directory...'
-        sh '''cd BikeShopAnalyticsAPI/ && dotnet publish -c Release --self-contained true --runtime linux-x64
-'''
+        sh '''cd BikeShopAnalyticsAPI/ && dotnet publish -c Release --self-contained true --runtime linux-x64'''
         echo 'Building API ...'
         echo 'Build Successful'
       }
