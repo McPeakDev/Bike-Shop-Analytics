@@ -14,10 +14,10 @@ pipeline {
         sh 'git commit -m \'Merge all dev branches to master\''
         sh 'git status'
         sh 'git push origin master'
-        sh 'git push origin McPeakML'
-        sh 'git push origin JohnsonZD'
-        sh 'git push origin McNabbMR'
-        sh 'git push origin hudTest'
+        sh 'git push origin/McPeakML'
+        sh 'git push origin/JohnsonZD'
+        sh 'git push origin/McNabbMR'
+        sh 'git push origin/hudTest'
       }
     }
     
