@@ -9,7 +9,7 @@ pipeline {
         sh 'git fetch'
         sh 'git pull'
         sh 'git config --global merge.ours.driver true'
-        sh 'git merge McPeakML JohnsonZD McNabbMR hudTest --no-commit'
+        sh 'git merge origin/McPeakML origin/JohnsonZD origin/McNabbMR origin/hudTest --no-commit'
         sh 'git checkout HEAD Jenkinsfile'
         sh 'git commit -m \'Merge all dev branches to master\''
         sh 'git status'
