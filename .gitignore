@@ -4,7 +4,8 @@
 *.aab
 *.dll
 obj/
-Jenkinsfile.file
+*.code-workspace
+.vscode/
 
 # Cache Files
 *.cache
