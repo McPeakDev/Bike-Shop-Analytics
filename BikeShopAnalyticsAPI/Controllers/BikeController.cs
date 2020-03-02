@@ -20,6 +20,11 @@ namespace BikeShopAnalytics.Controllers
             _bikeRepo = bikeRepo;
         }
 
+        [HttpGet("[action]/{bikeID}")]
+        public Bike Read(int bikeID)
+        {
+            return _bikeRepo.Read(b => b.BikeID == bikeID);
+        }
 
         [HttpPost("[action]")]
         public IActionResult Create(Bike bike)
@@ -32,7 +37,7 @@ namespace BikeShopAnalytics.Controllers
             return Problem("Error! Could not create the bike..");
         }
 
-        [HttpPost("[action]")]
+        [HttpPut("[action]")]
         public IActionResult Update(Bike bike)
         {
             if (ModelState.IsValid)
@@ -41,6 +46,25 @@ namespace BikeShopAnalytics.Controllers
                 return Ok("Success! Bike Updated!");
             }
             return Problem("Error! Could not update the Bike..");
+        }
+
+        [HttpDelete("[action]/{bikeID}")]
+        public IActionResult Delete(int bikeID)
+        {
+            var bike = Read(bikeID);
+            if(!(bike is null))
+            {
+                _bikeRepo.Delete(bike);
+                return Ok("Success! Bike Deleted!");
+
+            }
+            return Problem("Error! Could not delete the Bike..");
+        }
+
+        [HttpGet("[action]")]
+        public List<Bike> ReadAll()
+        {
+            return _bikeRepo.ReadAll().ToList();
         }
     }
 }
