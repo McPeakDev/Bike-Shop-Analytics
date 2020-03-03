@@ -20,6 +20,5 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         public string PlotItemTwo { get; set; }
 
         public string ChartType { get; set; }
-
     }
 }
