@@ -65,7 +65,9 @@ pipeline {
         post {
           failure {
             echo "Useless Errors From FTP..."
-            currentBuild.result = 'SUCCESS'
+            script {
+                currentBuild.result = 'SUCCESS'
+            }
           }
         }
       }
