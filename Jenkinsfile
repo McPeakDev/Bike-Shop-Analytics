@@ -27,23 +27,13 @@ pipeline {
         sh 'git push origin JohnsonZD'
         sh 'git push origin McNabbMR'
         sh 'git push origin hudTest'
+        warnError(message: 'Merge Failed')
       }
     }
 
     stage('Test') {
-      parallel {
-        stage('Test') {
-          steps {
-            echo 'Implement Testing'
-          }
-        }
-
-        stage('Merge Failed') {
-          steps {
-            echo 'Continue After Merge Fails'
-          }
-        }
-
+      steps {
+        echo 'Implement Testing'
       }
     }
 
