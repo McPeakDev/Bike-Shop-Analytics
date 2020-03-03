@@ -74,12 +74,12 @@ pipeline {
           sh "lftp -e 'mput BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/*; bye' -u $FTPUserName,$FTPPassword 192.168.1.105"
           }
         }
-        post {
-          failure {
-            echo "Useless Errors From FTP..."
-            script {
-                currentBuild.result = 'SUCCESS'
-            }
+      }
+      post {
+        failure {
+          echo "Useless Errors From FTP..."
+          script {
+              currentBuild.result = 'SUCCESS'
           }
         }
       }
