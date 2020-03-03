@@ -47,7 +47,7 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Changing Directory...'
-        sh 'cd BikeShopAnalyticsAPI/ && dotnet publish -c Release --self-contained true --runtime linux-x64'
+        sh 'cd BikeShopAnalyticsAPI/ && dotnet publish -c Release'
         echo 'Building API ...'
         echo 'Build Successful'
       }
