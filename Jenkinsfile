@@ -3,6 +3,9 @@ pipeline {
   stages {
     stage('Merge') {
       steps {
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh "exit 1"
+        }
         sh 'git config --global credential.helper cache'
         sh 'git config --global push.default simple'
         sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
@@ -27,7 +30,6 @@ pipeline {
         sh 'git push origin JohnsonZD'
         sh 'git push origin McNabbMR'
         sh 'git push origin hudTest'
-        warnError(message: 'Merge Failed')
       }
     }
 
