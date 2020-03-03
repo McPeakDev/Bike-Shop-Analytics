@@ -1,10 +1,9 @@
 pipeline {
   agent any
   stages {
-    try
-    {
-      stage('Merge') {
-        steps {
+    stage('Merge') {
+      steps {
+        catchError {
           sh 'git config --global credential.helper cache'
           sh 'git config --global push.default simple'
           sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
@@ -31,9 +30,10 @@ pipeline {
           sh 'git push origin hudTest'
         }
       }
-      catch(err)
-      {
-        error 'Merge Failed... Using last successful merge for build.'
+    }
+    post {
+      failure {
+        echo "Merge Failed Continuing..."
       }
     }
 
@@ -58,11 +58,8 @@ pipeline {
         withCredentials(bindings: [usernamePassword(credentialsId: 'ad99e083-f143-411f-81b1-a87f62c2a72b', usernameVariable: 'FTPUserName', passwordVariable: 'FTPPassword')]) {
           sh "lftp -e 'mput BikeShopAnalyticsAPI/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsAPI.dll BikeShopAnalyticsAPI/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsAPI.deps.json BikeShopAnalyticsAPI/bin/Release/netcoreapp3.0/linux-x64/publish/BikeShopAnalyticsAPI.runtimeconfig.json; bye' -u $FTPUserName,$FTPPassword 192.168.1.105"
         }
-
       }
     }
-
-  }
   triggers {
     pollSCM('H/15 * * * *')
   }
