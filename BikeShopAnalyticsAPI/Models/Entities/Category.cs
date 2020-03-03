@@ -19,6 +19,17 @@ namespace BikeShopAnalyticsAPI.Models.Entities
 
         public string PlotItemTwo { get; set; }
 
+        public string PlotItemThree { get; set; }
+
+        public string PlotItemFour { get; set; }
+
+        public string PlotItemFive { get; set; }
+
         public string ChartType { get; set; }
+
+        public DateTime StartRange { get; set; }
+
+        public DateTime EndRange { get; set; }
+
     }
 }
