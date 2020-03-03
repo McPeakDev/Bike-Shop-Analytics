@@ -1,10 +1,10 @@
 pipeline {
   agent any
   stages {
-    stage('Merge') {
-      steps {
-        try
-        {
+    try
+    {
+      stage('Merge') {
+        steps {
           sh 'git config --global credential.helper cache'
           sh 'git config --global push.default simple'
           sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
@@ -30,10 +30,10 @@ pipeline {
           sh 'git push origin McNabbMR'
           sh 'git push origin hudTest'
         }
-        catch(err)
-        {
-          error 'Merge Failed... Using last successful merge for build.'
-        }
+      }
+      catch(err)
+      {
+        error 'Merge Failed... Using last successful merge for build.'
       }
     }
 
