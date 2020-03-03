@@ -31,6 +31,7 @@ pipeline {
         }
       }
     }
+  }
     post {
       failure {
         echo "Merge Failed Continuing..."
