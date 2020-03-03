@@ -30,7 +30,7 @@ pipeline {
           sh 'git checkout JohnsonZD'
           sh 'git merge master'
           sh 'git push origin JohnsonZD'
-          sh 'git checkout McNabbMR
+          sh 'git checkout McNabbMR'
           sh 'git merge master'
           sh 'git push origin McNabbMR'
           sh 'git checkout hudTest'
