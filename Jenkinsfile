@@ -3,33 +3,37 @@ pipeline {
   stages {
     stage('Merge') {
       steps {
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh "exit 1"
+        try
+        {
+          sh 'git config --global credential.helper cache'
+          sh 'git config --global push.default simple'
+          sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
+          sh 'git fetch'
+          sh 'git checkout McPeakML'
+          sh 'git pull'
+          sh 'git checkout JohnsonZD'
+          sh 'git pull'
+          sh 'git checkout McNabbMR'
+          sh 'git pull'
+          sh 'git checkout hudTest'
+          sh 'git pull'
+          sh 'git checkout master'
+          sh 'git pull'
+          sh 'git config --global merge.ours.driver true'
+          sh 'git merge origin/McPeakML origin/JohnsonZD origin/McNabbMR origin/hudTest --no-commit'
+          sh 'git checkout HEAD Jenkinsfile'
+          sh 'git commit -m \'Merge all dev branches to master\''
+          sh 'git status'
+          sh 'git push origin master'
+          sh 'git push origin McPeakML'
+          sh 'git push origin JohnsonZD'
+          sh 'git push origin McNabbMR'
+          sh 'git push origin hudTest'
         }
-        sh 'git config --global credential.helper cache'
-        sh 'git config --global push.default simple'
-        sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
-        sh 'git fetch'
-        sh 'git checkout McPeakML'
-        sh 'git pull'
-        sh 'git checkout JohnsonZD'
-        sh 'git pull'
-        sh 'git checkout McNabbMR'
-        sh 'git pull'
-        sh 'git checkout hudTest'
-        sh 'git pull'
-        sh 'git checkout master'
-        sh 'git pull'
-        sh 'git config --global merge.ours.driver true'
-        sh 'git merge origin/McPeakML origin/JohnsonZD origin/McNabbMR origin/hudTest --no-commit'
-        sh 'git checkout HEAD Jenkinsfile'
-        sh 'git commit -m \'Merge all dev branches to master\''
-        sh 'git status'
-        sh 'git push origin master'
-        sh 'git push origin McPeakML'
-        sh 'git push origin JohnsonZD'
-        sh 'git push origin McNabbMR'
-        sh 'git push origin hudTest'
+        catch(err)
+        {
+          error 'Merge Failed... Using last successful merge for build.'
+        }
       }
     }
 
