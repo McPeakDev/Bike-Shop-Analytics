@@ -30,12 +30,13 @@ pipeline {
           sh 'git push origin hudTest'
         }
       }
-    }
-    post {
-      failure {
-        echo "Merge Failed Continuing..."
+      post {
+        failure {
+          echo "Merge Failed Continuing..."
+        }
       }
     }
+
 
     stage('Test') {
       steps {
