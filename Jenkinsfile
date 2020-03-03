@@ -60,6 +60,7 @@ pipeline {
         }
       }
     }
+  }
   triggers {
     pollSCM('H/15 * * * *')
   }
