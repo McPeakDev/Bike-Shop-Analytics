@@ -21,7 +21,7 @@ pipeline {
           sh 'git merge origin/JohnsonZD origin/McNabbMR origin/hudTest'
           sh 'git checkout master'
           sh 'git config --global merge.ours.driver true'
-          sh 'git merge McPeakML'
+          sh 'git merge McPeakML --no-commit'
           sh 'git checkout HEAD~1 Jenkinsfile'
           sh 'git commit -m \'Merge all dev branches to master\''
           sh 'git status'
