@@ -8,16 +8,15 @@ class APIClient extends React.Component {
         console.log("created");
     }
 
-    componentDidMount() {
-        window.fetch("https://bikeshopmonitoring.duckdns.org/bike/readall/", {
-            method: 'GET',
+    async componentDidMount() {
+        let request = await window.fetch("https://bikeshopmonitoring.duckdns.org/bike/readall/", {
+            method: "GET",
             headers: {
                 "Access-Control-Allow-Origin": '*',
             }
         } )
-            .then(res => res.json())
-            .then(json => this.setState({ data: json}));
-        console.log("called");
+        let response = await request;
+        console.log(response);
     }
 
     render() {
