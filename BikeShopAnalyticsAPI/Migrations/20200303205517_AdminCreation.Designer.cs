@@ -4,54 +4,22 @@ using BikeShopAnalyticsAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BikeShopAnalyticsAPI.Migrations
 {
     [DbContext(typeof(BikeShopContext))]
-    partial class BikeShopContextModelSnapshot : ModelSnapshot
+    [Migration("20200303205517_AdminCreation")]
+    partial class AdminCreation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("BikeShopAnalyticsAPI.Models.Entities.Admin", b =>
-                {
-                    b.Property<int>("AdminID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
-                    b.Property<string>("MiddleName")
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
-
-                    b.HasKey("AdminID");
-
-                    b.ToTable("Admins");
-                });
 
             modelBuilder.Entity("BikeShopAnalyticsAPI.Models.Entities.Bike", b =>
                 {
@@ -110,54 +78,6 @@ namespace BikeShopAnalyticsAPI.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("BikeShopAnalyticsAPI.Models.Entities.Loggin_In.Auth", b =>
-                {
-                    b.Property<int>("AuthID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AdminID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AuthID");
-
-                    b.HasIndex("AdminID");
-
-                    b.ToTable("Auths");
-                });
-
-            modelBuilder.Entity("BikeShopAnalyticsAPI.Models.Entities.Loggin_In.Credentials", b =>
-                {
-                    b.Property<int>("CredentialID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AuthID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
-                    b.HasKey("CredentialID");
-
-                    b.HasIndex("AuthID");
-
-                    b.ToTable("Credentials");
-                });
-
             modelBuilder.Entity("BikeShopAnalyticsAPI.Models.Entities.SalesOrder", b =>
                 {
                     b.Property<int>("SalesID")
@@ -200,24 +120,6 @@ namespace BikeShopAnalyticsAPI.Migrations
                     b.HasIndex("BikeID");
 
                     b.ToTable("SalesOrders");
-                });
-
-            modelBuilder.Entity("BikeShopAnalyticsAPI.Models.Entities.Loggin_In.Auth", b =>
-                {
-                    b.HasOne("BikeShopAnalyticsAPI.Models.Entities.Admin", "Admin")
-                        .WithMany()
-                        .HasForeignKey("AdminID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BikeShopAnalyticsAPI.Models.Entities.Loggin_In.Credentials", b =>
-                {
-                    b.HasOne("BikeShopAnalyticsAPI.Models.Entities.Loggin_In.Auth", "Auth")
-                        .WithMany()
-                        .HasForeignKey("AuthID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("BikeShopAnalyticsAPI.Models.Entities.SalesOrder", b =>

@@ -16,6 +16,8 @@ using BikeShopAnalyticsAPI.Services;
 using BikeShopAnalyticsAPI.Models.Entities;
 using Microsoft.AspNetCore.HttpOverrides;
 using System.Net;
+using Microsoft.AspNetCore.Identity;
+using BikeShopAnalyticsAPI.Models.Entities.Loggin_In;
 
 namespace BikeShopAnalytics
 {
@@ -36,6 +38,10 @@ namespace BikeShopAnalytics
                 options.UseSqlServer(Configuration.GetConnectionString("DevDatabase")));
             services.AddScoped<IRepository<Bike>, DbRepository<Bike>>();
             services.AddScoped<IRepository<SalesOrder>, DbRepository<SalesOrder>>();
+            services.AddScoped<IRepository<Category>, DbRepository<Category>>();
+            services.AddScoped<IRepository<Admin>, DbRepository<Admin>>();
+            services.AddScoped<IRepository<Credentials>, DbRepository<Credentials>>();
+            services.AddScoped<IRepository<Auth>, DbRepository<Auth>>();
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.KnownProxies.Add(IPAddress.Parse("127.0.0.1"));
@@ -55,9 +61,16 @@ namespace BikeShopAnalytics
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-            //app.UseHttpsRedirection();
-
             app.UseRouting();
+
+            app.UseCors(options => 
+            {
+                options.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            }
+            );
+            
 
             app.UseAuthorization();
 
