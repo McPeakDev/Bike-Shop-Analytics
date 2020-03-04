@@ -92,6 +92,6 @@ pipeline {
     }
   }
   triggers {
-    cron('H 7 * * *')
+    cron('0 H/2 * * *')
   }
 }
