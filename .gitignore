@@ -6,6 +6,7 @@
 obj/
 *.code-workspace
 .vscode/
+node_modules/
 
 # Cache Files
 *.cache
