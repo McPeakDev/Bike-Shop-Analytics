@@ -9,6 +9,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace BikeShopAnalyticsAPI.Services
 {
@@ -24,32 +25,32 @@ namespace BikeShopAnalyticsAPI.Services
         /// <param name="predicate">A Comparing Function in the form of a lambda</param>
         /// <param name="includes">An array of lambda expressions for sub-entities to be included</param>
         /// <returns>A TEntity</returns>
-        TEntity Read(Func<TEntity, bool> predicate, params Expression<Func<TEntity, object>>[] includes);
+        Task<TEntity> Read(Func<TEntity, bool> predicate, params Expression<Func<TEntity, object>>[] includes);
 
         /// <summary>
         /// Reads The Entire table of TEntity, with any sub-entities to include. 
         /// </summary>
         /// <param name="includes">An array of lambda expressions for sub-entities to be included</param>
         /// <returns>An IQueryable of TEntity</returns>
-        IQueryable<TEntity> ReadAll(params Expression<Func<TEntity, object>>[] includes);
+        Task<IQueryable<TEntity>> ReadAll(params Expression<Func<TEntity, object>>[] includes);
 
         /// <summary>
         /// Creates a TEntity in the table of Type of TEntity
         /// </summary>
         /// <param name="obj">A object of TEntity</param>
         /// <returns>A TEntity</returns>
-        TEntity Create(TEntity obj);
+        Task<TEntity> Create(TEntity obj);
 
         /// <summary>
         /// Updates a TEntity in the table of Type of TEntity
         /// </summary>
         /// <param name="obj">A object of TEntity</param>
-        void Update(TEntity obj);
+        Task Update(TEntity obj);
 
         /// <summary>
         /// Deletes a TEntity in the table of Type of TEntity
         /// </summary>
         /// <param name="obj">A object of TEntity</param>
-        void Delete(TEntity obj);
+        Task Delete(TEntity obj);
     }
 }

@@ -28,16 +28,16 @@ namespace BikeShopAnalyticsAPI.Controllers
         }
 
         [HttpPost("[action]")]
-        public Auth Read(Credentials creds)
+        public async Task<Auth> Read(Credentials creds)
         {
-            var adminCreds = _credRepo.Read(cr => (cr.UserName == creds.UserName && cr.Password == creds.Password), cr => cr.Auth);
-            var adminAuth = _authRepo.Read(a => a.AuthID == adminCreds.AuthID, a => a.Admin);
+            var adminCreds = await _credRepo.Read(cr => (cr.UserName == creds.UserName && cr.Password == creds.Password), cr => cr.Auth);
+            var adminAuth = await _authRepo.Read(a => a.AuthID == adminCreds.AuthID, a => a.Admin);
 
             return adminAuth;
         }
 
         [HttpPost("[action]")]
-        public IActionResult Create(AdminBundle adminBundle)
+        public async Task<IActionResult> Create(AdminBundle adminBundle)
         {
             MD5 hasher = MD5.Create();
 
@@ -58,8 +58,8 @@ namespace BikeShopAnalyticsAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                _adminRepo.Create(adminBundle.Admin);
-                _credRepo.Create(new Credentials
+                await _adminRepo.Create(adminBundle.Admin);
+                await _credRepo.Create(new Credentials
                 {
                     UserName = adminBundle.Admin.UserName,
                     Password = adminBundle.Password,
@@ -71,23 +71,23 @@ namespace BikeShopAnalyticsAPI.Controllers
         }
 
         [HttpPut("[action]")]
-        public IActionResult Update(Admin admin)
+        public async Task<IActionResult> Update(Admin admin)
         {
             if (ModelState.IsValid)
             {
-                _adminRepo.Update(admin);
+                await _adminRepo.Update(admin);
                 return Ok("Success! Admin Updated!");
             }
             return Problem("Error! Could not update the admin..");
         }
 
         [HttpDelete("[action]/{adminID}")]
-        public IActionResult Delete(int adminID)
+        public async Task<IActionResult> Delete(int adminID)
         {
             var admin = new Admin();//Read(adminID);
             if (!(admin is null))
             {
-                _adminRepo.Delete(admin);
+                await _adminRepo.Delete(admin);
                 return Ok("Success! Admin Deleted!");
 
             }
@@ -95,9 +95,10 @@ namespace BikeShopAnalyticsAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public List<Admin> ReadAll()
+        public async Task<List<Admin>> ReadAll()
         {
-            return _adminRepo.ReadAll().ToList();
+            var adminList = await _adminRepo.ReadAll();
+            return adminList.ToList();
         }
     }
 }

@@ -7,11 +7,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 using Microsoft.EntityFrameworkCore;
-using BikeShopAnalyticsAPI.Models.Entities;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using BikeShopAnalyticsAPI.Models;
+using System.Threading.Tasks;
 
 namespace BikeShopAnalyticsAPI.Services
 {
@@ -50,10 +50,10 @@ namespace BikeShopAnalyticsAPI.Services
         /// </summary>
         /// <param name="obj">A object of TEntity</param>
         /// <returns>A TEntity</returns>
-        public TEntity Create(TEntity obj)
+        public async Task<TEntity> Create(TEntity obj)
         {
             //Add the obj to the table, save the object, and return the object. 
-            _table.Add(obj);
+            await _table.AddAsync(obj);
             Save();
             return obj;
         }
@@ -64,10 +64,10 @@ namespace BikeShopAnalyticsAPI.Services
         /// <param name="predicate">A Comparing Function in the form of a lambda</param>
         /// <param name="includes">An array of lambda expressions for sub-entities to be included</param>
         /// <returns>A TEntity</returns>
-        public TEntity Read(Func<TEntity, bool> predicate, params Expression<Func<TEntity, object>>[] includes)
+        public Task<TEntity> Read(Func<TEntity, bool> predicate, params Expression<Func<TEntity, object>>[] includes)
         {
             //Return TEntity Where Predicate is True and include all IncludeProperties from includes
-            return includes.Aggregate(_table.AsQueryable(), (current, includeProperty) => current.Include(includeProperty)).FirstOrDefault(predicate);
+            return Task.Run( () => includes.Aggregate(_table.AsQueryable(), (current, includeProperty) => current.Include(includeProperty)).FirstOrDefault(predicate));
 
         }
 
@@ -76,41 +76,52 @@ namespace BikeShopAnalyticsAPI.Services
         /// </summary>
         /// <param name="includes">An array of lambda expressions for sub-entities to be included</param>
         /// <returns>An IQueryable of TEntity</returns>
-        public IQueryable<TEntity> ReadAll(params Expression<Func<TEntity, object>>[] includes)
+        public Task<IQueryable<TEntity>> ReadAll(params Expression<Func<TEntity, object>>[] includes)
         {
             //Return IQueryable of TEntity and include all IncludeProperties from includes
-            return includes.Aggregate(_table.AsQueryable(), (current, includeProperty) => current.Include(includeProperty));
+            return Task.Run( () => includes.Aggregate(_table.AsQueryable(), (current, includeProperty) => current.Include(includeProperty)));
         }
 
         /// <summary>
         /// Updates a TEntity in the table of Type of TEntity
         /// </summary>
         /// <param name="obj">A object of TEntity</param>
-        public void Update(TEntity obj)
+        public Task Update(TEntity obj)
         {
             //Attach obj to defined table, Tell the entry that it has been modified, Save the Database.
-            _table.Attach(obj);
-            _db.Entry(obj).State = EntityState.Modified;
-            Save();
+            return Task.Run
+                ( () => 
+                    {
+                        _table.Attach(obj);
+                        _db.Entry(obj).State = EntityState.Modified;
+                        Save();
+                    }
+                );
         }
 
         /// <summary>
         /// Deletes a TEntity in the table of Type of TEntity
         /// </summary>
         /// <param name="obj">A object of TEntity</param>
-        public void Delete(TEntity obj)
+        public Task Delete(TEntity obj)
         {
             //Remove obj from defined table. Save the Database.
-            _table.Remove(obj);
-            Save();
+            return Task.Run
+            ( () => 
+                {
+                    _table.Remove(obj);
+                    Save();
+                }
+            );
+
         }
 
         /// <summary>
         /// Saves/Updates the Database.
         /// </summary>
-        public void Save()
+        public async void Save()
         {
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
     }
 }
