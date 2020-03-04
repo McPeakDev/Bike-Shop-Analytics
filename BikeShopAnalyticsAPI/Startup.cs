@@ -62,7 +62,13 @@ namespace BikeShopAnalytics
 
             app.UseRouting();
 
-            app.UseCors();
+            app.UseCors(options => 
+            {
+                options.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            }
+            );
 
             app.UseAuthorization();
 
