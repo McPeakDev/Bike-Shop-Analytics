@@ -8,15 +8,25 @@ class APIClient extends React.Component {
         console.log("created");
     }
 
-    async componentDidMount() {
-        let request = await window.fetch("https://bikeshopmonitoring.duckdns.org/bike/readall/", {
+    componentDidMount() {
+        window.fetch("https://bikeshopmonitoring.duckdns.org/bike/readall", {
             method: "GET",
             headers: {
-                "Access-Control-Allow-Origin": '*',
-            }
+                "Access-Control-Allow-Origin": '*'//,
+                //'Accept': 'application/json',
+                //'Content-Type': 'application/json'
+            },
+            //body: JSON.stringify({Name: 'Schwinn', Price: 102.34})
         } )
-        let response = await request;
-        console.log(response);
+        //GET
+            .then(res => res.json())
+            .then(json => this.setState({ data: json}));
+        //POST
+            //.then(res => {
+            //    console.log(res.json());
+            //})
+        
+            console.log("called");
     }
 
     render() {
@@ -25,7 +35,7 @@ class APIClient extends React.Component {
                 <ul>
                     {this.state.data.map(el => (
                         <li>
-                            {el.name}: {el.salesPrice}
+                            {el.bikeID}: {el.name}
                         </li>
                     ))}
                 </ul>

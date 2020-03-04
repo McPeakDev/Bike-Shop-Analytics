@@ -69,6 +69,7 @@ namespace BikeShopAnalytics
                 .AllowAnyHeader();
             }
             );
+            
 
             app.UseAuthorization();
 
