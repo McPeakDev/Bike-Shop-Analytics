@@ -39,11 +39,21 @@ namespace BikeShopAnalyticsAPI.Controllers
         [HttpPost("[action]")]
         public IActionResult Create(AdminBundle adminBundle)
         {
-            SHA512 sha = new SHA512Managed();
+            MD5 hasher = MD5.Create();
+
+            var hashArray = hasher.ComputeHash((Encoding.UTF8.GetBytes(adminBundle.Password)));
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var item in hashArray)
+            {
+                sb.Append(item.ToString("x2"));
+            }
+
             Auth auth = new Auth
             {
                 Admin = adminBundle.Admin,
-                Token = Encoding.Default.GetString(sha.ComputeHash(Encoding.Default.GetBytes(adminBundle.Password)))
+                Token = sb.ToString()
             };
 
             if (ModelState.IsValid)
