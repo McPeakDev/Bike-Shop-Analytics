@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
+using CryptSharp.Utility;
 using System.Linq;
 using System.Threading.Tasks;
 using BikeShopAnalyticsAPI.Models.Entities;
@@ -39,11 +39,10 @@ namespace BikeShopAnalyticsAPI.Controllers
         [HttpPost("[action]")]
         public IActionResult Create(AdminBundle adminBundle)
         {
-            SHA512 sha = new SHA512Managed();
-            Auth auth = new Auth
+                Auth auth = new Auth
             {
                 Admin = adminBundle.Admin,
-                Token = Encoding.Default.GetString(sha.ComputeHash(Encoding.Default.GetBytes(adminBundle.Password)))
+                Token = Encoding.Default.GetString(hmac.ComputeHash(Encoding.Default.GetBytes(adminBundle.Password)))
             };
 
             if (ModelState.IsValid)
