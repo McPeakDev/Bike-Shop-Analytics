@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
+using CryptSharp.Utility;
 using System.Linq;
 using System.Threading.Tasks;
 using BikeShopAnalyticsAPI.Models.Entities;
