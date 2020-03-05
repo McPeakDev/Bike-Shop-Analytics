@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import logo from "./logo.svg";
 import "./App.css"
-import Comparisons from './Components/Comparisons'
+import Api from "./APIClient"
 
 class App extends Component {
   constructor(props)
@@ -11,9 +11,8 @@ class App extends Component {
   render(){
     return(
       <div>
-        <Comparisons></Comparisons>
+        <Api />
       </div>
-      
     )
   }
 }
