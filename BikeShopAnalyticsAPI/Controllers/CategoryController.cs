@@ -51,7 +51,7 @@ namespace BikeShopAnalyticsAPI.Controllers
         [HttpDelete("[action]/{categoryID}")]
         public async Task<IActionResult> Delete(int categoryID)
         {
-            var category = Read(categoryID);
+            var category = new Category();//Read(categoryID);
             if (!(category is null))
             {
                 await _categoryRepo.Delete(category);
@@ -64,7 +64,8 @@ namespace BikeShopAnalyticsAPI.Controllers
         [HttpGet("[action]")]
         public async Task<List<Category>> ReadAll()
         {
-            return await _categoryRepo.ReadAll().ToList();
+            var categoryList = await _categoryRepo.ReadAll().ToList();
+            return categoryList;
         }
     }
 }
