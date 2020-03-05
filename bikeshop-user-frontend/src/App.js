@@ -1,17 +1,19 @@
 import React, {Component} from "react"
 import logo from "./logo.svg";
 import "./App.css"
-import Api from './APIClient'
+import Comparisons from './Components/Comparisons'
 
 class App extends Component {
   constructor(props)
   {
     super(props)
   }
- 
   render(){
     return(
-      <Api></Api>
+      <div>
+        <Comparisons></Comparisons>
+      </div>
+      
     )
   }
 }
