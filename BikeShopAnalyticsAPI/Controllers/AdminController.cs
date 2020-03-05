@@ -29,7 +29,7 @@ namespace BikeShopAnalyticsAPI.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<Auth>> Read(Credentials creds)
+        public async Task<ActionResult<Auth>> Login(Credentials creds)
         {
             var adminCreds = await _credRepo.Read(cr => (cr.UserName == creds.UserName && cr.Password == creds.Password), cr => cr.Auth);
             var adminAuth = await _authRepo.Read(a => a.AuthID == adminCreds.AuthID, a => a.Admin);
