@@ -64,7 +64,7 @@ namespace BikeShopAnalytics.Controllers
         [HttpGet("[action]")]
         public async Task<List<Bike>> ReadAll()
         {
-            var bikeList = await _bikeRepo.ReadAll().ToList();
+            var bikeList = await _bikeRepo.ReadAll();
             return bikeList.ToList();;
         }
     }
