@@ -6,6 +6,7 @@ using BikeShopAnalyticsAPI.Models.Entities;
 using BikeShopAnalyticsAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Text;
 
 namespace BikeShopAnalytics.Controllers
 {
@@ -21,40 +22,40 @@ namespace BikeShopAnalytics.Controllers
         }
 
         [HttpGet("[action]/{salesID}")]
-        public SalesOrder Read(int salesID)
+        public async Task<SalesOrder> Read(int salesID)
         {
-            return _salesOrderRepo.Read(so => so.SalesID == salesID);
+            return await _salesOrderRepo.Read(so => so.SalesID == salesID);
         }
 
         [HttpPost("[action]")]
-        public IActionResult Create(SalesOrder salesOrder)
+        public async Task<IActionResult> Create(SalesOrder salesOrder)
         {
             if (ModelState.IsValid)
             {
-                _salesOrderRepo.Create(salesOrder);
+                await _salesOrderRepo.Create(salesOrder);
                 return Ok("Success! Sales Order Created!");
             }
             return Problem("Error! Could not create the sales order..");
         }
 
         [HttpPut("[action]")]
-        public IActionResult Update(SalesOrder salesOrder)
+        public async Task<IActionResult> Update(SalesOrder salesOrder)
         {
             if (ModelState.IsValid)
             {
-                _salesOrderRepo.Update(salesOrder);
+                await _salesOrderRepo.Update(salesOrder);
                 return Ok("Success! Sales Order Updated!");
             }
             return Problem("Error! Could not update the sales order..");
         }
 
         [HttpDelete("[action]/{salesID}")]
-        public IActionResult Delete(int salesID)
+        public async Task<IActionResult> Delete(int salesID)
         {
             var sales= Read(salesID);
             if (!(sales is null))
             {
-                _salesOrderRepo.Delete(sales);
+                await _salesOrderRepo.Delete(sales);
                 return Ok("Success! Sales Order Deleted!");
 
             }
@@ -62,9 +63,9 @@ namespace BikeShopAnalytics.Controllers
         }
 
         [HttpGet("[action]")]
-        public List<SalesOrder> ReadAll()
+        public async Task<List<SalesOrder>> ReadAll()
         {
-            return _salesOrderRepo.ReadAll().ToList();
+            return await _salesOrderRepo.ReadAll().ToList();
         }
     }
 }

@@ -21,40 +21,40 @@ namespace BikeShopAnalytics.Controllers
         }
 
         [HttpGet("[action]/{bikeID}")]
-        public Bike Read(int bikeID)
+        public async Task<Bike> Read(int bikeID)
         {
-            return _bikeRepo.Read(b => b.BikeID == bikeID);
+            return await _bikeRepo.Read(b => b.BikeID == bikeID);
         }
 
         [HttpPost("[action]")]
-        public IActionResult Create(Bike bike)
+        public async Task<IActionResult> Create(Bike bike)
         {
             if (ModelState.IsValid)
             {
-                _bikeRepo.Create(bike);
+                await _bikeRepo.Create(bike);
                 return Ok("Success! Bike Created!");
             }
             return Problem("Error! Could not create the bike..");
         }
 
         [HttpPut("[action]")]
-        public IActionResult Update(Bike bike)
+        public async Task<IActionResult> Update(Bike bike)
         {
             if (ModelState.IsValid)
             {
-                _bikeRepo.Update(bike);
+                await _bikeRepo.Update(bike);
                 return Ok("Success! Bike Updated!");
             }
             return Problem("Error! Could not update the Bike..");
         }
 
         [HttpDelete("[action]/{bikeID}")]
-        public IActionResult Delete(int bikeID)
+        public async Task<IActionResult> Delete(int bikeID)
         {
             var bike = Read(bikeID);
             if(!(bike is null))
             {
-                _bikeRepo.Delete(bike);
+                await _bikeRepo.Delete(bike);
                 return Ok("Success! Bike Deleted!");
 
             }
@@ -62,9 +62,9 @@ namespace BikeShopAnalytics.Controllers
         }
 
         [HttpGet("[action]")]
-        public List<Bike> ReadAll()
+        public async Task<List<Bike>> ReadAll()
         {
-            return _bikeRepo.ReadAll().ToList();
+            return await _bikeRepo.ReadAll().ToList();
         }
     }
 }
