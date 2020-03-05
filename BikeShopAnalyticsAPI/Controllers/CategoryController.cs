@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BikeShopAnalyticsAPI.Models.Entities;
+using BikeShopAnalyticsAPI.Models.Entities.Loggin_In;
 using BikeShopAnalyticsAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,40 +22,40 @@ namespace BikeShopAnalyticsAPI.Controllers
         }
 
         [HttpGet("[action]/{categoryID}")]
-        public Category Read(int categoryID)
+        public async Task<Category> Read(int categoryID)
         {
-            return _categoryRepo.Read(so => so.CategoryID == categoryID);
+            return await _categoryRepo.Read(so => so.CategoryID == categoryID);
         }
 
         [HttpPost("[action]")]
-        public IActionResult Create(Category category)
+        public async Task<IActionResult> Create(Category category)
         {
             if (ModelState.IsValid)
             {
-                _categoryRepo.Create(category);
+                await _categoryRepo.Create(category);
                 return Ok("Success! Category Created!");
             }
             return Problem("Error! Could not create the category..");
         }
 
         [HttpPut("[action]")]
-        public IActionResult Update(Category category)
+        public async Task<IActionResult> Update(Category category)
         {
             if (ModelState.IsValid)
             {
-                _categoryRepo.Update(category);
+                await _categoryRepo.Update(category);
                 return Ok("Success! Category Updated!");
             }
             return Problem("Error! Could not update the sales order..");
         }
 
         [HttpDelete("[action]/{categoryID}")]
-        public IActionResult Delete(int categoryID)
+        public async Task<IActionResult> Delete(int categoryID)
         {
-            var category = Read(categoryID);
+            var category = new Category();//Read(categoryID);
             if (!(category is null))
             {
-                _categoryRepo.Delete(category);
+                await _categoryRepo.Delete(category);
                 return Ok("Success! Category Deleted!");
 
             }
@@ -62,9 +63,10 @@ namespace BikeShopAnalyticsAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public List<Category> ReadAll()
+        public async Task<List<Category>> ReadAll()
         {
-            return _categoryRepo.ReadAll().ToList();
+            var categoryList = await _categoryRepo.ReadAll();
+            return categoryList.ToList();;
         }
     }
 }
