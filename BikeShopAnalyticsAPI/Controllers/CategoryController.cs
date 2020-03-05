@@ -15,58 +15,81 @@ namespace BikeShopAnalyticsAPI.Controllers
     public class CategoryController : ControllerBase
     {
         private IRepository<Category> _categoryRepo;
+        private IRepository<Auth> _authRepo;
 
-        public CategoryController(IRepository<Category> categoryRepo)
+        public CategoryController(IRepository<Category> categoryRepo, IRepository<Auth> authRepo)
         {
             _categoryRepo = categoryRepo;
+            _authRepo = authRepo;
         }
 
         [HttpGet("[action]/{categoryID}")]
-        public async Task<Category> Read(int categoryID)
+        public async Task<ActionResult<Category>> Read([FromHeader(Name = "Token")]string token, int categoryID)
         {
-            return await _categoryRepo.Read(so => so.CategoryID == categoryID);
+            if(await _authRepo.Read(a => a.Token == token) != null)
+            {
+                return await _categoryRepo.Read(so => so.CategoryID == categoryID);
+            }
+            return StatusCode(403);
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Create(Category category)
+        public async Task<IActionResult> Create([FromHeader(Name = "Token")]string token, Category category)
         {
-            if (ModelState.IsValid)
+            if(await _authRepo.Read(a => a.Token == token) != null)
             {
-                await _categoryRepo.Create(category);
-                return Ok("Success! Category Created!");
+                if (ModelState.IsValid)
+                {
+                    await _categoryRepo.Create(category);
+                    return Ok("Success! Category Created!");
+                }
+                return Problem("Error! Could not create the category..");
             }
-            return Problem("Error! Could not create the category..");
+            return StatusCode(403);
         }
 
         [HttpPut("[action]")]
-        public async Task<IActionResult> Update(Category category)
+        public async Task<IActionResult> Update([FromHeader(Name = "Token")]string token, Category category)
         {
-            if (ModelState.IsValid)
+            if(await _authRepo.Read(a => a.Token == token) != null)
             {
-                await _categoryRepo.Update(category);
-                return Ok("Success! Category Updated!");
+                if (ModelState.IsValid)
+                {
+                    await _categoryRepo.Update(category);
+                    return Ok("Success! Category Updated!");
+                }
+                return Problem("Error! Could not update the sales order..");
             }
-            return Problem("Error! Could not update the sales order..");
+            return StatusCode(403);
         }
 
         [HttpDelete("[action]/{categoryID}")]
-        public async Task<IActionResult> Delete(int categoryID)
+        public async Task<IActionResult> Delete([FromHeader(Name = "Token")]string token, int categoryID)
         {
-            var category = new Category();//Read(categoryID);
-            if (!(category is null))
+            if(await _authRepo.Read(a => a.Token == token) != null)
             {
-                await _categoryRepo.Delete(category);
-                return Ok("Success! Category Deleted!");
+                var category = await _categoryRepo.Read(a => a.CategoryID == categoryID);
 
+                if (!(category is null))
+                {
+                    await _categoryRepo.Delete(category);
+                    return Ok("Success! Category Deleted!");
+
+                }
+                return Problem("Error! Could not delete the category..");
             }
-            return Problem("Error! Could not delete the category..");
+            return StatusCode(403);
         }
 
         [HttpGet("[action]")]
-        public async Task<List<Category>> ReadAll()
+        public async Task<ActionResult<List<Category>>> ReadAll([FromHeader(Name = "Token")]string token)
         {
-            var categoryList = await _categoryRepo.ReadAll();
-            return categoryList.ToList();;
+            if(await _authRepo.Read(a => a.Token == token) != null)
+            {
+                var categoryList = await _categoryRepo.ReadAll();
+                return categoryList.ToList();
+            }
+            return StatusCode(403);
         }
     }
 }

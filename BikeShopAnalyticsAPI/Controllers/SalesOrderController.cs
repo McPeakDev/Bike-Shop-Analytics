@@ -16,58 +16,80 @@ namespace BikeShopAnalytics.Controllers
     public class SalesOrderController : ControllerBase
     {
         private IRepository<SalesOrder> _salesOrderRepo;
+        private IRepository<Auth> _authRepo;
 
-        public SalesOrderController(IRepository<SalesOrder> salesOrderRepo)
+        public SalesOrderController(IRepository<SalesOrder> salesOrderRepo, IRepository<Auth> authRepo)
         {
             _salesOrderRepo = salesOrderRepo;
+            _authRepo = authRepo;
         }
 
         [HttpGet("[action]/{salesID}")]
-        public async Task<SalesOrder> Read(int salesID)
+        public async Task<ActionResult<SalesOrder>> Read([FromHeader(Name = "Token")]string token, int salesID)
         {
-            return await _salesOrderRepo.Read(so => so.SalesID == salesID);
+            if(await _authRepo.Read(a => a.Token == token) != null)
+            {
+                return await _salesOrderRepo.Read(so => so.SalesID == salesID, s => s.Bike);
+            }
+            return StatusCode(403);
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Create(SalesOrder salesOrder)
+        public async Task<IActionResult> Create([FromHeader(Name = "Token")]string token, SalesOrder salesOrder)
         {
-            if (ModelState.IsValid)
+            if(await _authRepo.Read(a => a.Token == token) != null)
             {
-                await _salesOrderRepo.Create(salesOrder);
-                return Ok("Success! Sales Order Created!");
+                if (ModelState.IsValid)
+                {
+                    await _salesOrderRepo.Create(salesOrder);
+                    return Ok("Success! Sales Order Created!");
+                }
+                return Problem("Error! Could not create the sales order..");
             }
-            return Problem("Error! Could not create the sales order..");
+            return StatusCode(403);
         }
 
         [HttpPut("[action]")]
-        public async Task<IActionResult> Update(SalesOrder salesOrder)
+        public async Task<IActionResult> Update([FromHeader(Name = "Token")]string token, SalesOrder salesOrder)
         {
-            if (ModelState.IsValid)
+            if(await _authRepo.Read(a => a.Token == token) != null)
             {
-                await _salesOrderRepo.Update(salesOrder);
-                return Ok("Success! Sales Order Updated!");
+                if (ModelState.IsValid)
+                {
+                    await _salesOrderRepo.Update(salesOrder);
+                    return Ok("Success! Sales Order Updated!");
+                }
+                return Problem("Error! Could not update the sales order..");
             }
-            return Problem("Error! Could not update the sales order..");
+            return StatusCode(403);
         }
 
         [HttpDelete("[action]/{salesID}")]
-        public async Task<IActionResult> Delete(int salesID)
+        public async Task<IActionResult> Delete([FromHeader(Name = "Token")]string token, int salesID)
         {
-            var sales= new SalesOrder();//Read(salesID);
-            if (!(sales is null))
+            if(await _authRepo.Read(a => a.Token == token) != null)
             {
-                await _salesOrderRepo.Delete(sales);
-                return Ok("Success! Sales Order Deleted!");
+                var sales = await _salesOrderRepo.Read(a => a.SalesID == salesID);
 
+                if (!(sales is null))
+                {
+                    await _salesOrderRepo.Delete(sales);
+                    return Ok("Success! Sales Order Deleted!");
+                }
+                return Problem("Error! Could not delete the sales order..");
             }
-            return Problem("Error! Could not delete the sales order..");
+            return StatusCode(403);
         }
 
         [HttpGet("[action]")]
-        public async Task<List<SalesOrder>> ReadAll()
+        public async Task<ActionResult<List<SalesOrder>>> ReadAll([FromHeader(Name = "Token")]string token)
         {
-            var salesList = await _salesOrderRepo.ReadAll();
-            return salesList.ToList();
+            if(await _authRepo.Read(a => a.Token == token) != null)
+            {
+                var salesList = await _salesOrderRepo.ReadAll(s => s.Bike);
+                return salesList.ToList();
+            }
+            return StatusCode(403);
         }
     }
 }

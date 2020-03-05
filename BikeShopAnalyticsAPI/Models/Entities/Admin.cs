@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
@@ -22,7 +21,7 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         public string LastName { get; set; }
         [StringLength(255)]
         public string Email { get; set; }
-        [StringLength(10)]
+        [StringLength(30)]
         public string UserName { get; set; }
             
         

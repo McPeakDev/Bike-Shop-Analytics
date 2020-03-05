@@ -54,7 +54,7 @@ namespace BikeShopAnalyticsAPI.Services
         {
             //Add the obj to the table, save the object, and return the object. 
             await _table.AddAsync(obj);
-            Save();
+            await Save();
             return obj;
         }
 
@@ -90,11 +90,11 @@ namespace BikeShopAnalyticsAPI.Services
         {
             //Attach obj to defined table, Tell the entry that it has been modified, Save the Database.
             return Task.Run
-                ( () => 
+                ( async () => 
                     {
                         _table.Attach(obj);
                         _db.Entry(obj).State = EntityState.Modified;
-                        Save();
+                        await Save();
                     }
                 );
         }
@@ -107,10 +107,10 @@ namespace BikeShopAnalyticsAPI.Services
         {
             //Remove obj from defined table. Save the Database.
             return Task.Run
-            ( () => 
+            ( async () => 
                 {
                     _table.Remove(obj);
-                    Save();
+                    await Save();
                 }
             );
 
@@ -119,7 +119,7 @@ namespace BikeShopAnalyticsAPI.Services
         /// <summary>
         /// Saves/Updates the Database.
         /// </summary>
-        public async void Save()
+        public async Task Save()
         {
             await _db.SaveChangesAsync();
         }
