@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BikeShopAnalyticsAPI.Models.Entities;
+using BikeShopAnalyticsAPI.Models.Entities.Loggin_In;
 using BikeShopAnalyticsAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
