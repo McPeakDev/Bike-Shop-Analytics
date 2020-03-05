@@ -51,12 +51,11 @@ namespace BikeShopAnalytics.Controllers
         [HttpDelete("[action]/{bikeID}")]
         public async Task<IActionResult> Delete(int bikeID)
         {
-            var bike = Read(bikeID);
+            var bike = new Bike();//Read(bikeID);
             if(!(bike is null))
             {
                 await _bikeRepo.Delete(bike);
                 return Ok("Success! Bike Deleted!");
-
             }
             return Problem("Error! Could not delete the Bike..");
         }
@@ -64,7 +63,8 @@ namespace BikeShopAnalytics.Controllers
         [HttpGet("[action]")]
         public async Task<List<Bike>> ReadAll()
         {
-            return await _bikeRepo.ReadAll().ToList();
+            var bikeList = await _bikeRepo.ReadAll().ToList();
+            return bikeList;
         }
     }
 }

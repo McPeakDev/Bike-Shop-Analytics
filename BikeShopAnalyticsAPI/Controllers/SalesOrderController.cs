@@ -52,7 +52,7 @@ namespace BikeShopAnalytics.Controllers
         [HttpDelete("[action]/{salesID}")]
         public async Task<IActionResult> Delete(int salesID)
         {
-            var sales= Read(salesID);
+            var sales= new SalesOrder();//Read(salesID);
             if (!(sales is null))
             {
                 await _salesOrderRepo.Delete(sales);
@@ -65,7 +65,8 @@ namespace BikeShopAnalytics.Controllers
         [HttpGet("[action]")]
         public async Task<List<SalesOrder>> ReadAll()
         {
-            return await _salesOrderRepo.ReadAll().ToList();
+            var salesList = await _salesOrderRepo.ReadAll().ToList();
+            return salesList;
         }
     }
 }
