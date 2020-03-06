@@ -9,7 +9,7 @@ class APIClient{
             },
         } )
         .then(res => res.json());
-
+        console.log(json);
         return json;
     }
 

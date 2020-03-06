@@ -1,5 +1,4 @@
 import React from 'react'
-import './Table.css'
 
 
 export default class Table extends React.Component {
@@ -7,10 +6,8 @@ export default class Table extends React.Component {
     constructor(props)
     {
         super(props);
-        console.log(props)
         this.state = {data: [] };
         this.getHeader = this.getHeader.bind(this);
-        this.getRowsData = this.getRowsData.bind(this);
         this.getKeys = this.getKeys.bind(this);
     }
 
@@ -22,30 +19,16 @@ export default class Table extends React.Component {
     getHeader() 
     {
         var keys = this.getKeys();
-        return keys.map((key, index)=> {
+        return keys.map((key)=> {
             return <th key={key}>{key.capitalize()}</th>
         })
-    }
-
-    getRowsData() 
-    {
-        var items = this.props.selectedObj;
-        console.log(items);
-        var keys = this.getKeys();
-        let rmp = keys.map(k => {
-            console.log(items[k].toString())
-            return <tr key={k}><RenderRow key={k}/></tr>
-
-        });
-        console.log(rmp);
-
     }
 
     render() {
         var keys = this.getKeys();
         return (
             <div>
-                <table>
+                <table class="table text-white">
                     <thead>
                         <tr>
                             {
@@ -59,9 +42,11 @@ export default class Table extends React.Component {
                         <tr>
                         {
                             keys.map(k => {
-                                console.log(this.props.selectedObj[k].toString())
-                                return <td key={k}>{this.props.selectedObj[k].toString()}</td>
-                    
+                               return (
+                               <td key={k}>
+                                    {k === "bike" ? "null" : this.props.selectedObj[k]}
+                               </td>
+                               )
                             })
                         }
                         </tr>
