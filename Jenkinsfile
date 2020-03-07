@@ -62,10 +62,10 @@ pipeline {
         sh 'cd BikeShopAnalyticsAPI/ && dotnet publish -c Release -r linux-x64 --self-contained false'
         echo 'Building API ...'
         echo 'Changing Directory...'
-        sh 'cd bikeshop-user-frontend && npm run build'        
+        sh 'cd bikeshop-user-frontend/ && npm install && npm run build'        
         echo 'Building User Front-End ...'
         echo 'Changing Directory...'
-        sh 'cd bikeshop-admin-frontend && npm run build'
+        sh 'cd bikeshop-admin-frontend/ && npm install && npm run build'
         echo 'Building Admin Front-End ...'
         echo 'Build Successful'
       }
