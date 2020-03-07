@@ -73,8 +73,13 @@ pipeline {
     
     stage('Save') {
       steps {
+        fileOperations([fileZipOperation('BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/')])
+        fileOperations([fileRenameOperation(destination: 'API.zip', source: 'publish.zip')])
         fileOperations([fileZipOperation('bikeshop-admin-frontend/build')])
-        archiveArtifacts 'BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.dll, BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.deps.json, BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.runtimeconfig.json'
+        fileOperations([fileRenameOperation(destination: 'Admin-FrontEnd.zip', source: 'build.zip')])
+        fileOperations([fileZipOperation('bikeshop-user-frontend/build')])
+        fileOperations([fileRenameOperation(destination: 'User-FrontEnd.zip', source: 'build.zip')])
+        archiveArtifacts 'API.zip Admin-FrontEnd.zip User-FrontEnd.zip'
       }
     }
     stage('Deploy') {
