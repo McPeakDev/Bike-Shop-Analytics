@@ -8,37 +8,29 @@ class App extends Component {
   constructor(props) 
   {
     super(props)
-    this.state = {data: [], obj: {}};
-    this.changeData = this.changeData.bind(this);
-    this.changeTable = this.changeTable.bind(this);
+    this.state = {categories: [], xvalues: [], yvalues: [], obj: {}};
+    this.changeTable = this.changeCategory.bind(this);
 
   }
   async componentDidMount() 
   {
       let api = new API();
-      this.setState({ data: await api.get("bike", "readall")});   
-      this.setState({obj: this.state.data[0]});  
-      console.log(this.state.obj);
-
+      this.setState({ categories: await api.get("category", "readall")});
+      console.log(this.state.categories);   
   }
 
-  changeData(event) 
+  async changeCategory(event) 
   {
-    this.setState(() => ({obj: this.state.data[event.value]}));
-    this.forceUpdate();
-  }
-
-  async changeTable(event) 
-  {
+    console.log(event.value)
     let api = new API();
-    this.setState({ data: await api.get(event.value, "readall")});   
-    this.setState({obj: this.state.data[0]});  
+    this.setState({ xvalues: await api.get(event.value, "readall")});   
+    this.setState({obj: this.state.xvalues[0]});  
     this.forceUpdate();
   }
 
   getKeys() 
   {
-      return Object.keys(this.state.data);
+      return Object.keys(this.state.categories);
   }
 
   render()
@@ -47,8 +39,8 @@ class App extends Component {
     let keys = this.getKeys();
     let optionItems = keys.map((key) => 
     {
-            let objKeys = Object.keys(this.state.data[key]);
-            return <option value={i++} key={key}>{this.state.data[key][objKeys[1]].capitalize()}</option>
+            let objKeys = Object.keys(this.state.xvalues[key]);
+            return <option value={i++} key={key}>{this.state.xvalues[key][objKeys[1]].capitalize()}</option>
     });
     return(
       <div class="wrapper container">
