@@ -61,12 +61,19 @@ pipeline {
         echo 'Changing Directory...'
         sh 'cd BikeShopAnalyticsAPI/ && dotnet publish -c Release -r linux-x64 --self-contained false'
         echo 'Building API ...'
+        echo 'Changing Directory...'
+        sh 'cd bikeshop-user-frontend && npm run build'        
+        echo 'Building User Front-End ...'
+        echo 'Changing Directory...'
+        sh 'cd bikeshop-admin-frontend && npm run build'
+        echo 'Building Admin Front-End ...'
         echo 'Build Successful'
       }
     }
     
     stage('Save') {
       steps {
+        fileOperations([fileZipOperation('bikeshop-admin-frontend/build')])
         archiveArtifacts 'BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.dll, BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.deps.json, BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.runtimeconfig.json'
       }
     }
@@ -75,7 +82,6 @@ pipeline {
         catchError {
           withCredentials(bindings: [usernamePassword(credentialsId: 'ad99e083-f143-411f-81b1-a87f62c2a72b', usernameVariable: 'FTPUserName', passwordVariable: 'FTPPassword')]) {
           sh "lftp -e 'mput BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.dll BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.deps.json BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.runtimeconfig.json; bye' -u $FTPUserName,$FTPPassword 192.168.1.105"
-
           }
         }
       }
