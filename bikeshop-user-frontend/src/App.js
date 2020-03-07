@@ -21,10 +21,13 @@ class App extends Component {
 
   async changeCategory(event) 
   {
-    console.log(event.value)
+    console.log(this.state.categories[event.value])
     let api = new API();
-    this.setState({ xvalues: await api.get(event.value, "readall")});   
-    this.setState({obj: this.state.xvalues[0]});  
+    this.setState({ xvalues: await api.get(this.state.categories[event.value].plotItemOne, "readall")});   
+    this.setState({ yvalues: await api.get(this.state.categories[event.value].plotItemTwo, "readall")});   
+    this.setState({xvalues: this.state.xvalues[0]});  
+    this.setState({yvalues: this.state.yvalues[0]});  
+    this.setState({obj: {x: this.state.xvalues, y: this.state.yvalues}})
     this.forceUpdate();
   }
 
@@ -39,19 +42,14 @@ class App extends Component {
     let keys = this.getKeys();
     let optionItems = keys.map((key) => 
     {
-            let objKeys = Object.keys(this.state.xvalues[key]);
-            return <option value={i++} key={key}>{this.state.xvalues[key][objKeys[1]].capitalize()}</option>
+            let objKeys = Object.keys(this.state.categories[key]);
+            return <option value={i++} key={key}>{this.state.categories[key][objKeys[1]].capitalize()}</option>
     });
     return(
       <div class="wrapper container">
         <Table selectedObj={this.state.obj}/>
         <div class="row">
-          <select class="rounded form-control-md col-lg-6" ref="bikes" onChange={e => this.changeTable(e.target)}>
-            <option selected value="bike">Bikes</option>
-            <option value="category">Categorys</option>
-            <option value="admin">Admins</option>
-          </select>
-          <select class="rounded form-control-md col-lg-6" ref="bikes" onChange={e => this.changeData(e.target)}>{optionItems}</select>
+          <select class="rounded form-control-md col-lg-6" onChange={e => this.changeCategory(e.target)}>{optionItems}</select>
         </div>
       </div>
     )
