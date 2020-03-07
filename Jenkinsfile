@@ -79,7 +79,7 @@ pipeline {
         fileOperations([fileRenameOperation(destination: 'Admin-FrontEnd.zip', source: 'build.zip')])
         fileOperations([fileZipOperation('bikeshop-user-frontend/build')])
         fileOperations([fileRenameOperation(destination: 'User-FrontEnd.zip', source: 'build.zip')])
-        archiveArtifacts 'API.zip Admin-FrontEnd.zip User-FrontEnd.zip'
+        archiveArtifacts 'API.zip, Admin-FrontEnd.zip, User-FrontEnd.zip'
       }
     }
     stage('Deploy') {
