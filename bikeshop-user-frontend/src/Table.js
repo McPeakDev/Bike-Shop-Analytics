@@ -1,69 +1,83 @@
 import React from 'react'
 
 
-export default class Table extends React.Component {
+class Table extends React.Component {
 
     constructor(props)
     {
         super(props);
         this.state = {data: [] };
-        this.getHeader = this.getHeader.bind(this);
-        this.getKeys = this.getKeys.bind(this);
     }
 
-    getKeys() 
+    getXKeys = () =>  
     {
-        return Object.keys(this.props.selectedObj)
+        return Object.keys(this.props.selectedObj.x)
     }
 
-    getHeader() 
+    getYKeys = () => 
     {
-        var keys = this.getKeys();
-        return keys.map((key)=> {
-            return <th key={key}>{key.capitalize()}</th>
-        })
+        return Object.keys(this.props.selectedObj.y)
     }
 
     render() {
-        var keys = this.getKeys();
-        return (
-            <div>
-                <table class="table text-white">
-                    <thead>
-                        <tr>
+        if(!this.props.selectedObj.x)
+        {
+            return <div className="wrapper container"><h1 className="text-white">Loading...</h1></div>
+        }
+        else
+        {
+            var yKeys = this.getYKeys();
+            return (
+                <div>
+                    <table className="table text-white">
+                        <thead>
+                            <tr>
+                            <th>{this.props.selectedObj.name.capitalize()}</th>
+                                {
+                                    Object.keys(this.props.selectedObj.x[0]).map( p1 => 
+                                        {
+                                            return <th key={p1}>{p1 === "bike" ? null : p1.capitalize()}</th>
+                                        }
+                                    )
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
                             {
-                                keys.map((key)=> {
-                                    return <th key={key}>{key.capitalize()}</th>
-                                })
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                        {
-                            keys.map(k => {
-                               return (
-                               <td key={k}>
-                                    {k === "bike" ? "null" : this.props.selectedObj[k]}
-                               </td>
-                               )
-                            })
-                        }
-                        </tr>
+                                yKeys.map( yKey => 
+                                    {
+                                        return <tr key={yKey}><td>{this.props.selectedObj.y[yKey].name}</td>{Object.keys(this.props.selectedObj.x[yKey]).map(xObj =>
+                                            {
+                                                if(xObj !== "bike")
+                                                {
+                                                    if(this.props.selectedObj.x[yKey][xObj].toString().includes("-"))
+                                                    {
+                                                        let date = new Intl.DateTimeFormat("en-US",{
+                                                            year: "numeric",
+                                                            month: "long",
+                                                            day: "2-digit"
+                                                        }).format(Date.parse(this.props.selectedObj.x[yKey][xObj].toString()))
+                                                        return <td key={xObj}>{date}</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        return <td key={xObj}>{this.props.selectedObj.x[yKey][xObj]}</td>
+                                                      }
 
-                    </tbody>
-                </table>
-            </div>
-        )
+                                                }
+                                                return null
+                                            }
+                                        )
+                                        }</tr> 
+                                    }
+                                )
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            )
+        }
     }
 }
 
-String.prototype.capitalize = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
-}
-
-const RenderRow = (props) => {
-    return props.keys.map((key)=> {
-        return <td key={key}>{props.selectedObj[key]}</td>
-    })
-}
+  export default Table;
