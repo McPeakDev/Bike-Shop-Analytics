@@ -1,46 +1,101 @@
-import React from 'react';
+class APIClient
+{
+    Token = null;
 
-
-class APIClient extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {data: [] };
-        console.log("created");
+    setToken(token)
+    {
+        this.Token = token;
     }
 
-    componentDidMount() {
-        window.fetch("https://bikeshopmonitoring.duckdns.org/bike/readall", {
+    getToken()
+    {
+        return this.Token;
+    }
+
+    async get(type, method) 
+    {
+        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/${type}/${method}`, {
             method: "GET",
             headers: {
-                "Access-Control-Allow-Origin": '*'//,
-                //'Accept': 'application/json',
-                //'Content-Type': 'application/json'
+                "Access-Control-Allow-Origin": '*',
+                "Token": this.Token
             },
-            //body: JSON.stringify({Name: 'Schwinn', Price: 102.34})
         } )
-        //GET
-            .then(res => res.json())
-            .then(json => this.setState({ data: json}));
-        //POST
-            //.then(res => {
-            //    console.log(res.json());
-            //})
-        
-            console.log("called");
+        .then(res => res.json());
+        return json;
     }
 
-    render() {
-        return (
-            <div id="root">
-                <ul>
-                    {this.state.data.map(el => (
-                        <li>
-                            {el.bikeID}: {el.name}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        );
+    async post(type, method, data) 
+    {
+        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/${type}/${method}`, {
+            method: "POST",
+            headers: {
+                "Access-Control-Allow-Origin": '*',
+                "Token": this.Token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        } )
+        .then(res => res.json());
+
+        return json;
+
+    }
+
+    async update(type, data) 
+    {
+        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/${type}/Update`, {
+            method: "PUT",
+            headers: {
+                "Access-Control-Allow-Origin": '*',
+                "Token": this.Token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        } )
+        .then(res => res.json());
+
+
+        return json;
+
+    }
+
+    async delete(type, data) 
+    {
+        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/${type}/Delete`, {
+            method: "DELETE",
+            headers: {
+                "Access-Control-Allow-Origin": '*',
+                "Token": this.Token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        } )
+        .then(res => res.json());
+
+
+        return json;
+
+    }
+
+    async deleteID(type, id) 
+    {
+        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/${type}/Delete/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Access-Control-Allow-Origin": '*',
+                "Token": this.Token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        } )
+        .then(res => res.json())
+
+        return json;
+
     }
 }
 

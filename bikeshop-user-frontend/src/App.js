@@ -44,10 +44,11 @@ class App extends Component {
     });
     return(
       <div className="wrapper container">
-        <Table selectedObj={this.state.obj} />
         <div className="row">
-          <select className="rounded form-control-md col-lg-6" onChange={e => this.changeCategory(e.target)}>{optionItems}</select>
+          <select className="align-content-center rounded form-control-lg col-lg-12" onChange={e => this.changeCategory(e.target)}>{optionItems}</select>
+          <br />>
         </div>
+        <Table selectedObj={this.state.obj} />
       </div>
     )
   }
