@@ -26,7 +26,7 @@ class Table extends React.Component {
         }
         else
         {
-            var yKeys = this.getYKeys();
+            var xKeys = this.getXKeys();
             return (
                 <div>
                     <table className="table text-white">
@@ -44,7 +44,7 @@ class Table extends React.Component {
                         </thead>
                         <tbody>
                             {
-                                yKeys.map( yKey => 
+                                xKeys.map( yKey => 
                                     {
                                         return <tr key={yKey}><td>{this.props.selectedObj.y[yKey].name}</td>{Object.keys(this.props.selectedObj.x[yKey]).map(xObj =>
                                             {
