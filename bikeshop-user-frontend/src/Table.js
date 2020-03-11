@@ -1,6 +1,6 @@
 import React from 'react'
 
-
+//Class that represents A Table.
 class Table extends React.Component {
 
     constructor(props)
