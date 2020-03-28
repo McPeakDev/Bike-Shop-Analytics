@@ -84,14 +84,14 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        catchError {
-          withCredentials(bindings: [usernamePassword(credentialsId: 'ad99e083-f143-411f-81b1-a87f62c2a72b', usernameVariable: 'FTPUserName', passwordVariable: 'FTPPassword')]) {
-            sh "lftp -e 'mput BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.dll BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.deps.json BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.runtimeconfig.json; bye' -u $FTPUserName,$FTPPassword 192.168.1.105"
-            sh "cd bikeshop-admin-frontend/build/ && lftp -e 'mirror -R ; bye' -u $FTPUserName,$FTPPassword 192.168.1.10"
-            sh "cd bikeshop-user-frontend/build/ && lftp -e 'mirror -R; bye' -u $FTPUserName,$FTPPassword 192.168.1.9"
-          }
+//        catchError {
+ //         withCredentials(bindings: [usernamePassword(credentialsId: 'ad99e083-f143-411f-81b1-a87f62c2a72b', usernameVariable: 'FTPUserName', passwordVariable: 'FTPPassword')]) {
+   //         sh "lftp -e 'mput BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.dll BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.deps.json BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.runtimeconfig.json; bye' -u $FTPUserName,$FTPPassword 192.168.1.105"
+    //        sh "cd bikeshop-admin-frontend/build/ && lftp -e 'mirror -R ; bye' -u $FTPUserName,$FTPPassword 192.168.1.10"
+    //        sh "cd bikeshop-user-frontend/build/ && lftp -e 'mirror -R; bye' -u $FTPUserName,$FTPPassword 192.168.1.9"
+     //     }
           echo "Deployed!"
-        }
+        //}
       }
       post {
         failure {
