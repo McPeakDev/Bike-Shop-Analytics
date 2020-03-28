@@ -1,9 +1,24 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'mcr.microsoft.com/dotnet/core/aspnet:3.1'
+    }
+
+  }
   stages {
     stage('Merge') {
+      post {
+        failure {
+          echo 'Merge Failed Continuing...'
+          script {
+            currentBuild.result = 'UNSTABLE'
+          }
+
+        }
+
+      }
       steps {
-        catchError {
+        catchError() {
           sh 'git config --global credential.helper cache'
           sh 'git config --global push.default simple'
           sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
@@ -37,18 +52,9 @@ pipeline {
           sh 'git merge master'
           sh 'git push origin hudTest'
         }
-      }
-      post {
-        failure {
-          echo "Merge Failed Continuing..."
-          script {
-              currentBuild.result = 'UNSTABLE'
-          }
-        }
-        
+
       }
     }
-
 
     stage('Test') {
       steps {
@@ -62,7 +68,7 @@ pipeline {
         sh 'cd BikeShopAnalyticsAPI/ && dotnet publish -c Release -r linux-x64 --self-contained false'
         echo 'Building API ...'
         echo 'Changing Directory...'
-        sh 'cd bikeshop-user-frontend/ && npm install && npm run build'        
+        sh 'cd bikeshop-user-frontend/ && npm install && npm run build'
         echo 'Building User Front-End ...'
         echo 'Changing Directory...'
         sh 'cd bikeshop-admin-frontend/ && npm install && npm run build'
@@ -70,7 +76,7 @@ pipeline {
         echo 'Build Successful'
       }
     }
-    
+
     stage('Save') {
       steps {
         fileOperations([fileZipOperation('BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/')])
@@ -82,26 +88,26 @@ pipeline {
         archiveArtifacts 'API.zip, Admin-FrontEnd.zip, User-FrontEnd.zip'
       }
     }
+
     stage('Deploy') {
-      steps {
-//        catchError {
- //         withCredentials(bindings: [usernamePassword(credentialsId: 'ad99e083-f143-411f-81b1-a87f62c2a72b', usernameVariable: 'FTPUserName', passwordVariable: 'FTPPassword')]) {
-   //         sh "lftp -e 'mput BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.dll BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.deps.json BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/BikeShopAnalyticsAPI.runtimeconfig.json; bye' -u $FTPUserName,$FTPPassword 192.168.1.105"
-    //        sh "cd bikeshop-admin-frontend/build/ && lftp -e 'mirror -R ; bye' -u $FTPUserName,$FTPPassword 192.168.1.10"
-    //        sh "cd bikeshop-user-frontend/build/ && lftp -e 'mirror -R; bye' -u $FTPUserName,$FTPPassword 192.168.1.9"
-     //     }
-          echo "Deployed!"
-        //}
-      }
       post {
         failure {
-          echo "Useless Errors From FTP..."
+          echo 'Useless Errors From FTP...'
           script {
-              currentBuild.result = 'UNSTABLE'
+            currentBuild.result = 'UNSTABLE'
           }
+
         }
+
+      }
+      steps {
+        echo 'Deployed!'
       }
     }
+
+  }
+  environment {
+    Home = '/tmp'
   }
   triggers {
     cron('0 8 * * *')
