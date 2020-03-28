@@ -1,12 +1,8 @@
 pipeline {
-  agent {
-    docker {
-      image 'mcr.microsoft.com/dotnet/core/sdk:3.1'
-    }
-
-  }
+  agent any
   stages {
     stage('Merge') {
+      agent any
       post {
         failure {
           echo 'Merge Failed Continuing...'
@@ -57,51 +53,160 @@ pipeline {
     }
 
     stage('Test') {
-      steps {
-        echo 'Implement Testing'
+      parallel {
+        stage('Test API') {
+          agent {
+            docker {
+              image 'mcr.microsoft.com/dotnet/core/sdk:3.1'
+            }
+
+          }
+          environment {
+            Home = '/tmp'
+          }
+          steps {
+            echo 'Implement Testing'
+          }
+        }
+
+        stage('Test Admin') {
+          agent {
+            docker {
+              image 'node:10-alpine'
+            }
+
+          }
+          steps {
+            echo 'Implement Testing'
+          }
+        }
+
+        stage('Test User') {
+          agent {
+            docker {
+              image 'node:10-alpine'
+            }
+
+          }
+          steps {
+            echo 'Implement Testing'
+          }
+        }
+
       }
     }
 
     stage('Build') {
-      steps {
-        echo 'Changing Directory...'
-        sh 'cd BikeShopAnalyticsAPI/ && dotnet publish -c Release -r linux-x64 --self-contained false'
-        echo 'Building API ...'
-        echo 'Changing Directory...'
-        sh 'cd bikeshop-user-frontend/ && npm install && npm run build'
-        echo 'Building User Front-End ...'
-        echo 'Changing Directory...'
-        sh 'cd bikeshop-admin-frontend/ && npm install && npm run build'
-        echo 'Building Admin Front-End ...'
-        echo 'Build Successful'
+      parallel {
+        stage('Build API') {
+          agent {
+            docker {
+              image 'mcr.microsoft.com/dotnet/core/sdk:3.1'
+            }
+
+          }
+          environment {
+            Home = '/tmp'
+          }
+          steps {
+            sh '''cd BikeShopAnalyticsAPI/ 
+dotnet publish -c Release -r linux-x64 --self-contained false
+echo "API Built!"'''
+          }
+        }
+
+        stage('Build Admin') {
+          agent {
+            docker {
+              image 'node:10-alpine'
+            }
+
+          }
+          steps {
+            sh '''cd bikeshop-admin-frontend/
+npm install 
+npm run build
+echo "Admin Front-End Built!"'''
+          }
+        }
+
+        stage('Build User') {
+          agent {
+            docker {
+              image 'node:10-alpine'
+            }
+
+          }
+          steps {
+            sh '''cd bikeshop-admin-frontend/
+npm install 
+npm run build
+echo "User Front-End Built!"'''
+          }
+        }
+
       }
     }
 
     stage('Save') {
-      steps {
-        fileOperations([fileZipOperation('BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/')])
-        fileOperations([fileRenameOperation(destination: 'API.zip', source: 'publish.zip')])
-        fileOperations([fileZipOperation('bikeshop-admin-frontend/build')])
-        fileOperations([fileRenameOperation(destination: 'Admin-FrontEnd.zip', source: 'build.zip')])
-        fileOperations([fileZipOperation('bikeshop-user-frontend/build')])
-        fileOperations([fileRenameOperation(destination: 'User-FrontEnd.zip', source: 'build.zip')])
-        archiveArtifacts 'API.zip, Admin-FrontEnd.zip, User-FrontEnd.zip'
+      parallel {
+        stage('Save API') {
+          steps {
+            fileOperations([fileZipOperation('BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/')])
+            fileOperations([fileRenameOperation(destination: 'API.zip', source: 'publish.zip')])
+            fileOperations([fileZipOperation('bikeshop-admin-frontend/build')])
+            fileOperations([fileRenameOperation(destination: 'Admin-FrontEnd.zip', source: 'build.zip')])
+            fileOperations([fileZipOperation('bikeshop-user-frontend/build')])
+            fileOperations([fileRenameOperation(destination: 'User-FrontEnd.zip', source: 'build.zip')])
+            archiveArtifacts 'API.zip, Admin-FrontEnd.zip, User-FrontEnd.zip'
+          }
+        }
+
+        stage('Save Admin') {
+          steps {
+            echo 'Implement Manually'
+          }
+        }
+
+        stage('Save User') {
+          steps {
+            echo 'Implement Manually'
+          }
+        }
+
       }
     }
 
     stage('Deploy') {
-      post {
-        failure {
-          echo 'Useless Errors From FTP...'
-          script {
-            currentBuild.result = 'UNSTABLE'
-          }
+      parallel {
+        stage('Deploy') {
+          post {
+            failure {
+              echo 'Useless Errors From FTP...'
+              script {
+                currentBuild.result = 'UNSTABLE'
+              }
 
+            }
+
+          }
+          steps {
+            echo 'API Deployed!'
+          }
         }
 
-      }
-      steps {
-        echo 'Deployed!'
+        stage('Deploy Admin') {
+          steps {
+            echo 'Admin Front-End Deployed!'
+          }
+        }
+
+        stage('Deploy User') {
+          steps {
+            echo 'User Front-End Deployed!'
+          }
+        }
+
       }
     }
 
