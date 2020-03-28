@@ -114,6 +114,7 @@ dotnet publish -c Release -r linux-x64 --self-contained false
 echo "API Built!"'''
             fileOperations([fileZipOperation('BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/')])
             fileOperations([fileRenameOperation(destination: 'API.zip', source: 'publish.zip')])
+            archiveArtifacts 'API.zip'
           }
         }
 
@@ -131,6 +132,7 @@ npm run build
 echo "Admin Front-End Built!"'''
             fileOperations([fileZipOperation('bikeshop-admin-frontend/build')])
             fileOperations([fileRenameOperation(destination: 'Admin-FrontEnd.zip', source: 'build.zip')])
+            archiveArtifacts 'Admin-FrontEnd.zip'
           }
         }
 
@@ -146,8 +148,9 @@ echo "Admin Front-End Built!"'''
 npm install 
 npm run build
 echo "User Front-End Built!"'''
+            fileOperations([fileZipOperation('bikeshop-user-frontend/build')])
             fileOperations([fileRenameOperation(destination: 'User-FrontEnd.zip', source: 'build.zip')])
-            archiveArtifacts 'API.zip, Admin-FrontEnd.zip, User-FrontEnd.zip'
+            archiveArtifacts 'User-FrontEnd.zip'
           }
         }
 
