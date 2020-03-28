@@ -112,6 +112,8 @@ pipeline {
             sh '''cd BikeShopAnalyticsAPI/ 
 dotnet publish -c Release -r linux-x64 --self-contained false
 echo "API Built!"'''
+            fileOperations([fileZipOperation('BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/')])
+            fileOperations([fileRenameOperation(destination: 'API.zip', source: 'publish.zip')])
           }
         }
 
@@ -127,6 +129,8 @@ echo "API Built!"'''
 npm install 
 npm run build
 echo "Admin Front-End Built!"'''
+            fileOperations([fileZipOperation('bikeshop-admin-frontend/build')])
+            fileOperations([fileRenameOperation(destination: 'Admin-FrontEnd.zip', source: 'build.zip')])
           }
         }
 
@@ -142,35 +146,8 @@ echo "Admin Front-End Built!"'''
 npm install 
 npm run build
 echo "User Front-End Built!"'''
-          }
-        }
-
-      }
-    }
-
-    stage('Save') {
-      parallel {
-        stage('Save API') {
-          steps {
-            fileOperations([fileZipOperation('BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/')])
-            fileOperations([fileRenameOperation(destination: 'API.zip', source: 'publish.zip')])
-            fileOperations([fileZipOperation('bikeshop-admin-frontend/build')])
-            fileOperations([fileRenameOperation(destination: 'Admin-FrontEnd.zip', source: 'build.zip')])
-            fileOperations([fileZipOperation('bikeshop-user-frontend/build')])
             fileOperations([fileRenameOperation(destination: 'User-FrontEnd.zip', source: 'build.zip')])
             archiveArtifacts 'API.zip, Admin-FrontEnd.zip, User-FrontEnd.zip'
-          }
-        }
-
-        stage('Save Admin') {
-          steps {
-            echo 'Implement Manually'
-          }
-        }
-
-        stage('Save User') {
-          steps {
-            echo 'Implement Manually'
           }
         }
 
@@ -179,17 +156,7 @@ echo "User Front-End Built!"'''
 
     stage('Deploy') {
       parallel {
-        stage('Deploy') {
-          post {
-            failure {
-              echo 'Useless Errors From FTP...'
-              script {
-                currentBuild.result = 'UNSTABLE'
-              }
-
-            }
-
-          }
+        stage('Deploy API') {
           steps {
             echo 'API Deployed!'
           }
