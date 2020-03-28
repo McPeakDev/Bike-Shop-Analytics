@@ -1,8 +1,7 @@
 pipeline {
-  agent any
+  agent none
   stages {
     stage('Merge') {
-      agent any
       post {
         failure {
           echo 'Merge Failed Continuing...'
