@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /var/www/API
+RUN ls -al
 RUN cd BikeShopAnalyticsAPI/
 RUN dotnet publish -c Release -r linux-x64 --self-contained false
 EXPOSE 5000/tcp
