@@ -18,7 +18,7 @@ namespace BikeShopAnalytics.Controllers
         private IRepository<PurchaseItem> _purchaseItemRepo;
         private IRepository<Auth> _authRepo;
 
-        public ManufacturerTransactionController(IRepository<PurchaseItem> purchaseItemRepo, IRepository<Auth> authRepo)
+        public PurchaseItemController(IRepository<PurchaseItem> purchaseItemRepo, IRepository<Auth> authRepo)
         {
             _purchaseItemRepo = purchaseItemRepo;
             _authRepo = authRepo;
