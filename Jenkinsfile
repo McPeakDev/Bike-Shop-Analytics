@@ -15,24 +15,14 @@ pipeline {
         }
 
         stage('Create Admin Image') {
-          agent {
-            docker {
-              image 'node:10-alpine'
-            }
-
-          }
+          agent any
           steps {
             echo 'Implement Image Creation'
           }
         }
 
         stage('Create User Image') {
-          agent {
-            docker {
-              image 'node:10-alpine'
-            }
-
-          }
+          agent any
           steps {
             echo 'Implement Image Creation'
           }
