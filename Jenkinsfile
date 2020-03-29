@@ -100,7 +100,7 @@ pipeline {
         stage('Create API Image') {
           agent {
             dockerfile {
-              filename 'BikeShopAnalyticsAPI/DockerFile'
+              filename 'BikeShopAnalyticsAPI/Dockerfile'
             }
 
           }
