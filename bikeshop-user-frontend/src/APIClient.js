@@ -2,7 +2,7 @@
 class APIClient
 {
     //Token variable to verify the user is logged in.
-    Token = "b1b43074c8c0d6d5ad1b5ec2699bce99";
+    Token = "9be8a0fbd8e3605bebba0555f14467d1";
 
     //Sets the token variable
     setToken(token)
@@ -20,7 +20,7 @@ class APIClient
     async get(type, method) 
     {
         //Call the API and await the return of the call.
-        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/${type}/${method}`, {
+        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/api/${type}/${method}`, {
             method: "GET",
             headers: {
                 "Access-Control-Allow-Origin": '*',
@@ -37,7 +37,7 @@ class APIClient
     async post(type, method, data) 
     {
         //Call the API and await the return of the call.
-        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/${type}/${method}`, {
+        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/api/${type}/${method}`, {
             method: "POST",
             headers: {
                 "Access-Control-Allow-Origin": '*',
@@ -58,7 +58,7 @@ class APIClient
     async update(type, data) 
     {
         //Call the API and await the return of the call.
-        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/${type}/Update`, {
+        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/api/${type}/Update`, {
             method: "PUT",
             headers: {
                 "Access-Control-Allow-Origin": '*',
@@ -79,7 +79,7 @@ class APIClient
     async delete(type, data) 
     {
         //Call the API and await the return of the call.
-        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/${type}/Delete`, {
+        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/api/${type}/Delete`, {
             method: "DELETE",
             headers: {
                 "Access-Control-Allow-Origin": '*',
@@ -100,7 +100,7 @@ class APIClient
     async deleteID(type, id) 
     {
         //Call the API and await the return of the call.
-        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/${type}/Delete/${id}`, {
+        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/api/${type}/Delete/${id}`, {
             method: "DELETE",
             headers: {
                 "Access-Control-Allow-Origin": '*',
