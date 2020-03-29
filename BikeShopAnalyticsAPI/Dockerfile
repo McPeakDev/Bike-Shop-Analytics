@@ -3,4 +3,4 @@ COPY ./BikeShopAnalyticsAPI /var/www/API
 WORKDIR /var/www/API
 RUN dotnet publish -c Release -r linux-x64 --self-contained false
 EXPOSE 5000/tcp
-ENTRYPOINT ["dotnet", "/var/www/API/bin/Release/netcoreapp3.1/linux-x64/BikeShopAnalyticsAPI.dll"]
+ENTRYPOINT ["dotnet", "--urls", "https://0.0.0.0:5000", "/var/www/API/bin/Release/netcoreapp3.1/linux-x64/BikeShopAnalyticsAPI.dll"]
