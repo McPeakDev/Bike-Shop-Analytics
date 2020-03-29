@@ -114,6 +114,8 @@ echo "API Built!"'''
             fileOperations([fileZipOperation('BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/')])
             fileOperations([fileRenameOperation(destination: 'API.zip', source: 'publish.zip')])
             archiveArtifacts 'API.zip'
+            sh '''docker build -t API -f BikeShopAnalyticsAPI/Dockerfile BikeShopAnalyticsAPI/.
+'''
           }
         }
 
@@ -160,6 +162,8 @@ echo "User Front-End Built!"'''
       parallel {
         stage('Deploy API') {
           steps {
+            sh '''docker run --publish=443:8080 API
+'''
             echo 'API Deployed!'
           }
         }
