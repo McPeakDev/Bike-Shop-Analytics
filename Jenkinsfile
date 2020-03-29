@@ -65,6 +65,12 @@ pipeline {
           }
           steps {
             echo 'Implement Testing'
+            sh '''cd BikeShopAnalyticsAPI/ \
+                  dotnet publish -c Release -r linux-x64 --self-contained false \
+                  echo "API Built!"'''
+            fileOperations([fileZipOperation('BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/')])
+            fileOperations([fileRenameOperation(destination: 'API.zip', source: 'publish.zip')])
+            archiveArtifacts 'API.zip'
           }
         }
 
@@ -77,6 +83,13 @@ pipeline {
           }
           steps {
             echo 'Implement Testing'
+            sh '''cd bikeshop-admin-frontend/ \
+                  npm install \
+                  npm run build \
+                  echo "Admin Front-End Built!"'''
+            fileOperations([fileZipOperation('bikeshop-admin-frontend/build')])
+            fileOperations([fileRenameOperation(destination: 'Admin-FrontEnd.zip', source: 'build.zip')])
+            archiveArtifacts 'Admin-FrontEnd.zip'
           }
         }
 
@@ -89,6 +102,13 @@ pipeline {
           }
           steps {
             echo 'Implement Testing'
+            sh '''cd bikeshop-admin-frontend/ \
+                  npm install \
+                  npm run build \
+                  echo "User Front-End Built!"'''
+            fileOperations([fileZipOperation('bikeshop-user-frontend/build')])
+            fileOperations([fileRenameOperation(destination: 'User-FrontEnd.zip', source: 'build.zip')])
+            archiveArtifacts 'User-FrontEnd.zip'
           }
         }
 
@@ -108,14 +128,7 @@ pipeline {
             Home = '/tmp'
           }
           steps {
-            sh '''cd BikeShopAnalyticsAPI/ 
-dotnet publish -c Release -r linux-x64 --self-contained false
-echo "API Built!"'''
-            fileOperations([fileZipOperation('BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/')])
-            fileOperations([fileRenameOperation(destination: 'API.zip', source: 'publish.zip')])
-            archiveArtifacts 'API.zip'
-            sh '''ls -al
-docker build -t API -f BikeShopAnalyticsAPI/Dockerfile BikeShopAnalyticsAPI/.
+            sh '''docker build -t API -f BikeShopAnalyticsAPI/Dockerfile BikeShopAnalyticsAPI/.
 '''
           }
         }
@@ -128,13 +141,7 @@ docker build -t API -f BikeShopAnalyticsAPI/Dockerfile BikeShopAnalyticsAPI/.
 
           }
           steps {
-            sh '''cd bikeshop-admin-frontend/
-npm install 
-npm run build
-echo "Admin Front-End Built!"'''
-            fileOperations([fileZipOperation('bikeshop-admin-frontend/build')])
-            fileOperations([fileRenameOperation(destination: 'Admin-FrontEnd.zip', source: 'build.zip')])
-            archiveArtifacts 'Admin-FrontEnd.zip'
+            echo 'Implement Image Creation'
           }
         }
 
@@ -146,16 +153,9 @@ echo "Admin Front-End Built!"'''
 
           }
           steps {
-            sh '''cd bikeshop-admin-frontend/
-npm install 
-npm run build
-echo "User Front-End Built!"'''
-            fileOperations([fileZipOperation('bikeshop-user-frontend/build')])
-            fileOperations([fileRenameOperation(destination: 'User-FrontEnd.zip', source: 'build.zip')])
-            archiveArtifacts 'User-FrontEnd.zip'
+            echo 'Implement Image Creation'
           }
         }
-
       }
     }
 
@@ -180,7 +180,6 @@ echo "User Front-End Built!"'''
             echo 'User Front-End Deployed!'
           }
         }
-
       }
     }
 
