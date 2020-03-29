@@ -99,8 +99,8 @@ pipeline {
       parallel {
         stage('Create API Image') {
           agent {
-            dockerfile {
-              filename 'BikeShopAnalyticsAPI/Dockerfile'
+            docker {
+              image 'mcr.microsoft.com/dotnet/core/aspnet:3.1'
             }
 
           }
@@ -108,6 +108,7 @@ pipeline {
             Home = '/tmp'
           }
           steps {
+            sh 'apt install docker.io'
             sh '''cd BikeShopAnalyticsAPI/ 
 dotnet publish -c Release -r linux-x64 --self-contained false
 echo "API Built!"'''
