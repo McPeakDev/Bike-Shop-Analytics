@@ -102,7 +102,7 @@ echo "Admin Front-End Built!"'''
           }
           steps {
             echo 'Implement Testing'
-            sh '''cd bikeshop-admin-frontend/
+            sh '''cd bikeshop-user-frontend/
 npm install
 npm run build
 echo "User Front-End Built!"'''
@@ -123,7 +123,7 @@ echo "User Front-End Built!"'''
             Home = '/tmp'
           }
           steps {
-            sh '''docker build -t API -f BikeShopAnalyticsAPI/Dockerfile BikeShopAnalyticsAPI/.
+            sh '''docker build -t api -f BikeShopAnalyticsAPI/Dockerfile BikeShopAnalyticsAPI/.
 '''
           }
         }
