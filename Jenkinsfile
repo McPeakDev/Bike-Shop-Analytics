@@ -9,15 +9,14 @@ pipeline {
             Home = '/tmp'
           }
           steps {
-            sh '''docker build -t api -f BikeShopAnalyticsAPI/Dockerfile .
-'''
+            sh '''docker build -t api -f BikeShopAnalyticsAPI/Dockerfile .'''
           }
         }
 
         stage('Create Admin Image') {
           agent any
           steps {
-            echo 'Implement Image Creation'
+            sh '''docker build -t admin -f bikeshop-admin-frontend/Dockerfile .'''
           }
         }
 
