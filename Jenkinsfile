@@ -9,7 +9,7 @@ pipeline {
             Home = '/tmp'
           }
           steps {
-            sh '''docker build -t api -f BikeShopAnalyticsAPI/Dockerfile BikeShopAnalyticsAPI/.
+            sh '''docker build -t api -f BikeShopAnalyticsAPI/Dockerfile .
 '''
           }
         }
