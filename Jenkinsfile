@@ -42,7 +42,7 @@ pipeline {
 
         stage('Deploy Admin') {
           steps {
-            sh '''docker container stop admin && docker container rm admin'''
+            sh '''docker container stop admin-fe && docker container rm admin-fe'''
             sh '''docker run -p 3000:3000 --name admin-fe -d admin:latest'''
             echo 'Admin Front-End Deployed!'
           }
