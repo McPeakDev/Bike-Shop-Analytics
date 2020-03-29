@@ -95,12 +95,12 @@ pipeline {
       }
     }
 
-    stage('Build') {
+    stage('Create Images') {
       parallel {
-        stage('Build API') {
+        stage('Create API Image') {
           agent {
-            docker {
-              image 'mcr.microsoft.com/dotnet/core/sdk:3.1'
+            dockerfile {
+              filename 'BikeShopAnalyticsAPI/DockerFile'
             }
 
           }
@@ -119,7 +119,7 @@ echo "API Built!"'''
           }
         }
 
-        stage('Build Admin') {
+        stage('Create Admin Image') {
           agent {
             docker {
               image 'node:10-alpine'
@@ -137,7 +137,7 @@ echo "Admin Front-End Built!"'''
           }
         }
 
-        stage('Build User') {
+        stage('Create User Image') {
           agent {
             docker {
               image 'node:10-alpine'
