@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BikeShopAnalyticsAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CategoryController : ControllerBase
     {
         private IRepository<Category> _categoryRepo;

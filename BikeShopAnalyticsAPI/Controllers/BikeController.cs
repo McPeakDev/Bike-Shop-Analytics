@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 namespace BikeShopAnalytics.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class BikeController : ControllerBase
     {
         private IRepository<Bike> _bikeRepo;

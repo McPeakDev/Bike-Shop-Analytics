@@ -14,7 +14,7 @@ using System.Text;
 namespace BikeShopAnalyticsAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AdminController : ControllerBase
     {
         private IRepository<Admin> _adminRepo;
