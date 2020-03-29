@@ -2,7 +2,7 @@
 class APIClient
 {
     //Token variable to verify the user is logged in.
-    Token = null;
+    Token = "b1b43074c8c0d6d5ad1b5ec2699bce99";
 
     //Sets the token variable
     setToken(token)

@@ -48,7 +48,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
     createCategory = async (event) =>
     {
         event.preventDefault();
-        var chart = {categoryName: this.refs.nameCreate.value, plotItemOne: this.refs.xCreate.value, plotItemTwo: this.refs.yCreate.value, chartType: this.refs.chartTypeCreate.value}
+        let chart = {categoryName: this.refs.nameCreate.value, plotItemOne: this.refs.xCreate.value, plotItemTwo: this.refs.yCreate.value, chartType: this.refs.chartTypeCreate.value}
         await this.api.post("category","create", chart)
         this.componentDidMount();
     }
@@ -56,7 +56,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
     updateCategory = async (event) =>
     {   
         event.preventDefault();
-        var chart = {categoryID: parseInt(this.refs.iDUpdate.value), categoryName: this.refs.nameUpdate.value, plotItemOne: this.refs.xUpdate.value, plotItemTwo: this.refs.yUpdate.value, chartType: this.refs.chartTypeUpdate.value}
+        let chart = {categoryID: parseInt(this.refs.iDUpdate.value), categoryName: this.refs.nameUpdate.value, plotItemOne: this.refs.xUpdate.value, plotItemTwo: this.refs.yUpdate.value, chartType: this.refs.chartTypeUpdate.value}
         await this.api.update("category", chart)
         this.componentDidMount();
 
