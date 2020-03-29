@@ -108,14 +108,14 @@ pipeline {
             Home = '/tmp'
           }
           steps {
-            sh 'apk install docker.io'
             sh '''cd BikeShopAnalyticsAPI/ 
 dotnet publish -c Release -r linux-x64 --self-contained false
 echo "API Built!"'''
             fileOperations([fileZipOperation('BikeShopAnalyticsAPI/bin/Release/netcoreapp3.1/linux-x64/publish/')])
             fileOperations([fileRenameOperation(destination: 'API.zip', source: 'publish.zip')])
             archiveArtifacts 'API.zip'
-            sh '''docker build -t API -f BikeShopAnalyticsAPI/Dockerfile BikeShopAnalyticsAPI/.
+            sh '''ls -al
+docker build -t API -f BikeShopAnalyticsAPI/Dockerfile BikeShopAnalyticsAPI/.
 '''
           }
         }
