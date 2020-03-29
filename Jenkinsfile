@@ -34,14 +34,16 @@ pipeline {
       parallel {
         stage('Deploy API') {
           steps {
-            sh '''docker run --publish=443:8080 API
-'''
+            sh '''docker container stop api && docker container rm api'''
+            sh '''docker run -p 5000:5000 --name api -d api:latest'''
             echo 'API Deployed!'
           }
         }
 
         stage('Deploy Admin') {
           steps {
+            sh '''docker container stop admin && docker container rm admin'''
+            sh '''docker run -p 3000:3000 --name admin-fe -d admin:latest'''
             echo 'Admin Front-End Deployed!'
           }
         }
