@@ -108,7 +108,7 @@ pipeline {
             Home = '/tmp'
           }
           steps {
-            sh 'apt install docker.io'
+            sh 'sudo apt install docker.io'
             sh '''cd BikeShopAnalyticsAPI/ 
 dotnet publish -c Release -r linux-x64 --self-contained false
 echo "API Built!"'''
