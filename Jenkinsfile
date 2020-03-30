@@ -14,11 +14,9 @@ pipeline {
       }
       steps {
         catchError() {
-        withCredentials([usernamePassword(credentialsId: 'fd3bf359-9733-41e4-a86d-be304b4c1c49', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+           git credentialsId: 'bitbucket-cloud', url: 'https://bitbucket.org/McPeakML/bike-shop-analytics.git'
            sh 'git config --global credential.helper cache'
            sh 'git config --global push.default simple'
-           sh 'git remote rm origin'
-           sh 'git remote add origin https://{$GIT_USERNAME}@bitbucket.org/{$GIT_USERNAME}/bike-shop-analytics.git'
            sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
            sh 'git fetch'
            sh 'git checkout JohnsonZD'
@@ -49,7 +47,6 @@ pipeline {
            sh 'git checkout hudTest'
            sh 'git merge master'
            sh 'git push origin hudTest'
-         }
         }
       }
     }
