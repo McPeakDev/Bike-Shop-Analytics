@@ -5,7 +5,7 @@ import Table from "./Table"
 import API from './APIClient'
 
 //Default Program. Renders all other components
-class UserPage extends Component {
+class App extends Component {
   
   //Create a class-wide API variable 
   api = new API();
@@ -88,4 +88,4 @@ String.prototype.capitalize = function() {
 
 
 //Export App for importing.
-export default UserPage;
+export default App;

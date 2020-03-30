@@ -5,7 +5,7 @@ import LandingPage from './LandingPage';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 
- class AdminPage extends React.Component
+ class App extends React.Component
  {
     api = new API();
     
@@ -67,4 +67,4 @@ String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
   }
 
-export default AdminPage
+export default App
