@@ -33,7 +33,7 @@ pipeline {
           sh 'git config --global merge.ours.driver true'
           sh 'git merge McPeakML'
           sh 'git status'
-          sh 'git remote set-url origin https://bitbucket.org/$GIT_USER/bike-shop-analytics.git'
+          sh 'git remote set-url ssh://git@bitbucket.org/$GIT_USER/bike-shop-analytics.git'
           sh 'git push origin master'
           sh 'git checkout McPeakML'
           sh 'git merge master'
@@ -150,7 +150,7 @@ pipeline {
           agent any
           steps {
             sh '''docker container stop api && docker container rm api'''
-            sh '''docker run -p 5000:5000 --name api -d api:latest'''
+            sh '''docker run -p 5000:5000 --name api --restart always -d api:latest'''
             echo 'API Deployed!'
           }
         }
@@ -159,7 +159,7 @@ pipeline {
           agent any
           steps {
             sh '''docker container stop admin-fe && docker container rm admin-fe'''
-            sh '''docker run -p 3000:3000 --name admin-fe -d admin:latest'''
+            sh '''docker run -p 3000:3000 --name admin-fe --restart always -d admin:latest'''
             echo 'Admin Front-End Deployed!'
           }
         }
@@ -167,7 +167,7 @@ pipeline {
         stage('Deploy User') {
           steps {
             sh '''docker container stop user-fe && docker container rm user-fe'''
-            sh '''docker run -p 3001:3001 --name user-fe -d user:latest'''
+            sh '''docker run -p 3001:3001 --name user-fe --restart always -d user:latest'''
             echo 'User Front-End Deployed!'
           }
         }
