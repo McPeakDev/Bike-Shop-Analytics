@@ -158,7 +158,7 @@ pipeline {
           }
         }
 
-        stage('Deploy Front-End') {
+        stage('Deploy Admin Front-End') {
           agent any
           steps {
             sh 'docker container stop admin-fe && docker container rm admin-fe'
@@ -167,7 +167,7 @@ pipeline {
           }
         }
 
-        stage('Deploy User') {
+        stage('Deploy User Front-End') {
           agent any
           steps {
             sh 'docker container stop user-fe && docker container rm user-fe'
