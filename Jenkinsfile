@@ -15,9 +15,9 @@ pipeline {
       }
       steps {
         catchError() {
-          git(credentialsId: 'bitbucket-cloud', url: 'https://bitbucket.org/McPeakML/bike-shop-analytics.git')
           sh 'git config --global credential.helper cache'
           sh 'git config --global push.default simple'
+          sh 'git config user.name "Matthew McPeak"'
           sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
           sh 'git fetch'
           sh 'git checkout JohnsonZD'
