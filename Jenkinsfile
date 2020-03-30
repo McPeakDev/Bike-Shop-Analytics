@@ -162,7 +162,7 @@ pipeline {
           agent any
           steps {
             sh 'docker container stop admin-fe && docker container rm admin-fe'
-            sh 'docker run -p 3000:3000 --name admin-fe --restart always -d admin:latest'
+            sh 'docker run -p 3002:3002 --name admin-fe --restart always -d admin:latest'
             echo 'Admin Front-End Deployed!'
           }
         }
