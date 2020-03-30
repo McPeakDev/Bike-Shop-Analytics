@@ -9,12 +9,14 @@ class UserPage extends Component {
   
   //Create a class-wide API variable 
   api = new API();
+  UserToken = "9be8a0fbd8e3605bebba0555f14467d1";
 
   //Default Constructor. Instantiates the state of the class.
   constructor(props) 
   {
     super(props);
     this.state = {categories: [], obj: {}};
+    this.api.Token = this.UserToken;
   }
 
   //Upon a component mounting, Load data into the application state.
