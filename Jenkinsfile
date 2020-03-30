@@ -15,40 +15,42 @@ pipeline {
       }
       steps {
         catchError() {
-        withCredentials([usernamePassword(credentialsId: 'fd3bf359-9733-41e4-a86d-be304b4c1c49', passwordVariable: 'GIT_PASS', usernameVariable: 'GIT_USER')]) {
-          sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
-          sh 'git fetch'
-          sh 'git checkout JohnsonZD'
-          sh 'git pull'
-          sh 'git checkout McNabbMR'
-          sh 'git pull'
-          sh 'git checkout hudTest'
-          sh 'git pull'
-          sh 'git checkout master'
-          sh 'git pull'
-          sh 'git checkout McPeakML'
-          sh 'git pull'
-          sh 'git merge origin/JohnsonZD origin/McNabbMR origin/hudTest'
-          sh 'git checkout master'
-          sh 'git config --global merge.ours.driver true'
-          sh 'git merge McPeakML'
-          sh 'git status'
-          sh 'git remote set-url origin ssh://git@bitbucket.org/$GIT_USER/bike-shop-analytics.git'
-          sh 'git push origin master'
-          sh 'git checkout McPeakML'
-          sh 'git merge master'
-          sh 'git push origin McPeakML'
-          sh 'git checkout JohnsonZD'
-          sh 'git merge master'
-          sh 'git push origin JohnsonZD'
-          sh 'git checkout McNabbMR'
-          sh 'git merge master'
-          sh 'git push origin McNabbMR'
-          sh 'git checkout hudTest'
-          sh 'git merge master'
-          sh 'git push origin hudTest'
+          withCredentials(bindings: [usernamePassword(credentialsId: 'fd3bf359-9733-41e4-a86d-be304b4c1c49', passwordVariable: 'GIT_PASS', usernameVariable: 'GIT_USER')]) {
+            sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
+            sh 'git fetch'
+            sh 'git checkout JohnsonZD'
+            sh 'git pull'
+            sh 'git checkout McNabbMR'
+            sh 'git pull'
+            sh 'git checkout hudTest'
+            sh 'git pull'
+            sh 'git checkout master'
+            sh 'git pull'
+            sh 'git checkout McPeakML'
+            sh 'git pull'
+            sh 'git merge origin/JohnsonZD origin/McNabbMR origin/hudTest'
+            sh 'git checkout master'
+            sh 'git config --global merge.ours.driver true'
+            sh 'git merge McPeakML'
+            sh 'git status'
+            sh 'git remote set-url origin ssh://git@bitbucket.org/$GIT_USER/bike-shop-analytics.git'
+            sh 'git push origin master'
+            sh 'git checkout McPeakML'
+            sh 'git merge master'
+            sh 'git push origin McPeakML'
+            sh 'git checkout JohnsonZD'
+            sh 'git merge master'
+            sh 'git push origin JohnsonZD'
+            sh 'git checkout McNabbMR'
+            sh 'git merge master'
+            sh 'git push origin McNabbMR'
+            sh 'git checkout hudTest'
+            sh 'git merge master'
+            sh 'git push origin hudTest'
+          }
+
         }
-       }
+
       }
     }
 
@@ -115,6 +117,7 @@ pipeline {
 
       }
     }
+
     stage('Create Images') {
       parallel {
         stage('Create API Image') {
@@ -123,21 +126,21 @@ pipeline {
             Home = '/tmp'
           }
           steps {
-            sh '''docker build -t api -f BikeShopAnalyticsAPI/Dockerfile .'''
+            sh 'docker build -t api -f BikeShopAnalyticsAPI/Dockerfile .'
           }
         }
 
-        stage('Create Front-End Image') {
+        stage('Create Admin Image') {
           agent any
           steps {
-            sh '''docker build -t admin -f bikeshop-admin-frontend/Dockerfile .'''
+            sh 'docker build -t admin -f bikeshop-admin-frontend/Dockerfile .'
           }
         }
 
         stage('Create User Image') {
           agent any
           steps {
-            sh '''docker build -t user -f bikeshop-user-frontend/Dockerfile .'''
+            sh 'docker build -t user -f bikeshop-user-frontend/Dockerfile .'
           }
         }
 
@@ -149,8 +152,8 @@ pipeline {
         stage('Deploy API') {
           agent any
           steps {
-            sh '''docker container stop api && docker container rm api'''
-            sh '''docker run -p 5000:5000 --name api --restart always -d api:latest'''
+            sh 'docker container stop api && docker container rm api'
+            sh 'docker run -p 5000:5000 --name api --restart always -d api:latest'
             echo 'API Deployed!'
           }
         }
@@ -158,16 +161,17 @@ pipeline {
         stage('Deploy Front-End') {
           agent any
           steps {
-            sh '''docker container stop admin-fe && docker container rm admin-fe'''
-            sh '''docker run -p 3000:3000 --name admin-fe --restart always -d admin:latest'''
+            sh 'docker container stop admin-fe && docker container rm admin-fe'
+            sh 'docker run -p 3000:3000 --name admin-fe --restart always -d admin:latest'
             echo 'Admin Front-End Deployed!'
           }
         }
 
         stage('Deploy User') {
+          agent any
           steps {
-            sh '''docker container stop user-fe && docker container rm user-fe'''
-            sh '''docker run -p 3001:3001 --name user-fe --restart always -d user:latest'''
+            sh 'docker container stop user-fe && docker container rm user-fe'
+            sh 'docker run -p 3001:3001 --name user-fe --restart always -d user:latest'
             echo 'User Front-End Deployed!'
           }
         }
