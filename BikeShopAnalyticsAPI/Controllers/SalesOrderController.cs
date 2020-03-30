@@ -86,7 +86,7 @@ namespace BikeShopAnalytics.Controllers
         {
             if(await _authRepo.Read(a => a.Token == token) != null)
             {
-                var salesList = await _salesOrderRepo.ReadAll(s => s.Bike);
+                var salesList = await _salesOrderRepo.ReadAll();
                 return salesList.ToList();
             }
             return StatusCode(403);
