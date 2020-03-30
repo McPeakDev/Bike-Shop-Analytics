@@ -120,6 +120,7 @@ pipeline {
     stage('Deploy') {
       parallel {
         stage('Deploy API') {
+          agent any
           steps {
             sh 'docker container stop api && docker container rm api'
             sh 'docker run -p 5000:5000 --name api -d api:latest'
@@ -128,6 +129,7 @@ pipeline {
         }
 
         stage('Deploy Front-End') {
+          agent any
           steps {
             sh 'docker container stop front-end && docker container rm front-end'
             sh 'docker run -p 3000:3000 --name front-end -d front-end:latest'
