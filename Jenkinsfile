@@ -108,7 +108,7 @@ pipeline {
           }
         }
 
-        stage('Create Admin Image') {
+        stage('Create Front-End Image') {
           agent any
           steps {
             sh 'docker build -t front-end -f bikeshop-frontend/Dockerfile .'
@@ -128,7 +128,7 @@ pipeline {
           }
         }
 
-        stage('Deploy Admin') {
+        stage('Deploy Front-End') {
           steps {
             sh 'docker container stop front-end && docker container rm front-end'
             sh 'docker run -p 3000:3000 --name front-end -d front-end:latest'
