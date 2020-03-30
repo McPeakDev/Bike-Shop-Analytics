@@ -17,10 +17,6 @@ pipeline {
         catchError() {
           sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
           sh 'git fetch'
-          sh 'git branch --set-upstream-to=origin/McNabbNR McNabbMR'
-          sh 'git branch --set-upstream-to=origin/McPeakML McPeakML'
-          sh 'git branch --set-upstream-to=origin/JohnsonZD JohnsonZD'
-          sh 'git branch --set-upstream-to=origin/hudTest hudTest'
           sh 'git checkout JohnsonZD'
           sh 'git pull'
           sh 'git checkout McNabbMR'
