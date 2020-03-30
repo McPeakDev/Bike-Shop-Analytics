@@ -15,7 +15,7 @@ pipeline {
       }
       steps {
         catchError() {
-          git credentialsId: 'bitbucket-cloud', url: 'https://bitbucket.org/{f01af8a8-752f-4208-ad68-a1e64107c933}/bike-shop-analytics.git'
+          git(credentialsId: 'bitbucket-cloud', url: 'https://McPeakML@bitbucket.org/McPeakML/bike-shop-analytics.git')
           sh 'git config --global credential.helper cache'
           sh 'git config --global push.default simple'
           sh 'git config user.name "Matthew McPeak"'
