@@ -33,7 +33,7 @@ pipeline {
           sh 'git config --global merge.ours.driver true'
           sh 'git merge McPeakML'
           sh 'git status'
-          sh 'git remote set-url ssh://git@bitbucket.org/$GIT_USER/bike-shop-analytics.git'
+          sh 'git remote set-url origin ssh://git@bitbucket.org/$GIT_USER/bike-shop-analytics.git'
           sh 'git push origin master'
           sh 'git checkout McPeakML'
           sh 'git merge master'
