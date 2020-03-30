@@ -18,7 +18,7 @@ pipeline {
            sh 'git config --global credential.helper cache'
            sh 'git config --global push.default simple'
            sh 'git remote rm origin'
-           sh 'git remote add origin https://{$GIT_USERNAME}:{$GIT_PASSWORD}@github.com/{$GIT_USERNAME}/project.git'
+           sh 'git remote add origin https://{$GIT_USERNAME}:{$GIT_PASSWORD}@bitbucket.org/{$GIT_USERNAME}/bike-shop-analytics.git'
            sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
            sh 'git fetch'
            sh 'git checkout JohnsonZD'
