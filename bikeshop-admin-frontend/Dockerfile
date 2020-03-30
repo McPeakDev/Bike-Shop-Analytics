@@ -4,5 +4,5 @@ WORKDIR /var/www/html
 RUN npm install -g serve
 RUN npm install
 RUN npm run build
-EXPOSE 3000/tcp
-ENTRYPOINT ["serve", "-p", "3000", "-s", "/var/www/html/build"]
+EXPOSE 3002/tcp
+ENTRYPOINT ["serve", "-p", "3002", "-s", "/var/www/html/build"]
