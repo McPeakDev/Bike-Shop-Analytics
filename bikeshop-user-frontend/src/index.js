@@ -6,8 +6,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <BrowserRouter basename='*/user'>
-        <Route path="*/user">
+    <BrowserRouter>
+        <Route path="/user">
             <App />
         </Route>
     </BrowserRouter>
