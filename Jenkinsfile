@@ -15,7 +15,7 @@ pipeline {
       }
       steps {
         catchError() {
-        withCredentials([usernamePassword(credentialsId: 'bitbucket-cloud', passwordVariable: 'GIT_PASS', usernameVariable: 'GIT_USER')]) {
+        withCredentials([usernamePassword(credentialsId: 'fd3bf359-9733-41e4-a86d-be304b4c1c49', passwordVariable: 'GIT_PASS', usernameVariable: 'GIT_USER')]) {
           sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
           sh 'git fetch'
           sh 'git checkout JohnsonZD'
