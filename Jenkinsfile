@@ -1,7 +1,7 @@
 pipeline {
   agent any
   stages {
-    stage('Merge') {
+  stage('Merge') {
       post {
         failure {
           echo 'Merge Failed Continuing...'
@@ -74,7 +74,7 @@ pipeline {
           }
         }
 
-        stage('Test Front-End') {
+        stage('Test Admin') {
           agent {
             docker {
               image 'node:10-alpine'
@@ -83,19 +83,37 @@ pipeline {
           }
           steps {
             echo 'Implement Testing'
-            sh '''cd bikeshop-frontend/
+            sh '''cd bikeshop-admin-frontend/
                   npm install
                   npm run build
-                  echo "Front-End Built!"'''
+                  echo "Admin Front-End Built!"'''
             fileOperations([fileZipOperation('bikeshop-admin-frontend/build')])
             fileOperations([fileRenameOperation(destination: 'Admin-FrontEnd.zip', source: 'build.zip')])
             archiveArtifacts 'Admin-FrontEnd.zip'
           }
         }
 
+        stage('Test User') {
+          agent {
+            docker {
+              image 'node:10-alpine'
+            }
+
+          }
+          steps {
+            echo 'Implement Testing'
+            sh '''cd bikeshop-user-frontend/
+                  npm install
+                  npm run build
+                  echo "User Front-End Built!"'''
+            fileOperations([fileZipOperation('bikeshop-user-frontend/build')])
+            fileOperations([fileRenameOperation(destination: 'User-FrontEnd.zip', source: 'build.zip')])
+            archiveArtifacts 'User-FrontEnd.zip'
+          }
+        }
+
       }
     }
-
     stage('Create Images') {
       parallel {
         stage('Create API Image') {
@@ -104,14 +122,21 @@ pipeline {
             Home = '/tmp'
           }
           steps {
-            sh 'docker build -t api -f BikeShopAnalyticsAPI/Dockerfile .'
+            sh '''docker build -t api -f BikeShopAnalyticsAPI/Dockerfile .'''
           }
         }
 
         stage('Create Front-End Image') {
           agent any
           steps {
-            sh 'docker build -t front-end -f bikeshop-frontend/Dockerfile .'
+            sh '''docker build -t admin -f bikeshop-admin-frontend/Dockerfile .'''
+          }
+        }
+
+        stage('Create User Image') {
+          agent any
+          steps {
+            sh '''docker build -t user -f bikeshop-user-frontend/Dockerfile .'''
           }
         }
 
@@ -122,17 +147,25 @@ pipeline {
       parallel {
         stage('Deploy API') {
           steps {
-            sh 'docker container stop api && docker container rm api'
-            sh 'docker run -p 5000:5000 --name api -d api:latest'
+            sh '''docker container stop api && docker container rm api'''
+            sh '''docker run -p 5000:5000 --name api -d api:latest'''
             echo 'API Deployed!'
           }
         }
 
         stage('Deploy Front-End') {
           steps {
-            sh 'docker container stop front-end && docker container rm front-end'
-            sh 'docker run -p 3000:3000 --name front-end -d front-end:latest'
+            sh '''docker container stop admin-fe && docker container rm admin-fe'''
+            sh '''docker run -p 3000:3000 --name admin-fe -d admin:latest'''
             echo 'Admin Front-End Deployed!'
+          }
+        }
+
+        stage('Deploy User') {
+          steps {
+            sh '''docker container stop user-fe && docker container rm user-fe'''
+            sh '''docker run -p 3001:3001 --name user-fe -d user:latest'''
+            echo 'User Front-End Deployed!'
           }
         }
 
