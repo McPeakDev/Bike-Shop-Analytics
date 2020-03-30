@@ -1,7 +1,8 @@
 pipeline {
-  agent any
+  agent none
   stages {
-  stage('Merge') {
+    stage('Merge') {
+      agent any
       post {
         failure {
           echo 'Merge Failed Continuing...'
@@ -14,8 +15,7 @@ pipeline {
       }
       steps {
         catchError() {
-          sh 'git config --global credential.helper cache'
-          sh 'git config --global push.default simple'
+        withCredentials([usernamePassword(credentialsId: 'bitbucket-cloud', passwordVariable: 'GIT_PASS', usernameVariable: 'GIT_USER')]) {
           sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
           sh 'git fetch'
           sh 'git checkout JohnsonZD'
@@ -33,6 +33,7 @@ pipeline {
           sh 'git config --global merge.ours.driver true'
           sh 'git merge McPeakML'
           sh 'git status'
+          sh 'git remote set-url origin https://bitbucket.org/$GIT_USER/bike-shop-analytics.git'
           sh 'git push origin master'
           sh 'git checkout McPeakML'
           sh 'git merge master'
@@ -47,7 +48,7 @@ pipeline {
           sh 'git merge master'
           sh 'git push origin hudTest'
         }
-
+       }
       }
     }
 
@@ -146,6 +147,7 @@ pipeline {
     stage('Deploy') {
       parallel {
         stage('Deploy API') {
+          agent any
           steps {
             sh '''docker container stop api && docker container rm api'''
             sh '''docker run -p 5000:5000 --name api -d api:latest'''
@@ -154,6 +156,7 @@ pipeline {
         }
 
         stage('Deploy Front-End') {
+          agent any
           steps {
             sh '''docker container stop admin-fe && docker container rm admin-fe'''
             sh '''docker run -p 3000:3000 --name admin-fe -d admin:latest'''
