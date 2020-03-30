@@ -2,13 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route } from 'react-router-dom';
 import './index.css';
-import App from './App';
+import Admin from './AdminPage';
+import User from './UserPage';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
 <BrowserRouter>
-    <Route path="*">
-        <App />
+    <Route exact path="/">
+        <User />
+    </Route>
+    <Route exact path="/admin">
+        <Admin />
     </Route>
 </BrowserRouter>
 , document.getElementById('root'));
