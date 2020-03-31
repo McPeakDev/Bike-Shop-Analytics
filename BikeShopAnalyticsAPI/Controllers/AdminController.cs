@@ -10,24 +10,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Text;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BikeShopAnalyticsAPI.Controllers
 {
+    //[TestClass]
     [ApiController]
     [Route("api/[controller]")]
     public class AdminController : ControllerBase
     {
+        #region Properties
         private IRepository<Admin> _adminRepo;
         private IRepository<Auth> _authRepo;
         private IRepository<Credentials> _credRepo;
+        #endregion
 
+        #region Constructor
         public AdminController(IRepository<Admin> adminRepo, IRepository<Credentials> credRepo, IRepository<Auth> authRepo)
         { 
             _adminRepo = adminRepo;
             _authRepo = authRepo;
             _credRepo = credRepo;
         }
-
+        #endregion
+        
         [HttpPost("[action]")]
         public async Task<ActionResult<Auth>> Login(Credentials creds)
         {
@@ -126,6 +132,53 @@ namespace BikeShopAnalyticsAPI.Controllers
                 return adminList.ToList();
             }
             return StatusCode(403);
+        }
+
+        [TestMethod]
+        public async Task TestCRUDAdmin()
+        {
+            string token = "9be8a0fbd8e3605bebba0555f14467d1";
+            AdminBundle adminBundle = new AdminBundle();
+            
+            Admin admin = new Admin()
+            {
+                Email = "test@test.com",
+                FirstName = "Unit",
+                MiddleName = "Test",
+                LastName = "Code",
+                UserName = "Test"
+            };
+
+            Credentials creds = new Credentials()
+            {
+                UserName = adminBundle.Admin.UserName,
+                Password = adminBundle.Password
+            };
+
+            adminBundle.Admin = admin;
+            adminBundle.Password = "123456789!";
+
+            var result = (await Create(adminBundle)).ToString();
+
+            Assert.IsTrue(result.Contains("Success!"));
+
+            var auth = await Login(creds);
+
+            admin.AdminID = auth.Value.Admin.AdminID;
+
+            Assert.AreEqual(admin, auth.Value.Admin);
+
+            admin.MiddleName = "Changed Middle Name";
+
+            result = (await Update(token, admin)).ToString();
+
+            Assert.IsTrue(result.Contains("Success!"));
+
+            result = (await Delete(token, creds)).ToString();
+
+            Assert.IsTrue(result.Contains("Success!"));
+
+
         }
     }
 }
