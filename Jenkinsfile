@@ -147,11 +147,7 @@ pipeline {
     }
     
     stage('Deploy Test API') {
-      agent {
-          docker {
-            image 'mcr.microsoft.com/dotnet/core/sdk:3.1'
-           }
-      }
+      agent any
       steps {
          sh 'docker container stop api'
           sh 'docker run -p 5000:5000 --name api-test --restart always -d api:latest'
