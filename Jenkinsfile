@@ -54,9 +54,9 @@ pipeline {
       }
     }
 
-    stage('Test') {
+    stage('Build') {
       parallel {
-        stage('Test API') {
+        stage('Build API') {
           agent {
             docker {
               image 'mcr.microsoft.com/dotnet/core/sdk:3.1'
@@ -67,7 +67,6 @@ pipeline {
             Home = '/tmp'
           }
           steps {
-            echo 'Implement Testing'
             sh '''cd BikeShopAnalyticsAPI/
                   dotnet publish -c Release -r linux-x64 --self-contained false
                   echo "API Built!"'''
@@ -77,7 +76,7 @@ pipeline {
           }
         }
 
-        stage('Test Admin') {
+        stage('Build Admin') {
           agent {
             docker {
               image 'node:10-alpine'
@@ -96,7 +95,7 @@ pipeline {
           }
         }
 
-        stage('Test User') {
+        stage('Build User') {
           agent {
             docker {
               image 'node:10-alpine'
@@ -120,7 +119,7 @@ pipeline {
 
     stage('Create Images') {
       parallel {
-        stage('Create API Image') {
+        stage('Create API Images') {
           agent any
           environment {
             Home = '/tmp'
@@ -146,7 +145,37 @@ pipeline {
 
       }
     }
+    
+    stage('Deploy API') {
+      agent {
+          docker {
+            image 'mcr.microsoft.com/dotnet/core/sdk:3.1'
+           }
 
+      steps {
+         sh 'docker container stop api'
+          sh 'docker run -p 5000:5000 --name api-test --restart always -d api:latest'
+          echo 'API Deployed!'
+       }
+    }
+    
+    stage('Test API') {
+      agent {
+          docker {
+            image 'mcr.microsoft.com/dotnet/core/sdk:3.1'
+          }
+      steps {
+          sh '''cd BikeShopAnalyticsAPITest/
+                dotnet test
+                 echo "API Tested!"'''   
+      }
+    }
+    post {
+        failure {
+            sh 'docker container stop api-test && docker container start api'
+        }
+    }
+    
     stage('Deploy') {
       parallel {
         stage('Deploy API') {
