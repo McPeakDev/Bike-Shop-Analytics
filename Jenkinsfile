@@ -166,11 +166,6 @@ pipeline {
                 dotnet test
                  echo "API Tested!"'''   
       }
-      post {
-          always {
-              sh 'docker container stop api-test && docker container rm api-test && docker container start api'
-          }
-      }
     }
     
     stage('Deploy') {
@@ -178,6 +173,7 @@ pipeline {
         stage('Deploy API') {
           agent any
           steps {
+            sh 'docker container stop api-test && docker container rm api-test'
             sh 'docker container stop api && docker container rm api'
             sh 'docker run -p 5000:5000 --name api --restart always -d api:latest'
             echo 'API Deployed!'
