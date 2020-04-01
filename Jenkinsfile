@@ -170,11 +170,11 @@ pipeline {
                 dotnet test
                  echo "API Tested!"'''   
       }
-    }
-    post {
-        failure {
-            sh 'docker container stop api-test && docker container start api'
-        }
+      post {
+          failure {
+              sh 'docker container stop api-test && docker container start api'
+          }
+      }
     }
     
     stage('Deploy') {
