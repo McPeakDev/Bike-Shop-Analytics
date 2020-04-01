@@ -23,7 +23,25 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         public string Email { get; set; }
         [StringLength(30)]
         public string UserName { get; set; }
-            
-        
+
+        public override bool Equals(object obj)
+        {
+            if(obj is Admin)
+            {
+                var objAdmin = obj as Admin;
+                if (objAdmin.AdminID == AdminID && objAdmin.Email == Email && objAdmin.UserName == UserName)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
     }
 }
