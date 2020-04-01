@@ -167,7 +167,7 @@ pipeline {
                  echo "API Tested!"'''   
       }
       post {
-          failure {
+          always {
               sh 'docker container stop api-test && docker container start api'
           }
       }
