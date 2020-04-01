@@ -168,7 +168,7 @@ pipeline {
       }
       post {
           always {
-              sh 'docker container stop api-test && docker container start api'
+              sh 'docker container stop api-test && docker container rm api-test && docker container start api'
           }
       }
     }
