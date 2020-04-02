@@ -14,19 +14,19 @@ import { Button, Form, Col } from 'react-bootstrap';
 
     async componentDidMount() 
     {
-        this.refs.xCreate.value = null;
-        this.refs.yCreate.value = null;
-        this.refs.chartTypeCreate.value = null;
+        this.state.xItem = null
+        this.state.yItem = null
+        this.state.chartType = null    
 
         let cats = await this.api.get("category", "readall")
         this.setState( {data: cats})
 
         if (cats.length > 0)
         {
-            this.refs.iDUpdate.value = this.state.data[0].categoryID
-            this.refs.xUpdate.value = this.state.data[0].plotItemOne
-            this.refs.yUpdate.value = this.state.data[0].plotItemTwo
-            this.refs.chartTypeUpdate.value = this.state.data[0].chartType
+            this.state.categoryID = this.state.data[0].categoryID
+            this.state.xItem = this.state.data[0].plotItemOne
+            this.state.yItem = this.state.data[0].plotItemTwo
+            this.state.chartType = this.state.data[0].chartType      
         }
     }
    
@@ -37,11 +37,10 @@ import { Button, Form, Col } from 'react-bootstrap';
 
     changeCategory = (event) =>
     {
-        this.refs.iDUpdate.value = this.state.data[event.target.value].categoryID
-        this.refs.xUpdate.value = this.state.data[event.target.value].plotItemOne
-        this.refs.yUpdate.value = this.state.data[event.target.value].plotItemTwo
-        this.refs.chartTypeUpdate.value = this.state.data[event.target.value].chartType
-        
+        this.state.categoryID = this.state.data[event.target.value].categoryID
+        this.state.xItem = this.state.data[event.target.value].plotItemOne
+        this.state.yItem = this.state.data[event.target.value].plotItemTwo
+        this.state.chartType = this.state.data[event.target.value].chartType      
     }
 
     handlePlotItemX = (e) =>
@@ -77,7 +76,7 @@ import { Button, Form, Col } from 'react-bootstrap';
     updateCategory = async (event) =>
     {   
         event.preventDefault();
-        let chart = {categoryID: parseInt(this.state.categoryID), categoryName: `${this.refs.xUpdate.value} vs ${this.refs.yUpdate.value}`, plotItemOne: this.refs.xUpdate.value, plotItemTwo: this.refs.yUpdate.value, chartType: this.refs.chartTypeUpdate.value}
+        let chart = {categoryID: this.state.categoryID, categoryName: `${this.refs.xUpdate.value} vs ${this.refs.yUpdate.value}`, plotItemOne: this.refs.xUpdate.value, plotItemTwo: this.refs.yUpdate.value, chartType: this.refs.chartTypeUpdate.value}
         await this.api.update("category", chart)
         this.componentDidMount();
 
