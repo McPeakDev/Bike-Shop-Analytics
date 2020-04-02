@@ -80,7 +80,7 @@ namespace BikeShopAnalyticsAPITest
             pOrder.PurchaseID = poRead.PurchaseID;
 
             //Read PurchaseOrder
-            result = await client.GetAsync("https://bikeshopmonitoring.duckdns.org/api/purchaseorder/read/{pOrder.PurchaseID}");
+            result = await client.GetAsync($"https://bikeshopmonitoring.duckdns.org/api/purchaseorder/read/{pOrder.PurchaseID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
@@ -91,12 +91,12 @@ namespace BikeShopAnalyticsAPITest
 
             content = new StringContent(JsonConvert.SerializeObject(pOrder), UnicodeEncoding.UTF8, "application/json");
 
-            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/purchaseorder/update/", content);
+            result = await client.PutAsync("https://bikeshopmonitoring.duckdns.org/api/purchaseorder/update/", content);
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
             //Delete PurchaseOrder
-            result = await client.DeleteAsync("https://bikeshopmonitoring.duckdns.org/api/purchaseorder/delete/{pOrder.PurchaseID}");
+            result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/purchaseorder/delete/{pOrder.PurchaseID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 

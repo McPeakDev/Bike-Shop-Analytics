@@ -76,7 +76,7 @@ namespace BikeShopAnalyticsAPITest
             pitem.PurchaseID = pRead.PurchaseID;
 
             //Read PurchaseItem
-            result = await client.GetAsync("https://bikeshopmonitoring.duckdns.org/api/purchaseitem/read/{pitem.PurchaseID}");
+            result = await client.GetAsync($"https://bikeshopmonitoring.duckdns.org/api/purchaseitem/read/{pitem.PurchaseID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
@@ -87,12 +87,12 @@ namespace BikeShopAnalyticsAPITest
 
             content = new StringContent(JsonConvert.SerializeObject(pitem), UnicodeEncoding.UTF8, "application/json");
 
-            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/purchaseitem/update/", content);
+            result = await client.PutAsync("https://bikeshopmonitoring.duckdns.org/api/purchaseitem/update/", content);
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
             //Delete PurchaseItem
-            result = await client.DeleteAsync("https://bikeshopmonitoring.duckdns.org/api/purchaseitem/delete/{pitem.PurchaseID}");
+            result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/purchaseitem/delete/{pitem.PurchaseID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 

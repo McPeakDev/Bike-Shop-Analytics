@@ -78,7 +78,7 @@ namespace BikeShopAnalyticsAPITest
             cat.CategoryID = catRead.CategoryID;
 
             //Read Category
-            result = await client.GetAsync("https://bikeshopmonitoring.duckdns.org/api/category/read/{cat.CategoryID}");
+            result = await client.GetAsync($"https://bikeshopmonitoring.duckdns.org/api/category/read/{cat.CategoryID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
@@ -89,12 +89,12 @@ namespace BikeShopAnalyticsAPITest
 
             content = new StringContent(JsonConvert.SerializeObject(cat), UnicodeEncoding.UTF8, "application/json");
 
-            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/category/update/", content);
+            result = await client.PutAsync("https://bikeshopmonitoring.duckdns.org/api/category/update/", content);
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
             //Delete Category
-            result = await client.DeleteAsync("https://bikeshopmonitoring.duckdns.org/api/category/delete/{cat.CategoryID}");
+            result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/category/delete/{cat.CategoryID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 

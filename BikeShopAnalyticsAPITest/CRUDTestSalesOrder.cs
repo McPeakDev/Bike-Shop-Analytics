@@ -82,7 +82,7 @@ namespace BikeShopAnalyticsAPITest
             sales.SalesID = saleRead.SalesID;
 
             //Read SalesOrder
-            result = await client.GetAsync("https://bikeshopmonitoring.duckdns.org/api/salesorder/read/{sales.SalesID}");
+            result = await client.GetAsync($"https://bikeshopmonitoring.duckdns.org/api/salesorder/read/{sales.SalesID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
@@ -93,12 +93,12 @@ namespace BikeShopAnalyticsAPITest
 
             content = new StringContent(JsonConvert.SerializeObject(sales), UnicodeEncoding.UTF8, "application/json");
 
-            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/salesorder/update/", content);
+            result = await client.PutAsync("https://bikeshopmonitoring.duckdns.org/api/salesorder/update/", content);
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
             //Delete SalesOrder
-            result = await client.DeleteAsync("https://bikeshopmonitoring.duckdns.org/api/salesorder/delete/{sales.SalesID}");
+            result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/salesorder/delete/{sales.SalesID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 

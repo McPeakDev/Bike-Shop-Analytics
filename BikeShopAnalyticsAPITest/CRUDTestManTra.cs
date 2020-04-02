@@ -77,7 +77,7 @@ namespace BikeShopAnalyticsAPITest
             manu.ManTraID = manTraRead.ManTraID;
 
             //Read manufacturertransaction
-            result = await client.GetAsync("https://bikeshopmonitoring.duckdns.org/api/manufacturertransaction/read/{manu.ManTraID}");
+            result = await client.GetAsync($"https://bikeshopmonitoring.duckdns.org/api/manufacturertransaction/read/{manu.ManTraID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
@@ -88,12 +88,12 @@ namespace BikeShopAnalyticsAPITest
 
             content = new StringContent(JsonConvert.SerializeObject(manu), UnicodeEncoding.UTF8, "application/json");
 
-            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/manufacturertransaction/update/", content);
+            result = await client.PutAsync("https://bikeshopmonitoring.duckdns.org/api/manufacturertransaction/update/", content);
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
             //Delete ManufacturerTransaction
-            result = await client.DeleteAsync("https://bikeshopmonitoring.duckdns.org/api/manufacturertransaction/delete/{manu.ManTraID}");
+            result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/manufacturertransaction/delete/{manu.ManTraID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
