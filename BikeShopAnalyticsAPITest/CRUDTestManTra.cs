@@ -20,11 +20,11 @@ namespace BikeShopAnalyticsAPITest
             Admin admin = new Admin()
             {
 
-                Email = "testMan@test.com",
-                FirstName = "man",
+                Email = "test@test.com",
+                FirstName = "Unit",
                 MiddleName = "Test",
                 LastName = "Code",
-                UserName = "ManTraTest"
+                UserName = "Test"
             };
 
             adminBundle.Admin = admin;
