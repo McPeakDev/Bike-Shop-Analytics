@@ -146,28 +146,6 @@ pipeline {
       }
     }
     
-    stage('Deploy Test API') {
-      agent any
-      steps {
-         sh 'docker container stop api'
-          sh 'docker run -p 5000:5000 --name api-test --restart always -d api:latest'
-          echo 'API Deployed!'
-       }
-    }
-    
-    stage('Test API') {
-      agent {
-          docker {
-            image 'mcr.microsoft.com/dotnet/core/sdk:3.1'
-          }
-      }
-      steps {
-          sh '''cd BikeShopAnalyticsAPITest/
-                dotnet test
-                 echo "API Tested!"'''   
-      }
-    }
-    
     stage('Deploy') {
       parallel {
         stage('Deploy API') {
@@ -198,6 +176,19 @@ pipeline {
           }
         }
 
+      }
+    }
+    
+    stage('Test API') {
+      agent {
+          docker {
+            image 'mcr.microsoft.com/dotnet/core/sdk:3.1'
+          }
+      }
+      steps {
+          sh '''cd BikeShopAnalyticsAPITest/
+                dotnet test
+                 echo "API Tested!"'''   
       }
     }
 
