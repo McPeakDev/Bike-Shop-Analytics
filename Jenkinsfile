@@ -191,6 +191,7 @@ pipeline {
         sh '''cd BikeShopAnalyticsAPITest/
                 dotnet test
                  echo "API Tested!"'''
+        xunit([xUnitDotNet(deleteOutputFiles: true, failIfNotNew: true, pattern: '**/*.testresults', skipNoTestFiles: false, stopProcessingIfError: true)])
       }
     }
 
