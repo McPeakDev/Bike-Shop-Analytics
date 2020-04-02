@@ -24,7 +24,7 @@ namespace BikeShopAnalyticsAPITest
                 FirstName = "Unit",
                 MiddleName = "Test",
                 LastName = "Code",
-                UserName = "Test"
+                UserName = "CatTest"
             };
 
             adminBundle.Admin = admin;
@@ -78,7 +78,7 @@ namespace BikeShopAnalyticsAPITest
             cat.CategoryID = catRead.CategoryID;
 
             //Read Category
-            result = await client.GetAsync("https://bikeshopmonitoring.duckdns.org/api/Category/read/{cat.CategoryID}");
+            result = await client.GetAsync("https://bikeshopmonitoring.duckdns.org/api/category/read/{cat.CategoryID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 

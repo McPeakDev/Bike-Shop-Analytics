@@ -23,7 +23,7 @@ namespace BikeShopAnalyticsAPITest
                 FirstName = "Unit",
                 MiddleName = "Test",
                 LastName = "Code",
-                UserName = "Test"
+                UserName = "BikeTest"
             };
 
             adminBundle.Admin = admin;
