@@ -9,12 +9,12 @@ using System.Text;
 
 namespace BikeShopAnalyticsAPITest
 {
-    public class CRUDTest
+    public class CRUDTestAdmin
     {
         private static readonly HttpClient client = new HttpClient();
 
         [Fact]
-        public async Task CRUDTestAdmin()
+        public async Task CRUDTest()
         {
             AdminBundle adminBundle = new AdminBundle();
 
@@ -44,6 +44,11 @@ namespace BikeShopAnalyticsAPITest
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
+            /*
+             * local admin needs id from server and verify equal
+             * 
+             * */
+
             content = new StringContent(JsonConvert.SerializeObject(creds), UnicodeEncoding.UTF8, "application/json");
 
             result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/admin/login/", content);
@@ -63,6 +68,10 @@ namespace BikeShopAnalyticsAPITest
             result = await client.PutAsync("https://bikeshopmonitoring.duckdns.org/api/admin/update/", content);
 
             Assert.Equal("OK", result.StatusCode.ToString());
+
+            /*
+             * delete asny does not allow pass / we delete based on credentials
+             */
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "https://bikeshopmonitoring.duckdns.org/api/admin/delete/");
             request.Content = new StringContent(JsonConvert.SerializeObject(creds), Encoding.UTF8,"application/json");//CONTENT-TYPE header
