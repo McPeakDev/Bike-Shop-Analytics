@@ -47,6 +47,7 @@ pipeline {
             sh 'git checkout hudTest'
             sh 'git merge master'
             sh 'git push origin hudTest'
+            git 'ssh://git@bitbucket.org/McPeakML/bike-shop-analytics.git'
           }
 
         }
