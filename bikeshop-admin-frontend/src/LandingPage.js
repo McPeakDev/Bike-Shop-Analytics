@@ -9,7 +9,7 @@ import { Button, Form, Col } from 'react-bootstrap';
     {
        super(props);
        this.api = this.props.api;
-       this.state = { data: [], selectedObj: 0}
+       this.state = { data: [], xItem: "Bike", yItem: "Bike", chartType: "Bar"}
     }
 
     async componentDidMount() 
@@ -44,12 +44,31 @@ import { Button, Form, Col } from 'react-bootstrap';
         
     }
 
+    handlePlotItemX = (e) =>
+    {
+        console.log(e.target.value);
+        this.setState({xItem: e.target.value});
+    }
+
+    handlePlotItemY = (e) =>
+    {
+        console.log(e.target.value);
+        this.setState({yItem: e.target.value});
+    }
+
+    handleChartType = (e) =>
+    {
+        console.log(e.target.value);
+        this.setState({chartType: e.target.value});
+    }
+
     createCategory = async (event) =>
     {
         event.preventDefault();
+        console.log(event.target.value)
         if(event.value != "")
         {
-            let chart = {categoryName: `${this.refs.xCreate.value} vs ${this.refs.yCreate.value}` , plotItemOne: this.refs.xCreate.value, plotItemTwo: this.refs.yCreate.value, chartType: this.refs.chartTypeCreate.value}
+            let chart = {categoryName: `${this.state.xItem} vs ${this.state.yItem}` , plotItemOne: this.state.xItem, plotItemTwo: this.state.yItem, chartType: this.state.chartType}
             await this.api.post("category","create", chart)
             this.componentDidMount();
         }
@@ -58,7 +77,7 @@ import { Button, Form, Col } from 'react-bootstrap';
     updateCategory = async (event) =>
     {   
         event.preventDefault();
-        let chart = {categoryID: parseInt(this.refs.iDUpdate.value), categoryName: `${this.refs.xUpdate.value} vs ${this.refs.yUpdate.value}`, plotItemOne: this.refs.xUpdate.value, plotItemTwo: this.refs.yUpdate.value, chartType: this.refs.chartTypeUpdate.value}
+        let chart = {categoryID: parseInt(this.state.categoryID), categoryName: `${this.refs.xUpdate.value} vs ${this.refs.yUpdate.value}`, plotItemOne: this.refs.xUpdate.value, plotItemTwo: this.refs.yUpdate.value, chartType: this.refs.chartTypeUpdate.value}
         await this.api.update("category", chart)
         this.componentDidMount();
 
@@ -89,11 +108,11 @@ import { Button, Form, Col } from 'react-bootstrap';
                         <Form.Control as="select" ref="categories" className="align-content-center rounded form-control-lg col-lg-12" onChange={this.changeCategory}>{optionItems}</Form.Control>
                         <br />
                         <div className="col-sm-4">
-                            <Form method="get">
+                            <Form ref="CreateForm">
                                 <h1 className="text-white">Create</h1>
                                 <Form.Group  as={Col}>
                                     <Form.Label className="text-white">X Value</Form.Label>
-                                    <Form.Control as="select" ref="xCreate">
+                                    <Form.Control as="select" value={this.state.xItem} onChange={this.handlePlotItemX}>
                                         <option value="Bikes">Bikes</option>    
                                         <option value="SalesOrder">Sales Orders</option>    
                                         <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
@@ -102,7 +121,7 @@ import { Button, Form, Col } from 'react-bootstrap';
                                 </Form.Group>
                                 <Form.Group  as={Col}>
                                     <Form.Label className="text-white">Y Value</Form.Label>
-                                    <Form.Control as="select" ref="yCreate">
+                                    <Form.Control as="select" value={this.state.yItem} onChange={this.handlePlotItemY}>
                                         <option value="Bikes">Bikes</option>    
                                         <option value="SalesOrder">Sales Orders</option>    
                                         <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
@@ -111,21 +130,52 @@ import { Button, Form, Col } from 'react-bootstrap';
                                 </Form.Group>              
                                 <Form.Group  as={Col}>
                                     <Form.Label className="text-white">Chart Type</Form.Label>
-                                    <Form.Control as="select" ref="chartTypeCreate">
+                                    <Form.Control as="select" value={this.state.chartType} onChange={this.handleChartType}>
                                         <option value="Bar">Bar</option>    
                                         <option value="Line">Line</option>    
                                         <option value="Pie">Pie</option>    
                                         <option value="Polar">Polar</option>   
                                     </Form.Control>
                                 </Form.Group>              
-                                <Button onClick={this.createCategory}>Submit</Button>
+                                <Button type="button" onClick={this.createCategory}>Submit</Button>
                             </Form>
                         </div>
                         <div className="col-4">
-                            <form className="text-white"  onSubmit={this.updateCategory}>
+                            <Form ref="UpdateForm">
+                                <h1 className="text-white">Update</h1>
+                                <Form.Group  as={Col}>
+                                    <Form.Label className="text-white">X Value</Form.Label>
+                                    <Form.Control as="select" value={this.state.xItem} onChange={this.handlePlotItemX}>
+                                        <option value="Bikes">Bikes</option>    
+                                        <option value="SalesOrder">Sales Orders</option>    
+                                        <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
+                                        <option value="PurchaseOrders">PurchaseOrders</option> 
+                                    </Form.Control>
+                                </Form.Group>
+                                <Form.Group  as={Col}>
+                                    <Form.Label className="text-white">Y Value</Form.Label>
+                                    <Form.Control as="select" value={this.state.yItem} onChange={this.handlePlotItemY}>
+                                        <option value="Bikes">Bikes</option>    
+                                        <option value="SalesOrder">Sales Orders</option>    
+                                        <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
+                                        <option value="PurchaseOrders">PurchaseOrders</option> 
+                                    </Form.Control>
+                                </Form.Group>              
+                                <Form.Group  as={Col}>
+                                    <Form.Label className="text-white">Chart Type</Form.Label>
+                                    <Form.Control as="select" value={this.state.chartType} onChange={this.handleChartType}>
+                                        <option value="Bar">Bar</option>    
+                                        <option value="Line">Line</option>    
+                                        <option value="Pie">Pie</option>    
+                                        <option value="Polar">Polar</option>   
+                                    </Form.Control>
+                                </Form.Group>              
+                                <Button type="button" onClick={this.updateCategory}>Submit</Button>
+                            </Form>
+
+                            {/* <form className="text-white"  onSubmit={this.updateCategory}>
                                 <h1>Update</h1>
                                 <input ref="iDUpdate" type="hidden"></input>
-                                {/* Name: <input ref="nameUpdate" type="text"></input> */}
                                 <br />
                                 X Value: 
                                 <select ref="xUpdate" type="text">
@@ -152,7 +202,7 @@ import { Button, Form, Col } from 'react-bootstrap';
                                 </select>
                                 <br />
                                 <Button type="submit">Submit</Button>
-                            </form>
+                            </form> */}
                         </div>
                         <div className="col-4">
                             <form className="text-white"  onSubmit={e => this.deleteCategory(e, this.refs.categoryDelete.value)}>
