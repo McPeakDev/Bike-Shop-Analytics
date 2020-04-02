@@ -46,6 +46,7 @@ pipeline {
             sh 'git checkout hudTest'
             sh 'git merge master'
             sh 'git push origin hudTest'
+            sh 'git checkout master'
             sh 'git fetch'
             sh 'git pull'
           }
