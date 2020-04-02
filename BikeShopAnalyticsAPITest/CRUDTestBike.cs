@@ -36,6 +36,13 @@ namespace BikeShopAnalyticsAPITest
                 Password = adminBundle.Password
             };
 
+            Bike bike = new Bike()
+            {
+                BikeID = 99999,
+                Name = "Test Bike",
+                SalesPrice = 42
+            };
+
             //Create Admin
             HttpContent content = new StringContent(JsonConvert.SerializeObject(adminBundle), UnicodeEncoding.UTF8, "application/json");
 
@@ -56,7 +63,35 @@ namespace BikeShopAnalyticsAPITest
 
             Assert.True(admin.Equals(auth.Admin));
 
-            //ToDo
+            //Create Bike
+            content = new StringContent(JsonConvert.SerializeObject(bike), UnicodeEncoding.UTF8, "application/json");
+
+            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/bike/create/", content);
+
+            Assert.Equal("OK", result.StatusCode.ToString());
+
+            //Read Bike
+            result = await client.GetAsync("https://bikeshopmonitoring.duckdns.org/api/bike/read/99999");
+
+            Assert.Equal("OK", result.StatusCode.ToString());
+
+            Assert.Equal(result.Content.ToString(), bike.ToString());
+
+            //Update Bike
+            bike.Name = "New Name";
+
+            content = new StringContent(JsonConvert.SerializeObject(bike), UnicodeEncoding.UTF8, "application/json");
+
+            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/bike/update/", content);
+
+            Assert.Equal("OK", result.StatusCode.ToString());
+
+            //Delete Bike
+            content = new StringContent(JsonConvert.SerializeObject(bike), UnicodeEncoding.UTF8, "application/json");
+
+            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/bike/delete/", content);
+
+            Assert.Equal("OK", result.StatusCode.ToString());
 
             //Delete Test Admin before finish
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "https://bikeshopmonitoring.duckdns.org/api/admin/delete/");
