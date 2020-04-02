@@ -190,10 +190,10 @@ pipeline {
       steps {
         catchError() {
           sh '''cd BikeShopAnalyticsAPITest/
-                dotnet test --logger:html;LogFileName=./IntegrationTestResults.html
+                dotnet test --logger:trx;LogFileName=./IntegrationTestResults.trx
                  echo "API Tested!"'''
         }
-        xunit([xUnitDotNet(deleteOutputFiles: true, failIfNotNew: true, pattern: '**/*.html', skipNoTestFiles: false, stopProcessingIfError: true)])
+        mstest testResultsFile:"BikeShopAnalyticsAPITest/TestResults/*.trx", keepLongStdio: true
       }
     }
 
