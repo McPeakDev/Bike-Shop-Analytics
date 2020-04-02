@@ -1,6 +1,5 @@
 import React from 'react';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-
+import { Button, Form, Col } from 'react-bootstrap';
 
  class LandingPage extends React.Component
  {
@@ -15,7 +14,6 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
     async componentDidMount() 
     {
-        this.refs.nameCreate.value = null;
         this.refs.xCreate.value = null;
         this.refs.yCreate.value = null;
         this.refs.chartTypeCreate.value = null;
@@ -23,11 +21,13 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
         let cats = await this.api.get("category", "readall")
         this.setState( {data: cats})
 
-        this.refs.iDUpdate.value = this.state.data[0].categoryID
-        this.refs.nameUpdate.value = this.state.data[0].categoryName
-        this.refs.xUpdate.value = this.state.data[0].plotItemOne
-        this.refs.yUpdate.value = this.state.data[0].plotItemTwo
-        this.refs.chartTypeUpdate.value = this.state.data[0].chartType
+        if (cats.length > 0)
+        {
+            this.refs.iDUpdate.value = this.state.data[0].categoryID
+            this.refs.xUpdate.value = this.state.data[0].plotItemOne
+            this.refs.yUpdate.value = this.state.data[0].plotItemTwo
+            this.refs.chartTypeUpdate.value = this.state.data[0].chartType
+        }
     }
    
     getKeys() 
@@ -38,7 +38,6 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
     changeCategory = (event) =>
     {
         this.refs.iDUpdate.value = this.state.data[event.target.value].categoryID
-        this.refs.nameUpdate.value = this.state.data[event.target.value].categoryName
         this.refs.xUpdate.value = this.state.data[event.target.value].plotItemOne
         this.refs.yUpdate.value = this.state.data[event.target.value].plotItemTwo
         this.refs.chartTypeUpdate.value = this.state.data[event.target.value].chartType
@@ -48,24 +47,27 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
     createCategory = async (event) =>
     {
         event.preventDefault();
-        let chart = {categoryName: this.refs.nameCreate.value, plotItemOne: this.refs.xCreate.value, plotItemTwo: this.refs.yCreate.value, chartType: this.refs.chartTypeCreate.value}
-        await this.api.post("category","create", chart)
-        this.componentDidMount();
+        if(event.value != "")
+        {
+            let chart = {categoryName: `${this.refs.xCreate.value} vs ${this.refs.yCreate.value}` , plotItemOne: this.refs.xCreate.value, plotItemTwo: this.refs.yCreate.value, chartType: this.refs.chartTypeCreate.value}
+            await this.api.post("category","create", chart)
+            this.componentDidMount();
+        }
     }
 
     updateCategory = async (event) =>
     {   
         event.preventDefault();
-        let chart = {categoryID: parseInt(this.refs.iDUpdate.value), categoryName: this.refs.nameUpdate.value, plotItemOne: this.refs.xUpdate.value, plotItemTwo: this.refs.yUpdate.value, chartType: this.refs.chartTypeUpdate.value}
+        let chart = {categoryID: parseInt(this.refs.iDUpdate.value), categoryName: `${this.refs.xUpdate.value} vs ${this.refs.yUpdate.value}`, plotItemOne: this.refs.xUpdate.value, plotItemTwo: this.refs.yUpdate.value, chartType: this.refs.chartTypeUpdate.value}
         await this.api.update("category", chart)
         this.componentDidMount();
 
     }
 
-    deleteCategory = async (event) =>
+    deleteCategory = async (event, value) =>
     {
         event.preventDefault();
-        await this.api.deleteID("category", this.state.selectedObj.categoryID)
+        let result = await this.api.deleteID("category", value)
         this.componentDidMount();
         
     }
@@ -77,55 +79,136 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
         let optionItems = keys.map((key) => 
         {
             let objKeys = Object.keys(this.state.data[key]);
-            return <option value={i++} key={key}>{this.state.data[key][objKeys[1]].capitalize()}</option>
+            return <option value={this.state.data[key][objKeys[0]]} key={key}>{this.state.data[key][objKeys[1]].capitalize()}</option>
         });
-        return (
-            <div className="wrapper container">
-                <div className="row">
-                    <select className="align-content-center rounded form-control-lg col-lg-12" onChange={this.changeCategory}>{optionItems}</select>
-                    <br />
-                    <div className="col-4">
-                        <form className="text-white" onSubmit={this.createCategory}>
-                            <h1>Create</h1>
-                            Name: <input ref="nameCreate" type="text"></input>
-                            <br />
-                            X Value: <input ref="xCreate" type="text"></input>
-                            <br />
-                            Y Value: <input ref="yCreate" type="text"></input>
-                            <br />                 
-                            chartType: <input ref="chartTypeCreate" type="text"></input>
-                            <br />
-                            <br />
-                            <input type="submit"/>
-                        </form>
-                    </div>
-                    <div className="col-4">
-                        <form className="text-white"  onSubmit={this.updateCategory}>
-                            <h1>Update</h1>
-                            <input ref="iDUpdate" type="hidden"></input>
-                            Name: <input ref="nameUpdate" type="text"></input>
-                            <br />
-                            X Value: <input ref="xUpdate" type="text"></input>
-                            <br />
-                            Y Value: <input ref="yUpdate" type="text"></input>
-                            <br />                 
-                            chartType: <input ref="chartTypeUpdate" type="text"></input>
-                            <br />
-                            <input type="submit"/>
-                        </form>
-                    </div>
-                    <div className="col-4">
-                        <form className="text-white"  onSubmit={this.deleteCategory}>
-                            <h1>Delete</h1>
-                            <select className="align-content-center rounded form-control-lg col-lg-12" onChange={e=> this.setState( {selectedObj: this.state.data[e.target.value]})}>{optionItems}</select>
-                            <br />
-                            <br />
-                            <input type="submit"/>
-                        </form>
+        if (this.state.data.length > 0)
+        {
+            return (
+                <div className="container">
+                    <div className="row">
+                        <select ref="categories" className="align-content-center rounded form-control-lg col-lg-12" onChange={this.changeCategory}>{optionItems}</select>
+                        <br />
+                        <div className="col-sm-4">
+                            <Form method="get">
+                                <h1 className="text-white">Create</h1>
+                                <Form.Group  as={Col}>
+                                    <Form.Label className="text-white">X Value</Form.Label>
+                                    <Form.Control as="select" ref="xCreate">
+                                        <option value="Bikes">Bikes</option>    
+                                        <option value="SalesOrder">Sales Orders</option>    
+                                        <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
+                                        <option value="PurchaseOrders">PurchaseOrders</option> 
+                                    </Form.Control>
+                                </Form.Group>
+                                <Form.Group  as={Col}>
+                                    <Form.Label className="text-white">Y Value</Form.Label>
+                                    <Form.Control as="select" ref="yCreate">
+                                        <option value="Bikes">Bikes</option>    
+                                        <option value="SalesOrder">Sales Orders</option>    
+                                        <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
+                                        <option value="PurchaseOrders">PurchaseOrders</option> 
+                                    </Form.Control>
+                                </Form.Group>              
+                                <Form.Group  as={Col}>
+                                    <Form.Label className="text-white">Chart Type</Form.Label>
+                                    <Form.Control as="select" ref="chartTypeCreate">
+                                        <option value="Bar">Bar</option>    
+                                        <option value="Line">Line</option>    
+                                        <option value="Pie">Pie</option>    
+                                        <option value="Polar">Polar</option>   
+                                    </Form.Control>
+                                </Form.Group>              
+                                <Button onClick={this.createCategory}>Submit</Button>
+                            </Form>
+                        </div>
+                        <div className="col-4">
+                            <form className="text-white"  onSubmit={this.updateCategory}>
+                                <h1>Update</h1>
+                                <input ref="iDUpdate" type="hidden"></input>
+                                {/* Name: <input ref="nameUpdate" type="text"></input> */}
+                                <br />
+                                X Value: 
+                                <select ref="xUpdate" type="text">
+                                    <option value="Bikes">Bikes</option>    
+                                    <option value="SalesOrder">Sales Orders</option>    
+                                    <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
+                                    <option value="PurchaseOrders">PurchaseOrders</option>    
+                                </select>
+                                <br />
+                                Y Value: 
+                                <select ref="yUpdate" type="text">                               
+                                    <option value="Bikes">Bikes</option>    
+                                    <option value="SalesOrder">Sales Orders</option>    
+                                    <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
+                                    <option value="PurchaseOrders">PurchaseOrders</option>    
+                                </select>
+                                <br />                 
+                                chartType: 
+                                <select ref="chartTypeUpdate" type="text">                        
+                                    <option value="Bar">Bar</option>    
+                                    <option value="Line">Line</option>    
+                                    <option value="Pie">Pie</option>    
+                                    <option value="Polar">Polar</option>    
+                                </select>
+                                <br />
+                                <Button type="submit">Submit</Button>
+                            </form>
+                        </div>
+                        <div className="col-4">
+                            <form className="text-white"  onSubmit={e => this.deleteCategory(e, this.refs.categoryDelete.value)}>
+                                <h1>Delete</h1>
+                                <select ref="categoryDelete" className="align-content-center rounded form-control-lg col-lg-12" >{optionItems}</select>
+                                <br />
+                                <br />
+                                <Button type="submit">Submit</Button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        )
+            )
+        }
+        else
+        {
+            return (
+                <div className="wrapper container">
+                    <div className="row">
+                        <div className="col-4">
+                            <Form onSubmit={this.createCategory}>
+                                    <h1 className="text-white">Create</h1>
+                                    <Form.Group  as={Col}>
+                                        <Form.Label className="text-white">X Value</Form.Label>
+                                        <Form.Control as="select" ref="xCreate">
+                                            <option value="Bikes">Bikes</option>    
+                                            <option value="SalesOrder">Sales Orders</option>    
+                                            <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
+                                            <option value="PurchaseOrders">PurchaseOrders</option> 
+                                        </Form.Control>
+                                    </Form.Group>
+                                    <Form.Group  as={Col}>
+                                        <Form.Label className="text-white">Y Value</Form.Label>
+                                        <Form.Control as="select" ref="yCreate">
+                                            <option value="Bikes">Bikes</option>    
+                                            <option value="SalesOrder">Sales Orders</option>    
+                                            <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
+                                            <option value="PurchaseOrders">PurchaseOrders</option> 
+                                        </Form.Control>
+                                    </Form.Group>              
+                                    <Form.Group  as={Col}>
+                                        <Form.Label className="text-white">Chart Type</Form.Label>
+                                        <Form.Control as="select" ref="chartTypeCreate">
+                                            <option value="Bar">Bar</option>    
+                                            <option value="Line">Line</option>    
+                                            <option value="Pie">Pie</option>    
+                                            <option value="Polar">Polar</option>   
+                                        </Form.Control>
+                                    </Form.Group>              
+                                    <Button type="submit">Submit</Button>
+                                </Form>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
     }
 }
 

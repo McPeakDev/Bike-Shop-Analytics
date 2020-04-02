@@ -95,7 +95,11 @@ namespace BikeShopAnalyticsAPITest
 
             //Delete Test Admin before finish
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "https://bikeshopmonitoring.duckdns.org/api/admin/delete/");
+<<<<<<< Updated upstream:BikeShopAnalyticsAPITest/CRUDTestBike.cs
             request.Content = new StringContent(JsonConvert.SerializeObject(creds), Encoding.UTF8, "application/json");//CONTENT-TYPE header
+=======
+            request.Content = new StringContent(JsonConvert.SerializeObject(creds), Encoding.UTF8,"application/json");
+>>>>>>> Stashed changes:BikeShopAnalyticsAPITest/CRUDTest.cs
 
             result = await client.SendAsync(request);
 

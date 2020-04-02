@@ -40,6 +40,9 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
    
     render() 
     {
+        return <div><LandingPage api={this.api} /></div>
+
+        /*
         if(this.api.getToken() == null)
         {
             return (
@@ -57,8 +60,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
             )        }
         else
         {
-            return <div><LandingPage api={this.api} /></div>
-        }
+        } */
     }
 }
 
