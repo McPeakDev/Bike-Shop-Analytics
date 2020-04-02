@@ -14,10 +14,6 @@ import { Button, Form, Col } from 'react-bootstrap';
 
     async componentDidMount() 
     {
-        this.state.xItem = null
-        this.state.yItem = null
-        this.state.chartType = null    
-
         let cats = await this.api.get("category", "readall")
         this.setState( {data: cats})
 
@@ -64,7 +60,10 @@ import { Button, Form, Col } from 'react-bootstrap';
     createCategory = async (event) =>
     {
         event.preventDefault();
-        console.log(event.target.value)
+        console.log(this.state.xItem)
+        console.log(this.state.yItem)
+        console.log(this.state.chartType)
+
         if(event.value != "")
         {
             let chart = {categoryName: `${this.state.xItem} vs ${this.state.yItem}` , plotItemOne: this.state.xItem, plotItemTwo: this.state.yItem, chartType: this.state.chartType}
@@ -222,37 +221,37 @@ import { Button, Form, Col } from 'react-bootstrap';
                 <div className="wrapper container">
                     <div className="row">
                         <div className="col-4">
-                            <Form onSubmit={this.createCategory}>
-                                    <h1 className="text-white">Create</h1>
-                                    <Form.Group  as={Col}>
-                                        <Form.Label className="text-white">X Value</Form.Label>
-                                        <Form.Control as="select" ref="xCreate">
-                                            <option value="Bikes">Bikes</option>    
-                                            <option value="SalesOrder">Sales Orders</option>    
-                                            <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
-                                            <option value="PurchaseOrders">PurchaseOrders</option> 
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <Form.Group  as={Col}>
-                                        <Form.Label className="text-white">Y Value</Form.Label>
-                                        <Form.Control as="select" ref="yCreate">
-                                            <option value="Bikes">Bikes</option>    
-                                            <option value="SalesOrder">Sales Orders</option>    
-                                            <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
-                                            <option value="PurchaseOrders">PurchaseOrders</option> 
-                                        </Form.Control>
-                                    </Form.Group>              
-                                    <Form.Group  as={Col}>
-                                        <Form.Label className="text-white">Chart Type</Form.Label>
-                                        <Form.Control as="select" ref="chartTypeCreate">
-                                            <option value="Bar">Bar</option>    
-                                            <option value="Line">Line</option>    
-                                            <option value="Pie">Pie</option>    
-                                            <option value="Polar">Polar</option>   
-                                        </Form.Control>
-                                    </Form.Group>              
-                                    <Button type="submit">Submit</Button>
-                                </Form>
+                            <Form ref="CreateForm">
+                                <h1 className="text-white">Create</h1>
+                                <Form.Group  as={Col}>
+                                    <Form.Label className="text-white">X Value</Form.Label>
+                                    <Form.Control as="select" value={this.state.xItem} onChange={this.handlePlotItemX}>
+                                        <option value="Bikes">Bikes</option>    
+                                        <option value="SalesOrder">Sales Orders</option>    
+                                        <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
+                                        <option value="PurchaseOrders">PurchaseOrders</option> 
+                                    </Form.Control>
+                                </Form.Group>
+                                <Form.Group  as={Col}>
+                                    <Form.Label className="text-white">Y Value</Form.Label>
+                                    <Form.Control as="select" value={this.state.yItem} onChange={this.handlePlotItemY}>
+                                        <option value="Bikes">Bikes</option>    
+                                        <option value="SalesOrder">Sales Orders</option>    
+                                        <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
+                                        <option value="PurchaseOrders">PurchaseOrders</option> 
+                                    </Form.Control>
+                                </Form.Group>              
+                                <Form.Group  as={Col}>
+                                    <Form.Label className="text-white">Chart Type</Form.Label>
+                                    <Form.Control as="select" value={this.state.chartType} onChange={this.handleChartType}>
+                                        <option value="Bar">Bar</option>    
+                                        <option value="Line">Line</option>    
+                                        <option value="Pie">Pie</option>    
+                                        <option value="Polar">Polar</option>   
+                                    </Form.Control>
+                                </Form.Group>              
+                                <Button type="button" onClick={this.createCategory}>Submit</Button>
+                            </Form>
                         </div>
                     </div>
                 </div>

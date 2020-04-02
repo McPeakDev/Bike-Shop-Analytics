@@ -38,7 +38,7 @@ namespace BikeShopAnalyticsAPITest
 
             SalesOrder sales = new SalesOrder()
             {
-                BikeID = 42,
+                BikeID = 1,
                 ListPrice = 42,
                 SalePrice = 42,
                 Tax = 42,
@@ -48,6 +48,12 @@ namespace BikeShopAnalyticsAPITest
                 ShipDate = new DateTime(),
                 StoreID = 42,
                 State = "TN"
+            };
+
+            Bike bike = new Bike()
+            {
+                Name = "Test Bike",
+                SalesPrice = 42
             };
 
             //Create Admin
@@ -69,6 +75,19 @@ namespace BikeShopAnalyticsAPITest
             admin.AdminID = auth.AdminID;
 
             Assert.True(admin.Equals(auth.Admin));
+
+            //Create Bike
+            content = new StringContent(JsonConvert.SerializeObject(bike), UnicodeEncoding.UTF8, "application/json");
+
+            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/bike/create/", content);
+
+            Assert.Equal("OK", result.StatusCode.ToString());
+
+            var bikeRead = JsonConvert.DeserializeObject<Bike>(await result.Content.ReadAsStringAsync());
+
+            bike.BikeID = bikeRead.BikeID;
+
+            sales.BikeID = bike.BikeID;
 
             //Create SalesOrder
             content = new StringContent(JsonConvert.SerializeObject(sales), UnicodeEncoding.UTF8, "application/json");
@@ -99,6 +118,11 @@ namespace BikeShopAnalyticsAPITest
 
             //Delete SalesOrder
             result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/salesorder/delete/{sales.SalesID}");
+
+            Assert.Equal("OK", result.StatusCode.ToString());
+
+            //Delete Bike
+            result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/bike/delete/{bike.BikeID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
