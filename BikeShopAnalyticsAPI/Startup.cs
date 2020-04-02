@@ -42,6 +42,9 @@ namespace BikeShopAnalytics
             services.AddScoped<IRepository<Admin>, DbRepository<Admin>>();
             services.AddScoped<IRepository<Credentials>, DbRepository<Credentials>>();
             services.AddScoped<IRepository<Auth>, DbRepository<Auth>>();
+            services.AddScoped<IRepository<ManufacturerTransaction>, DbRepository<ManufacturerTransaction>>();
+            services.AddScoped<IRepository<PurchaseItem>, DbRepository<PurchaseItem>>();
+            services.AddScoped<IRepository<PurchaseOrder>, DbRepository<PurchaseOrder>>();
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.KnownProxies.Add(IPAddress.Parse("127.0.0.1"));

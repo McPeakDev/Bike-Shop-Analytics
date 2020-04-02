@@ -12,7 +12,7 @@ using System.Text;
 namespace BikeShopAnalytics.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ManufacturerTransactionController : ControllerBase
     {
         private IRepository<ManufacturerTransaction> _manufacturerTransactionRepo;
