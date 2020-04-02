@@ -188,9 +188,11 @@ pipeline {
 
       }
       steps {
-        sh '''cd BikeShopAnalyticsAPITest/
+        catchError() {
+          sh '''cd BikeShopAnalyticsAPITest/
                 dotnet test --logger:html;LogFileName=./IntegrationTestResults.html
                  echo "API Tested!"'''
+        }
         xunit([xUnitDotNet(deleteOutputFiles: true, failIfNotNew: true, pattern: '**/*.html', skipNoTestFiles: false, stopProcessingIfError: true)])
       }
     }
