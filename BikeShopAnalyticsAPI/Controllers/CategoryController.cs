@@ -40,8 +40,8 @@ namespace BikeShopAnalyticsAPI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    await _categoryRepo.Create(category);
-                    return Ok("Success! Category Created!");
+                    var result = await _categoryRepo.Create(category);
+                    return Ok(result);
                 }
                 return Problem("Error! Could not create the category..");
             }

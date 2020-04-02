@@ -41,8 +41,8 @@ namespace BikeShopAnalytics.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    await _salesOrderRepo.Create(salesOrder);
-                    return Ok("Success! Sales Order Created!");
+                    var result = await _salesOrderRepo.Create(salesOrder);
+                    return Ok(result);
                 }
                 return Problem("Error! Could not create the sales order..");
             }

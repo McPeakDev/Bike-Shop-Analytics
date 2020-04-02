@@ -41,8 +41,8 @@ namespace BikeShopAnalytics.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    await _purchaseOrderRepo.Create(purchaseOrder);
-                    return Ok("Success! Purchase Order Created!");
+                    var result = await _purchaseOrderRepo.Create(purchaseOrder);
+                    return Ok(result);
                 }
                 return Problem("Error! Could not create the Purchase Order..");
             }

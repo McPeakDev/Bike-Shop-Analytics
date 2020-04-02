@@ -107,17 +107,17 @@ namespace BikeShopAnalyticsAPI.Controllers
             return StatusCode(403);
         }
 
-        [HttpDelete("[action]")]
-        public async Task<IActionResult> Delete([FromHeader(Name = "Token")]string token, Credentials creds)
+        [HttpDelete("[action]/{adminID}")]
+        public async Task<IActionResult> Delete([FromHeader(Name = "Token")]string token, int adminID)
         {
             if(await _authRepo.Read(a => a.Token == token) != null)
             {
-                var adminCreds = await _credRepo.Read(cr => (cr.UserName == creds.UserName && cr.Password == creds.Password), cr => cr.Auth);
-                var adminAuth = await _authRepo.Read(a => a.AuthID == adminCreds.AuthID, a => a.Admin);
+                var adminAuth = await _authRepo.Read(a => a.Token == token, a => a.Admin);
+                var adminDelete = await _adminRepo.Read(a => a.AdminID == adminID);
 
-                if(!(adminAuth is null))
+                if (!(adminAuth is null))
                 {
-                    await _adminRepo.Delete(adminAuth.Admin);
+                    await _adminRepo.Delete(adminDelete);
                     return Ok("Success! Admin Deleted!");
                 }
                 return Problem("Error! Could not delete the admin..");

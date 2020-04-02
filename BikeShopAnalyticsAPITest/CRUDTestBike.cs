@@ -19,7 +19,6 @@ namespace BikeShopAnalyticsAPITest
 
             Admin admin = new Admin()
             {
-
                 Email = "test@test.com",
                 FirstName = "Unit",
                 MiddleName = "Test",
@@ -38,7 +37,6 @@ namespace BikeShopAnalyticsAPITest
 
             Bike bike = new Bike()
             {
-                BikeID = 99999,
                 Name = "Test Bike",
                 SalesPrice = 42
             };
@@ -70,38 +68,33 @@ namespace BikeShopAnalyticsAPITest
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
+            var bikeRead = JsonConvert.DeserializeObject<Bike>(await result.Content.ReadAsStringAsync());
+
+            bike.BikeID = bikeRead.BikeID;
+
             //Read Bike
-            result = await client.GetAsync("https://bikeshopmonitoring.duckdns.org/api/bike/read/99999");
+            result = await client.GetAsync($"https://bikeshopmonitoring.duckdns.org/api/bike/read/{bike.BikeID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
-            Assert.Equal(result.Content.ToString(), bike.ToString());
+            Assert.True(bike.Equals(bikeRead));
 
             //Update Bike
             bike.Name = "New Name";
 
             content = new StringContent(JsonConvert.SerializeObject(bike), UnicodeEncoding.UTF8, "application/json");
 
-            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/bike/update/", content);
+            result = await client.PutAsync("https://bikeshopmonitoring.duckdns.org/api/bike/update/", content);
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
             //Delete Bike
-            content = new StringContent(JsonConvert.SerializeObject(bike), UnicodeEncoding.UTF8, "application/json");
-
-            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/bike/delete/", content);
+            result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/bike/delete/{bike.BikeID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
-            //Delete Test Admin before finish
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "https://bikeshopmonitoring.duckdns.org/api/admin/delete/");
-<<<<<<< Updated upstream:BikeShopAnalyticsAPITest/CRUDTestBike.cs
-            request.Content = new StringContent(JsonConvert.SerializeObject(creds), Encoding.UTF8, "application/json");//CONTENT-TYPE header
-=======
-            request.Content = new StringContent(JsonConvert.SerializeObject(creds), Encoding.UTF8,"application/json");
->>>>>>> Stashed changes:BikeShopAnalyticsAPITest/CRUDTest.cs
-
-            result = await client.SendAsync(request);
+            //Delete Admin
+            result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/admin/delete/{admin.AdminID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
         }

@@ -7,6 +7,7 @@ using BikeShopAnalyticsAPI.Models.Entities.Loggin_In;
 using BikeShopAnalyticsAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace BikeShopAnalytics.Controllers
 {
@@ -40,8 +41,8 @@ namespace BikeShopAnalytics.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    await _bikeRepo.Create(bike);
-                    return Ok("Success! Bike Created!");
+                    var result = await _bikeRepo.Create(bike);
+                    return Ok(result);
                 }
                 return Problem("Error! Could not create the bike..");
             }
