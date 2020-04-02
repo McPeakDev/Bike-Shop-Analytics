@@ -38,7 +38,6 @@ namespace BikeShopAnalyticsAPITest
 
             ManufacturerTransaction manu = new ManufacturerTransaction()
             {
-                ManTraID = 99999,
                 TransactionDate = new DateTime(),
                 EMPLOYEEID = 42,
                 Amount = 42,
@@ -73,14 +72,16 @@ namespace BikeShopAnalyticsAPITest
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
-            //Read manufacturertransaction
-            //content = new StringContent(JsonConvert.SerializeObject(manu), UnicodeEncoding.UTF8, "application/json");
+            var manTraRead = JsonConvert.DeserializeObject<ManufacturerTransaction>(await result.Content.ReadAsStringAsync());
 
-            result = await client.GetAsync("https://bikeshopmonitoring.duckdns.org/api/manufacturertransaction/read/99999");
+            manu.ManTraID = manTraRead.ManTraID;
+
+            //Read manufacturertransaction
+            result = await client.GetAsync("https://bikeshopmonitoring.duckdns.org/api/manufacturertransaction/read/{manu.ManTraID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
-            Assert.Equal(result.Content.ToString(), manu.ToString());
+            Assert.True(manu.Equals(manTraRead));
 
             //Update ManufacturerTransaction
             manu.Description = "New description";
@@ -92,17 +93,12 @@ namespace BikeShopAnalyticsAPITest
             Assert.Equal("OK", result.StatusCode.ToString());
 
             //Delete ManufacturerTransaction
-            content = new StringContent(JsonConvert.SerializeObject(manu), UnicodeEncoding.UTF8, "application/json");
-
-            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/manufacturertransaction/delete/", content);
+            result = await client.DeleteAsync("https://bikeshopmonitoring.duckdns.org/api/manufacturertransaction/delete/{manu.ManTraID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
             //Delete Test Admin before finish
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "https://bikeshopmonitoring.duckdns.org/api/admin/delete/");
-            request.Content = new StringContent(JsonConvert.SerializeObject(creds), Encoding.UTF8, "application/json");//CONTENT-TYPE header
-
-            result = await client.SendAsync(request);
+            result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/admin/delete/{admin.AdminID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
         }

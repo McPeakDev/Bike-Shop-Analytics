@@ -38,7 +38,6 @@ namespace BikeShopAnalyticsAPITest
 
             PurchaseItem pitem = new PurchaseItem()
             {
-                PurchaseID = 99999,
                 ComponentID = 42,
                 PricePaid = 42,
                 Quantity = 42,
@@ -72,12 +71,16 @@ namespace BikeShopAnalyticsAPITest
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
+            var pRead = JsonConvert.DeserializeObject<PurchaseItem>(await result.Content.ReadAsStringAsync());
+
+            pitem.PurchaseID = pRead.PurchaseID;
+
             //Read PurchaseItem
-            result = await client.GetAsync("https://bikeshopmonitoring.duckdns.org/api/purchaseitem/read/99999");
+            result = await client.GetAsync("https://bikeshopmonitoring.duckdns.org/api/purchaseitem/read/{pitem.PurchaseID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
-            Assert.Equal(result.Content.ToString(), pitem.ToString());
+            Assert.True(pitem.Equals(pRead));
 
             //Update PurchaseItem
             pitem.ComponentID = 24;
@@ -89,17 +92,12 @@ namespace BikeShopAnalyticsAPITest
             Assert.Equal("OK", result.StatusCode.ToString());
 
             //Delete PurchaseItem
-            content = new StringContent(JsonConvert.SerializeObject(pitem), UnicodeEncoding.UTF8, "application/json");
-
-            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/purchaseitem/delete/", content);
+            result = await client.DeleteAsync("https://bikeshopmonitoring.duckdns.org/api/purchaseitem/delete/{pitem.PurchaseID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
             //Delete Test Admin before finish
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "https://bikeshopmonitoring.duckdns.org/api/admin/delete/");
-            request.Content = new StringContent(JsonConvert.SerializeObject(creds), Encoding.UTF8, "application/json");//CONTENT-TYPE header
-
-            result = await client.SendAsync(request);
+            result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/admin/delete/{admin.AdminID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
         }
