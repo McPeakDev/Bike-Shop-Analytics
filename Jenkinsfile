@@ -189,9 +189,9 @@ pipeline {
       }
       steps {
         sh '''cd BikeShopAnalyticsAPITest/
-                dotnet test
+                dotnet test --logger:html;LogFileName=./IntegrationTestResults.html
                  echo "API Tested!"'''
-        xunit([xUnitDotNet(deleteOutputFiles: true, failIfNotNew: true, pattern: '**/*.testresults', skipNoTestFiles: false, stopProcessingIfError: true)])
+        xunit([xUnitDotNet(deleteOutputFiles: true, failIfNotNew: true, pattern: '**/*.html', skipNoTestFiles: false, stopProcessingIfError: true)])
       }
     }
 
