@@ -86,7 +86,7 @@ import { Button, Form, Col } from 'react-bootstrap';
             return (
                 <div className="container">
                     <div className="row">
-                        <select ref="categories" className="align-content-center rounded form-control-lg col-lg-12" onChange={this.changeCategory}>{optionItems}</select>
+                        <Form.Control as="select" ref="categories" className="align-content-center rounded form-control-lg col-lg-12" onChange={this.changeCategory}>{optionItems}</Form.Control>
                         <br />
                         <div className="col-sm-4">
                             <Form method="get">

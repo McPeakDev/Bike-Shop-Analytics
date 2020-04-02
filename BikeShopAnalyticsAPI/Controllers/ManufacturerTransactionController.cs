@@ -41,8 +41,8 @@ namespace BikeShopAnalytics.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    await _manufacturerTransactionRepo.Create(manufacturerTransaction);
-                    return Ok("Success! Manufacturer Transaction Created!");
+                    var result = await _manufacturerTransactionRepo.Create(manufacturerTransaction);
+                    return Ok(result);
                 }
                 return Problem("Error! Could not create the Manufacturer Transaction..");
             }

@@ -25,5 +25,24 @@ namespace BikeShopAnalyticsAPI.Models.Entities
 
         public DateTime EndRange { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is Category)
+            {
+                var objCat = obj as Category;
+                if (objCat.CategoryID == CategoryID && objCat.CategoryName == CategoryName)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
     }
 }

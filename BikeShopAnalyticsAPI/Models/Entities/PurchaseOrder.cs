@@ -37,7 +37,26 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         // CONSTRAINT `FK_REFERENCE23` FOREIGN KEY (`EMPLOYEEID`) REFERENCES `EMPLOYEE` (`EMPLOYEEID`) ON DELETE CASCADE
         //example 
         // (2,87295,2,286614.9000,90.0000,35802.0000,'1994-01-01 00:00:00','1994-01-01 00:00:00',250902.9000),
-	    // (3,87295,3,109356.0000,75.0000,4407.0000,'1994-01-01 00:00:00','1994-01-01 00:00:00',105024.0000),
+        // (3,87295,3,109356.0000,75.0000,4407.0000,'1994-01-01 00:00:00','1994-01-01 00:00:00',105024.0000),
         //	(4,87295,4,13000.0000,55.0000,390.0000,'1994-01-01 00:00:00','1994-01-01 00:00:00',12665.0000),
+
+        public override bool Equals(object obj)
+        {
+            if (obj is PurchaseOrder)
+            {
+                var objPurchaseOrder = obj as PurchaseOrder;
+                if (objPurchaseOrder.PurchaseID == PurchaseID && objPurchaseOrder.ManuID == ManuID)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

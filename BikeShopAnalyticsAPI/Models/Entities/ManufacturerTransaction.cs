@@ -28,6 +28,25 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         //CONSTRAINT `FK_MANUFTRANS` FOREIGN KEY (`MANUFACTURERID`) REFERENCES `MANUFACTURER` (`MANUFACTURERID`) ON DELETE CASCADE
         //example data
         // (2,'1994-01-01 00:00:00',87295,250902.9000,'Initial Purchase for startup',2),
-	    // (2,'1994-01-31 00:00:00',87295,-250902.9000,'Automatic payment of bills',2),
+        // (2,'1994-01-31 00:00:00',87295,-250902.9000,'Automatic payment of bills',2),
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ManufacturerTransaction)
+            {
+                var objManTra = obj as ManufacturerTransaction;
+                if (objManTra.ManTraID == ManTraID && objManTra.EMPLOYEEID == EMPLOYEEID)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

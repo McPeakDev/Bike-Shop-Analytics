@@ -28,5 +28,24 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         //CONSTRAINT `FK_REFERENCE21` FOREIGN KEY (`COMPONENTID`) REFERENCES `COMPONENT` (`COMPONENTID`) ON DELETE CASCADE
         //example
         // (2,101000,49.4000,100,100),
+
+        public override bool Equals(object obj)
+        {
+            if (obj is PurchaseItem)
+            {
+                var objPurchaseItem = obj as PurchaseItem;
+                if (objPurchaseItem.PurchaseID == PurchaseID && objPurchaseItem.ComponentID == ComponentID)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

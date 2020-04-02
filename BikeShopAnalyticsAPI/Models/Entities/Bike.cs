@@ -21,5 +21,24 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         public ModelType Type { get; set; }
         public Color Color { get; set; }
         */
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Bike)
+            {
+                var objBike = obj as Bike;
+                if (objBike.BikeID == BikeID && objBike.Name == Name)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

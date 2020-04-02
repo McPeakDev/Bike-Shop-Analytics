@@ -48,13 +48,30 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         */
 
         public virtual Bike Bike { get; set; }
-        
+
         /*  TODO: Implement
         public virtual Customer Customer { get; set; }
         public virtual Employee Employee { get; set; }
         public virtual Store Store { get; set; }
         */
 
+        public override bool Equals(object obj)
+        {
+            if (obj is SalesOrder)
+            {
+                var objSalesOrder = obj as SalesOrder;
+                if (objSalesOrder.SalesID == SalesID && objSalesOrder.BikeID == BikeID)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
