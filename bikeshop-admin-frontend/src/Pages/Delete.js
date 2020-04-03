@@ -9,7 +9,7 @@ import { Toast, Button, Form} from 'react-bootstrap';
     {
         super(props);
         this.api = this.props.api;
-        this.state = { data: null, categoryID: null, categoryIndex: 0, status: false};
+        this.state = { data: this.props.data, categoryID: null, categoryIndex: 0, status: false};
     }
 
     changeCategory = (event) =>
@@ -18,7 +18,7 @@ import { Toast, Button, Form} from 'react-bootstrap';
         this.setState({categoryID: this.state.data[event.target.value].categoryID, categoryIndex: event.target.value});
     }
 
-    async componentDidMount() 
+    async componentWillMount() 
     {
         let cats = await this.api.get("category", "readall");
         if(cats.length > 0)
@@ -38,7 +38,8 @@ import { Toast, Button, Form} from 'react-bootstrap';
         let json = await this.api.deleteID("category", value);
         this.setState({status: json.includes("Success!")});
         this.refs.categories.value = 0;
-        await this.componentDidMount();
+        await this.componentWillMount();
+        await this.props.updateLinks()
     }
 
     resetForm = (event) =>
@@ -68,7 +69,7 @@ import { Toast, Button, Form} from 'react-bootstrap';
                                 </div>
                         </form>
                         <br/>
-                        <Toast show={this.state.status} onClose={() => this.setState({status: false})}>
+                        <Toast className="mx-auto"  show={this.state.status} onClose={() => this.setState({status: false})}>
                             <Toast.Header>
                                 <strong className="mr-auto">Success!</strong>
                                 <small>{new Date().toLocaleTimeString()}</small>
@@ -79,14 +80,6 @@ import { Toast, Button, Form} from 'react-bootstrap';
                 </div>
             );
         }
-        else
-        {
-            return(
-                <h1 className="text-white text-center">No Data</h1>
-            );
-
-        }
-
     }
 
     optionItems()

@@ -9,10 +9,10 @@ import { Button, Form, Col, Toast} from 'react-bootstrap';
     {
         super(props);
         this.api = this.props.api;
-        this.state = { data: null, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false};
+        this.state = { data: this.props.data, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false};
     }
 
-    async componentDidMount()
+    async componentWillMount()
     {
         let cats = await this.api.get("category", "readall");
         this.setState( {data: cats});
@@ -26,15 +26,22 @@ import { Button, Form, Col, Toast} from 'react-bootstrap';
             let chart = {categoryName: `${this.state.xItem} vs ${this.state.yItem}` , plotItemOne: this.state.xItem, plotItemTwo: this.state.yItem, chartType: this.state.chartType};
             let json = await this.api.post("category","create", chart);
             this.setState({status: json["categoryID"] !== undefined});
+            await this.props.updateLinks()
         }
-        this.refs.categories.value = 0;
-        await this.componentDidMount();
+        if(this.state.data > 0)
+        {
+            this.refs.categories.value = 0;
+        }
+        await this.componentWillMount();
     }
 
     resetForm = (event) =>
     {
         event.preventDefault();
-        this.refs.categories.value = 0;
+        if(this.state.data > 0)
+        {
+            this.refs.categories.value = 0;
+        }
         this.setState({xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false});
     }
 
@@ -58,7 +65,7 @@ import { Button, Form, Col, Toast} from 'react-bootstrap';
 
     conditionalReturnCategories()
     {
-        if(this.state.data !== null && this.state.data.length > 0)
+        if(this.state.data !== undefined && this.state.data.length > 0)
         {
             return (
                 <Form.Control as="select" ref="categories" className="align-content-center rounded form-control-lg col-lg-12" onChange={this.changeCategory}>{this.optionItems()}</Form.Control>
@@ -133,7 +140,7 @@ import { Button, Form, Col, Toast} from 'react-bootstrap';
                             </div>
                         </Form>
                         <br/>
-                        <Toast show={this.state.status} onClose={() => this.setState({status: false})} >
+                        <Toast className="mx-auto" show={this.state.status} onClose={() => this.setState({status: false})} >
                             <Toast.Header>
                                 <strong className="mr-auto">Success!</strong>
                                 <small>{new Date().toLocaleTimeString()}</small>

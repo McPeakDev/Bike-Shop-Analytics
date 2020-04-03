@@ -29,12 +29,17 @@ import { Button, Form, Jumbotron, Alert } from 'react-bootstrap';
 
     }
 
+    updateForm = () =>
+    {
+        this.setState({ userName: "", password: "", error: 200})
+    }
+
     submitForm = async (event) => 
     {
         event.preventDefault();
         let json = await this.api.post("Admin", "Login", {username: this.state.userName, password: this.state.password});
         this.api.setToken(json["token"]);
-        this.state.error = json["status"];
+        this.setState({data: await this.api.get("category", "readall"), error: json["status"]});
         this.forceUpdate();
     }
 
@@ -87,7 +92,7 @@ import { Button, Form, Jumbotron, Alert } from 'react-bootstrap';
         }
         return (
             <div>
-                <LandingPage api={this.api} />
+                <LandingPage api={this.api} updateForm={this.updateForm} data={this.state.data} />
             </div>
         );
     }

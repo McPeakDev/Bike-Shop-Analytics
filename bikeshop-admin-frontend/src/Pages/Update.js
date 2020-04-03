@@ -9,10 +9,10 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
     {
         super(props);
         this.api = this.props.api;
-        this.state = { data: null, categoryID: null, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false}
+        this.state = { data: this.props.data, categoryID: null, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false}
     }
 
-    async componentDidMount()
+    async componentWillMount()
     {
         let cats = await this.api.get("category", "readall")
         if(cats.length > 0)
@@ -32,7 +32,8 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
         let json = await this.api.update("category", chart)
         this.setState({status: json.includes("Success!")});
         this.refs.categories.value = 0;
-        await this.componentDidMount()
+        await this.componentWillMount()
+        await this.props.updateLinks()
 
     }
 
@@ -72,6 +73,27 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
         if(this.state.data !== null && this.state.data.length > 0)
         {
             return (
+                <Form.Control as="select" ref="categories" className="align-content-center rounded form-control-lg col-lg-12" onChange={this.changeCategory}>{this.optionItems()}</Form.Control>
+            );
+        }
+
+    }
+
+    optionItems()
+    {
+        let i = 0;
+        let keys = Object.keys(this.state.data);
+        return keys.map((key) => 
+        {
+            let objKeys = Object.keys(this.state.data[key]);
+            return <option value={i++} key={key}>{this.state.data[key][objKeys[1]].capitalize()}</option>
+        });
+    }
+
+    render()
+    {
+        return (
+            <div>
                 <div>
                     <div className="row">
                         <div className="col-md-3 col-md-offset-3"></div>
@@ -79,7 +101,7 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
                             <p className="text-white text-center">=============================</p>
                             <h1 className="text-white text-center"> Update</h1>
                             <p className="text-white text-center">=============================</p>
-                            <Form.Control as="select" ref="categories" className="align-content-center rounded form-control-lg col-lg-12" onChange={this.changeCategory}>{this.optionItems()}</Form.Control>
+                            {this.conditionalReturnCategories()}
                         </div>           
                     </div>
                     <div className="row">
@@ -119,7 +141,7 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
                             </div>
                             </Form>
                             <br/>
-                            <Toast show={this.state.status} onClose={() => this.setState({status: false})} >
+                            <Toast className="mx-auto" show={this.state.status} onClose={() => this.setState({status: false})} >
                                 <Toast.Header>
                                     <strong className="mr-auto">Success!</strong>
                                     <small>{new Date().toLocaleTimeString()}</small>
@@ -129,33 +151,6 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
                         </div>
                     </div>
                 </div>
-            );
-        }
-        else
-        {
-            return(
-                <h1 className="text-white text-center">No Data</h1>
-            );
-        }
-
-    }
-
-    optionItems()
-    {
-        let i = 0;
-        let keys = Object.keys(this.state.data);
-        return keys.map((key) => 
-        {
-            let objKeys = Object.keys(this.state.data[key]);
-            return <option value={i++} key={key}>{this.state.data[key][objKeys[1]].capitalize()}</option>
-        });
-    }
-
-    render()
-    {
-        return (
-            <div>
-                {this.conditionalReturnCategories()}
             </div>
         );
     }
