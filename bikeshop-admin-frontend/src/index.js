@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route } from 'react-router-dom';
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import Login from './Pages/Login';
+import * as serviceWorker from './Services/serviceWorker';
 
 ReactDOM.render(
 <BrowserRouter>
     <Route path="*">
-        <App />
+        <Login />
     </Route>
 </BrowserRouter>
 , document.getElementById('root'));
