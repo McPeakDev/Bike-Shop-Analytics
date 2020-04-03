@@ -28,10 +28,9 @@ pipeline {
             sh 'git pull'
             sh 'git checkout McPeakML'
             sh 'git pull'
-            sh 'git merge origin/JohnsonZD origin/McNabbMR origin/hudTest'
             sh 'git checkout master'
+            sh 'git merge JohnsonZD McNabbMR McPeakML hudTest'
             sh 'git config --global merge.ours.driver true'
-            sh 'git merge McPeakML'
             sh 'git status'
             sh 'git remote set-url origin ssh://git@bitbucket.org/$GIT_USER/bike-shop-analytics.git'
             sh 'git push origin master'
@@ -47,6 +46,9 @@ pipeline {
             sh 'git checkout hudTest'
             sh 'git merge master'
             sh 'git push origin hudTest'
+            sh 'git checkout master'
+            sh 'git fetch'
+            sh 'git pull'
           }
 
         }
@@ -186,9 +188,12 @@ pipeline {
 
       }
       steps {
-        sh '''cd BikeShopAnalyticsAPITest/
-                dotnet test
+        catchError() {
+          sh '''cd BikeShopAnalyticsAPITest/
+                dotnet test --logger:trx;LogFileName=./IntegrationTestResults.trx
                  echo "API Tested!"'''
+        }
+        mstest testResultsFile:"BikeShopAnalyticsAPITest/TestResults/*.trx", keepLongStdio: true
       }
     }
 
