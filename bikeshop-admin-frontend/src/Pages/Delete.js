@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form} from 'react-bootstrap';
+import { Toast, Button, Form} from 'react-bootstrap';
  
  class Delete extends React.Component
  {
@@ -9,7 +9,7 @@ import { Button, Form} from 'react-bootstrap';
     {
         super(props);
         this.api = this.props.api;
-        this.state = { data: null, categoryID: null, categoryIndex: 0};
+        this.state = { data: null, categoryID: null, categoryIndex: 0, status: false};
     }
 
     changeCategory = (event) =>
@@ -35,14 +35,17 @@ import { Button, Form} from 'react-bootstrap';
     deleteCategory = async (event, value) =>
     {
         event.preventDefault();
-        await this.api.deleteID("category", value);
+        let json = await this.api.deleteID("category", value);
+        this.setState({status: json.includes("Success!")});
+        this.refs.categories.value = 0;
         await this.componentDidMount();
     }
 
     resetForm = (event) =>
     {
         event.preventDefault();
-        this.setState({xItem: "Bike", yItem: "Bike", chartType: "Bar"})
+        this.refs.categories.value = 0;
+        this.setState({xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false})
     }
 
     conditionalReturnCategories()
@@ -60,10 +63,18 @@ import { Button, Form} from 'react-bootstrap';
                                 <Form.Control as="select" ref="categories" className="align-content-center rounded form-control-lg col-lg-12" onChange={this.changeCategory}>{this.optionItems()}</Form.Control>
                                 <br/>
                                 <div className="text-center">              
-                                    <Button type="button" onClick={e => this.deleteCategory(e, this.state.categoryID)}>Submit</Button>
+                                    <Button type="button" onClick={e => this.deleteCategory(e, this.state.categoryID)}>Submit</Button>{' '}
                                     <Button type="button" variant="secondary"  onClick={this.resetForm}>Reset</Button>
                                 </div>
                         </form>
+                        <br/>
+                        <Toast show={this.state.status} onClose={() => this.setState({status: false})}>
+                            <Toast.Header>
+                                <strong className="mr-auto">Success!</strong>
+                                <small>{new Date().toLocaleTimeString()}</small>
+                            </Toast.Header>
+                            <Toast.Body>Category Deleted!</Toast.Body>
+                        </Toast>
                     </div>           
                 </div>
             );

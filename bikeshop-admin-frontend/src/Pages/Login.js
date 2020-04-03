@@ -71,10 +71,10 @@ import { Button, Form, Jumbotron, Alert } from 'react-bootstrap';
                         <div className="col-md-6 col-md-offset-3">
                         <Form className="text-white">
                             <Form.Label>Username</Form.Label>
-                            <Form.Control type="text" placeholder="Username" name="userName" onChange={this.handleInputChange}/>
+                            <Form.Control type="text" placeholder="Username" name="userName" value={this.state.userName} onChange={this.handleInputChange}/>
                             <br/>
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" placeholder="Password"  name="password" onChange={this.handleInputChange}/>
+                            <Form.Control type="password" placeholder="Password"  name="password" value={this.state.password}  onChange={this.handleInputChange}/>
                             <br/>
                             <div className="text-center">
                                 <Button type="button" onClick={e => this.submitForm(e)}>Submit</Button>{' '}

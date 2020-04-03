@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Col} from 'react-bootstrap';
+import {Toast, Button, Form, Col} from 'react-bootstrap';
  
  class Update extends React.Component
  {
@@ -9,7 +9,7 @@ import { Button, Form, Col} from 'react-bootstrap';
     {
         super(props);
         this.api = this.props.api;
-        this.state = { data: null, categoryID: null, xItem: "Bike", yItem: "Bike", chartType: "Bar"}
+        this.state = { data: null, categoryID: null, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false}
     }
 
     async componentDidMount()
@@ -29,7 +29,8 @@ import { Button, Form, Col} from 'react-bootstrap';
     {   
         event.preventDefault();
         let chart = {categoryID: this.state.categoryID, categoryName: `${this.state.xItem} vs ${this.state.yItem}` , plotItemOne: this.state.xItem, plotItemTwo: this.state.yItem, chartType: this.state.chartType}
-        await this.api.update("category", chart)
+        let json = await this.api.update("category", chart)
+        this.setState({status: json.includes("Success!")});
         this.refs.categories.value = 0;
         await this.componentDidMount()
 
@@ -44,7 +45,8 @@ import { Button, Form, Col} from 'react-bootstrap';
     resetForm = (event) =>
     {
         event.preventDefault();
-        this.setState({xItem: "Bike", yItem: "Bike", chartType: "Bar"})
+        this.refs.categories.value = 0;
+        this.setState({xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false})
     }
 
     handlePlotItemX = (event) =>
@@ -111,8 +113,19 @@ import { Button, Form, Col} from 'react-bootstrap';
                                         <option value="Polar">Polar</option>   
                                     </Form.Control>
                                 </Form.Group>              
-                                <Button type="button" onClick={this.updateCategory}>Submit</Button>
+                                <div className="text-center">
+                                <Button type="button" onClick={this.updateCategory}>Submit</Button>{' '}
+                                <Button type="button" variant="secondary"  onClick={this.resetForm}>Reset</Button>
+                            </div>
                             </Form>
+                            <br/>
+                            <Toast show={this.state.status} onClose={() => this.setState({status: false})} >
+                                <Toast.Header>
+                                    <strong className="mr-auto">Success!</strong>
+                                    <small>{new Date().toLocaleTimeString()}</small>
+                                </Toast.Header>
+                                <Toast.Body>Category Updated!</Toast.Body>
+                            </Toast>
                         </div>
                     </div>
                 </div>

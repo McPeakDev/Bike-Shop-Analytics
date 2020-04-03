@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Col} from 'react-bootstrap';
+import { Button, Form, Col, Toast} from 'react-bootstrap';
  
  class Create extends React.Component
  {
@@ -9,7 +9,7 @@ import { Button, Form, Col} from 'react-bootstrap';
     {
         super(props);
         this.api = this.props.api;
-        this.state = { data: null, xItem: "Bike", yItem: "Bike", chartType: "Bar"};
+        this.state = { data: null, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false};
     }
 
     async componentDidMount()
@@ -24,15 +24,18 @@ import { Button, Form, Col} from 'react-bootstrap';
         if(event.value !== "")
         {
             let chart = {categoryName: `${this.state.xItem} vs ${this.state.yItem}` , plotItemOne: this.state.xItem, plotItemTwo: this.state.yItem, chartType: this.state.chartType};
-            await this.api.post("category","create", chart);
+            let json = await this.api.post("category","create", chart);
+            this.setState({status: json["categoryID"] !== undefined});
         }
+        this.refs.categories.value = 0;
         await this.componentDidMount();
     }
 
     resetForm = (event) =>
     {
         event.preventDefault();
-        this.setState({xItem: "Bike", yItem: "Bike", chartType: "Bar"});
+        this.refs.categories.value = 0;
+        this.setState({xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false});
     }
 
     handlePlotItemX = (event) =>
@@ -129,6 +132,14 @@ import { Button, Form, Col} from 'react-bootstrap';
                                 <Button type="button" variant="secondary"  onClick={this.resetForm}>Reset</Button>
                             </div>
                         </Form>
+                        <br/>
+                        <Toast show={this.state.status} onClose={() => this.setState({status: false})} >
+                            <Toast.Header>
+                                <strong className="mr-auto">Success!</strong>
+                                <small>{new Date().toLocaleTimeString()}</small>
+                            </Toast.Header>
+                            <Toast.Body>Category Created!</Toast.Body>
+                        </Toast>
                     </div>
                 </div>
             </div>
