@@ -26,7 +26,6 @@ import { Button, Form, Jumbotron, Alert } from 'react-bootstrap';
                 [event.target.name]: event.target.value
             }
         )
-        console.log(this.state)
 
     }
 
