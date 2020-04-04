@@ -3,6 +3,7 @@ import React, {Component} from "react"
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import Table from "./Table"
 import API from './APIClient'
+import Chart from './Chart'
 
 //Default Program. Renders all other components
 class App extends Component {
@@ -15,8 +16,14 @@ class App extends Component {
   constructor(props) 
   {
     super(props);
-    this.state = {categories: [], obj: {}};
+    this.state = {
+      categories: [],
+      obj: {},
+      xVals: [],
+      yVals: [],
+      backgroundColor:[]};
     this.api.Token = this.UserToken;
+    this.getColors = this.getColors.bind(this)
   }
 
   //Upon a component mounting, Load data into the application state.
@@ -46,6 +53,10 @@ class App extends Component {
 
     //Assign the variables to their appropriate state objects.
     this.setState({obj: {name: `${this.state.categories[event.value].plotItemOne} vs ${this.state.categories[event.value].plotItemTwo}`, x: plotItemOne, y: plotItemTwo}});
+
+    this.setState({backgroundColor:[], xVals:[], yVals:[]})
+
+    console.log('Got Here')
   }
 
   //Get the keys of the applications categories.
@@ -54,6 +65,40 @@ class App extends Component {
       return Object.keys(this.state.categories);
   }
 
+  getXandYValues()
+  {
+    for(let i = 0; i < this.state.obj.y.length; i++)
+    {
+      for(let j = 0; j < this.state.obj.x.length; j++)
+      {
+        if(this.state.obj.x[j].bikeID === this.state.obj.y[i].bikeID)
+        {
+          this.state.xVals.push(this.state.obj.x[j].name)
+          break
+        }
+      }
+      this.state.yVals.push(this.state.obj.y[i].salePrice)
+    }
+  }
+
+  getColors()
+    {
+        let r = Math.floor(Math.random() * 255);
+        let g = Math.floor(Math.random() * 255);
+        let b = Math.floor(Math.random() * 255);
+        return "rgb(" + r + "," + g + "," + b + ")";
+    }
+
+    setColors()
+    {
+      let c;
+      for(let i = 0; i < this.state.obj.x.length; i++)
+      {
+        c = this.getColors()
+        this.state.backgroundColor.push(c)
+      }
+    }
+
   //Render the application.
   render()
   {
@@ -61,21 +106,36 @@ class App extends Component {
     let i = 0;
     let keys = this.getKeys();
 
+
     //Create a list of options for a select box.
     let optionItems = keys.map((key) => 
     {
             let objKeys = Object.keys(this.state.categories[key]);
             return <option value={i++} key={key}>{this.state.categories[key][objKeys[1]].capitalize()}</option>
     });
+    
+    if(this.state.obj.x != undefined && this.state.obj.y != undefined)
+    {
+      this.getXandYValues()
+      this.setColors()
+      console.log(this.state.backgroundColor)
+    }
+
+    console.log(this.state.obj.x)
+    console.log(this.state.obj.y)
     //Return the html content.
     return(
       <div className="wrapper container">
         <div className="row">
           <select className="align-content-center rounded form-control-lg col-lg-12" onChange={e => this.changeCategory(e.target)}>{optionItems}</select>
-          <br />>
+          <br />
         </div>
-        <Table selectedObj={this.state.obj} />
+        {/*{<Table selectedObj={this.state.obj} />}*/}
+        <div>
+          <Chart xVals={this.state.xVals} yVals={this.state.yVals} backgroundColor={this.state.backgroundColor} />
+        </div>
       </div>
+      
     )
   }
 }
