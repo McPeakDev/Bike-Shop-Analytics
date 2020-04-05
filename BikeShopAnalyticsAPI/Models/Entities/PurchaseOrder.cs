@@ -13,20 +13,29 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PurchaseID { get; set; }
 
-        public int EmployeeID { get; set; }
+        [Required]
+        public uint EmployeeID { get; set; }
 
+        [Required]
+        [ForeignKey("ManufacturerTransaction")]
         public int ManuID { get; set; }
-        
+
+        [Required]
         public int TotalList { get; set; }
 
+        [Required]
         public int ShippingCost { get; set; }
 
+        [Required]
         public int Discount { get; set; }
 
+        [Required]
         public DateTime OrderDate { get; set; }
 
+        [Required]
         public DateTime ReceiveDate { get; set; }
 
+        [Required]
         public int AmountDue { get; set; }
 
         //  PRIMARY KEY (`PURCHASEID`),

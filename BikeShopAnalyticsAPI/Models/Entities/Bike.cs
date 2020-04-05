@@ -13,8 +13,10 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BikeID { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         public decimal SalesPrice { get; set; }
 
         /*  TODO: Implement

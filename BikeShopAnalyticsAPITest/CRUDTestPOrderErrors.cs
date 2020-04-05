@@ -74,7 +74,7 @@ namespace BikeShopAnalyticsAPITest
             Assert.NotEqual("OK", result.StatusCode.ToString());
 
             //Update PurchaseOrder
-            pOrder.EmployeeID = -24; //still invalid
+            pOrder.EmployeeID = 24; //still invalid
 
             content = new StringContent(JsonConvert.SerializeObject(pOrder), UnicodeEncoding.UTF8, "application/json");
 

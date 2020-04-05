@@ -74,7 +74,7 @@ namespace BikeShopAnalyticsAPITest
             Assert.NotEqual("OK", result.StatusCode.ToString());
 
             //Update PurchaseItem
-            pitem.ComponentID = -24; //still invalid
+            pitem.ComponentID = 24; //still invalid
 
             content = new StringContent(JsonConvert.SerializeObject(pitem), UnicodeEncoding.UTF8, "application/json");
 

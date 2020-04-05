@@ -13,12 +13,16 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PurchaseID { get; set; }
 
-        public int ComponentID { get; set; }
+        [Required]
+        public uint ComponentID { get; set; }
 
+        [Required]
         public int PricePaid { get; set; }
-        
+
+        [Required]
         public int Quantity { get; set; }
 
+        [Required]
         public int QuantityReceived { get; set; }
 
         // PRIMARY KEY (`PURCHASEID`,`COMPONENTID`),

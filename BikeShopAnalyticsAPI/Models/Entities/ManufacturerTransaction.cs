@@ -13,14 +13,19 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ManTraID { get; set; }
 
+        [Required]
         public DateTime TransactionDate { get; set; }
 
-        public int EMPLOYEEID { get; set; }
+        [Required]
+        public uint EmployeeID { get; set; }
 
+        [Required]
         public int Amount { get; set; }
 
+        [Required]
         public string Description { get; set; }
-
+        
+        [Required]
         public int Reference { get; set; }
 
         //PRIMARY KEY (`MANUFACTURERID`,`TRANSACTIONDATE`,`REFERENCE`),
@@ -35,7 +40,7 @@ namespace BikeShopAnalyticsAPI.Models.Entities
             if (obj is ManufacturerTransaction)
             {
                 var objManTra = obj as ManufacturerTransaction;
-                if (objManTra.ManTraID == ManTraID && objManTra.EMPLOYEEID == EMPLOYEEID)
+                if (objManTra.ManTraID == ManTraID && objManTra.EmployeeID == EmployeeID)
                 {
                     return true;
                 }

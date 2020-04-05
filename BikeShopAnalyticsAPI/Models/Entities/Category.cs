@@ -13,16 +13,22 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryID { get; set; }
 
+        [Required]
         public string CategoryName { get; set; }
-
+        
+        [Required]
         public string PlotItemOne { get; set; }
 
+        [Required]
         public string PlotItemTwo { get; set; }
 
+        [Required]
         public string ChartType { get; set; }
 
+        [Required]
         public DateTime StartRange { get; set; }
-
+        
+        [Required]
         public DateTime EndRange { get; set; }
 
         public override bool Equals(object obj)

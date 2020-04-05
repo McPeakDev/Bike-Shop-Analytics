@@ -39,7 +39,7 @@ namespace BikeShopAnalyticsAPITest
             ManufacturerTransaction manu = new ManufacturerTransaction()
             {
                 TransactionDate = new DateTime(),
-                EMPLOYEEID = 42,
+                EmployeeID = 42,
                 Amount = 42,
                 Description = "Test Manu",
                 Reference = 42
