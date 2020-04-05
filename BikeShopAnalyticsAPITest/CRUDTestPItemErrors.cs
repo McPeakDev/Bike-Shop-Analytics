@@ -38,7 +38,7 @@ namespace BikeShopAnalyticsAPITest
 
             PurchaseItem pitem = new PurchaseItem()
             {
-                //nothing here, should fail
+                PurchaseID = -1
             };
 
             //Create Admin

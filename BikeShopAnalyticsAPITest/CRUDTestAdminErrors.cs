@@ -20,7 +20,7 @@ namespace BikeShopAnalyticsAPITest
 
             Admin admin = new Admin()
             {
-
+                AdminID = -1,
                 Email = "test@test.com",
                 FirstName = "Unit",
                 MiddleName = "Test",

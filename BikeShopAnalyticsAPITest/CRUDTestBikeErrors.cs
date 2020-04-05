@@ -37,7 +37,7 @@ namespace BikeShopAnalyticsAPITest
 
             Bike bike = new Bike()
             {
-                //Empty, should fail
+                BikeID = -1
             };
 
             //Create Admin

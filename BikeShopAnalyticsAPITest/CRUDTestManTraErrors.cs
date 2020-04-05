@@ -38,7 +38,7 @@ namespace BikeShopAnalyticsAPITest
 
             ManufacturerTransaction manu = new ManufacturerTransaction()
             {
-                //nothing here, should fail
+                ManTraID = -1
             };
 
             //Create Admin

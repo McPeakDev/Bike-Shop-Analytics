@@ -38,7 +38,7 @@ namespace BikeShopAnalyticsAPITest
 
             Category cat = new Category()
             {
-                //Empty, should fail
+                CategoryID = -1
             };
 
             //Create Admin

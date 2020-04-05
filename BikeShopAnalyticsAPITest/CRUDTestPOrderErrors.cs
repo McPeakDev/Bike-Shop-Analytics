@@ -38,7 +38,7 @@ namespace BikeShopAnalyticsAPITest
 
             PurchaseOrder pOrder = new PurchaseOrder()
             {
-                //nothing declared here, should fail
+               PurchaseID = -1
             };
 
             //Create Admin
