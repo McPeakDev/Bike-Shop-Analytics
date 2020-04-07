@@ -17,10 +17,16 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         public string CategoryName { get; set; }
         
         [Required]
-        public string PlotItemOne { get; set; }
+        public string XCategory { get; set; }
 
         [Required]
-        public string PlotItemTwo { get; set; }
+        public string XProperties { get; set; }
+
+        [Required]
+        public string YCategory { get; set; }
+
+        [Required]
+        public string YProperties { get; set; }
 
         [Required]
         public string ChartType { get; set; }

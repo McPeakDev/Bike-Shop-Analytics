@@ -34,6 +34,22 @@ class APIClient
         return json;
     }
 
+    async getID(type, method, id) 
+    {
+        //Call the API and await the return of the call.
+        let json = await window.fetch(`https://bikeshopmonitoring.duckdns.org/api/${type}/${method}/${id}`, {
+            method: "GET",
+            headers: {
+                "Access-Control-Allow-Origin": '*',
+                "Token": this.Token
+            },
+        } )
+        .then(res => res.json());
+
+        //Return the json of the API return call.
+        return json;
+    }
+
     //Asynchronous POST method for the API. Takes the objects type and the method to pull from. Also takes a data object. Both type and method are strings. Data is an object.
     async post(type, method, data) 
     {

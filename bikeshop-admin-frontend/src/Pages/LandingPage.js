@@ -1,6 +1,6 @@
 import React from 'react';
-import { Navbar, Nav } from 'react-bootstrap';
-import Create from './Create';
+import {Fade, Navbar, Nav } from 'react-bootstrap';
+import Create from './Create.jsx';
 import Update from './Update';
 import Delete from './Delete';
 
@@ -13,7 +13,7 @@ import Delete from './Delete';
     {
        super(props);
        this.api = this.props.api;
-       this.state = {data: this.props.data, link: "Create", linkStatus: false}
+       this.state = {data: this.props.data, link: "Create", linkStatus: false, shown: true}
     }
 
      async componentDidMount()
@@ -38,7 +38,7 @@ import Delete from './Delete';
 
     handleLink = (e, value) =>
     {
-        this.setState({link: value});
+        this.setState({ shown: false, nextLink: value });
     }
    
     navbar()
@@ -73,33 +73,30 @@ import Delete from './Delete';
     {
         if(this.state.linkStatus)
         {
-            if(this.state.link === "Create")
-            {
             return (
-                    <div>
-                        {this.navbar()}
-                        <Create api={this.api} updateLinks={this.updateData} data={this.state.data}/>
-                    </div> 
-                );
-            }
-            else if (this.state.link === "Update")
-            {
-                return (
-                    <div>
-                        {this.navbar()}
-                        <Update api={this.api} updateLinks={this.updateData} data={this.state.data}/>
-                    </div> 
-                );
-            }
-            else if (this.state.link === "Delete")
-            {
-                return (
-                    <div>
-                        {this.navbar()}
-                        <Delete api={this.api} updateLinks={this.updateData} data={this.state.data}/>
-                    </div> 
-                );
-            }
+                <div>
+                    {this.navbar()}
+                    <Fade onExited={() =>  this.setState({ link: this.state.nextLink, shown: true })} in={this.state.shown}>                
+                        <div>
+                            {this.state.link === "Create" &&
+                                    <div>
+                                        <Create api={this.api} updateLinks={this.updateData} data={this.state.data}/>
+                                    </div> 
+                            }
+                            {this.state.link === "Update" &&
+                                    <div>
+                                        <Update api={this.api} updateLinks={this.updateData} data={this.state.data}/>
+                                    </div> 
+                            }
+                            {this.state.link === "Delete" &&
+                                    <div>
+                                        <Delete api={this.api} updateLinks={this.updateData} data={this.state.data}/>
+                                    </div> 
+                            }
+                        </div>
+                    </Fade>
+                </div>
+            );
         }
         else
         {

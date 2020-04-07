@@ -82,14 +82,10 @@ namespace BikeShopAnalytics.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<List<ManufacturerTransaction>>> ReadAll([FromHeader(Name = "Token")]string token)
+        public async Task<ActionResult<List<ManufacturerTransaction>>> ReadAll()
         {
-            if(await _authRepo.Read(a => a.Token == token) != null)
-            {
-                var transactionList = await _manufacturerTransactionRepo.ReadAll();
-                return transactionList.ToList();
-            }
-            return StatusCode(403);
+            var transactionList = await _manufacturerTransactionRepo.ReadAll();
+            return transactionList.ToList();
         }
     }
 }

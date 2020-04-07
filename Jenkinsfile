@@ -1,62 +1,7 @@
 pipeline {
   agent none
   stages {
-    stage('Merge') {
-      agent any
-      post {
-        failure {
-          echo 'Merge Failed Continuing...'
-          script {
-            currentBuild.result = 'UNSTABLE'
-          }
-
-        }
-
-      }
-      steps {
-        catchError() {
-          withCredentials(bindings: [usernamePassword(credentialsId: 'fd3bf359-9733-41e4-a86d-be304b4c1c49', passwordVariable: 'GIT_PASS', usernameVariable: 'GIT_USER')]) {
-            sh 'git remote set-branches --add origin McPeakML McNabbMR JohnsonZD hudTest'
-            sh 'git fetch'
-            sh 'git checkout JohnsonZD'
-            sh 'git pull'
-            sh 'git checkout McNabbMR'
-            sh 'git pull'
-            sh 'git checkout hudTest'
-            sh 'git pull'
-            sh 'git checkout master'
-            sh 'git pull'
-            sh 'git checkout McPeakML'
-            sh 'git pull'
-            sh 'git checkout master'
-            sh 'git merge JohnsonZD McNabbMR McPeakML hudTest'
-            sh 'git config --global merge.ours.driver true'
-            sh 'git status'
-            sh 'git remote set-url origin ssh://git@bitbucket.org/$GIT_USER/bike-shop-analytics.git'
-            sh 'git push origin master'
-            sh 'git checkout McPeakML'
-            sh 'git merge master'
-            sh 'git push origin McPeakML'
-            sh 'git checkout JohnsonZD'
-            sh 'git merge master'
-            sh 'git push origin JohnsonZD'
-            sh 'git checkout McNabbMR'
-            sh 'git merge master'
-            sh 'git push origin McNabbMR'
-            sh 'git checkout hudTest'
-            sh 'git merge master'
-            sh 'git push origin hudTest'
-            sh 'git checkout master'
-            sh 'git fetch'
-            sh 'git pull'
-          }
-
-        }
-
-      }
-    }
-
-    stage('Build') {
+  stage('Build') {
       parallel {
         stage('Build API') {
           agent {

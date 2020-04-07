@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Bar, Line, Pie} from 'react-chartjs-2';
+import {Line, defaults} from 'react-chartjs-2';
+
 export default class Chart extends Component {
     constructor(props){
         super(props);
@@ -10,21 +11,20 @@ export default class Chart extends Component {
                     {
                         label: 'Saleprice',
                         data: this.props.yVals,
-                        backgroundColor:this.props.backgroundColor
+                        borderColor: 'rgb(204,1204,0)',
+                        fill: false
                     }
                 ]
             }
         }
+        defaults.global.defaultFontColor = "#ffffff";
             
     }
     
-    
     render() {
         return (
-            <div className="chart">
-                <Bar
-                data={this.state.chartData} />
-
+            <div className="bg-dark text-white">
+                <Line data={this.state.chartData} dark/>
             </div>
         )
     }

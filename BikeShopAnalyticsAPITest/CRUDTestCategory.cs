@@ -39,8 +39,8 @@ namespace BikeShopAnalyticsAPITest
             Category cat = new Category()
             {
                 CategoryName = "Test Cat",
-                PlotItemOne = "P1",
-                PlotItemTwo = "P2",
+                XCategory= "P1",
+                YCategory = "P2",
                 ChartType = "pie",
                 StartRange = new DateTime(),
                 EndRange = new DateTime()
