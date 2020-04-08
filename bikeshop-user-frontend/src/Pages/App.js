@@ -31,10 +31,10 @@ class App extends Component {
     let cats = await this.api.get("category", "readall");
 
     //Request the categories X Values.
-    let plotItemOne = await this.api.get(cats[0].plotItemOne, "readall");
+    let plotItemOne = await this.api.get(cats[0].xCategory, "readall");
 
     //Request the categories Y Values.
-    let plotItemTwo = await this.api.get(cats[0].plotItemTwo, "readall");
+    let plotItemTwo = await this.api.get(cats[0].yCategory, "readall");
 
     //Assign the variables to their appropriate state objects.
     this.setState({ categories: cats, obj: {name: `${cats[0].plotItemOne} vs ${cats[0].plotItemTwo}`, x: plotItemOne , y: plotItemTwo}, chartShown: true});
@@ -47,15 +47,13 @@ class App extends Component {
   changeCategory = async(event) => 
   {
     //Request the categories X Values.
-    let plotItemOne = await this.api.get(this.state.categories[event.value].plotItemOne, "readall");
+    let plotItemOne = await this.api.get(this.state.categories[event.value].xCategory, "readall");
 
     //Request the categories Y Values.
-    let plotItemTwo = await this.api.get(this.state.categories[event.value].plotItemTwo, "readall"); 
+    let plotItemTwo = await this.api.get(this.state.categories[event.value].yCategory, "readall"); 
 
     //Assign the variables to their appropriate state objects.
-    this.setState({obj: {name: `${this.state.categories[event.value].plotItemOne} vs ${this.state.categories[event.value].plotItemTwo}`, x: plotItemOne, y: plotItemTwo, backgroundColor:[], xVals:[], yVals:[]}, chartShown: false});
-
-    console.log(this.state.chartShown)
+    this.setState({obj: {name: `${this.state.categories[event.value].xCategory} vs ${this.state.categories[event.value].yCategory}`, x: plotItemOne, y: plotItemTwo, backgroundColor:[], xVals:[], yVals:[]}, chartShown: false});
 
     this.initializeChartComponents();
   }
@@ -65,7 +63,6 @@ class App extends Component {
     if(this.state.obj.x !== undefined && this.state.obj.y !== undefined)
     {
       this.getXandYValues()
-      console.log(this.state.chartShown)
     }
   }
 

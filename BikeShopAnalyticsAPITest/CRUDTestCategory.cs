@@ -41,6 +41,8 @@ namespace BikeShopAnalyticsAPITest
                 CategoryName = "Test Cat",
                 XCategory= "P1",
                 YCategory = "P2",
+                XProperties = "P1",
+                YProperties = "P2",
                 ChartType = "pie",
                 StartRange = new DateTime(),
                 EndRange = new DateTime()

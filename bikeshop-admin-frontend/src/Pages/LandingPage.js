@@ -1,6 +1,6 @@
 import React from 'react';
 import {Fade, Navbar, Nav } from 'react-bootstrap';
-import Create from './Create.jsx';
+import Create from './Create.js';
 import Update from './Update';
 import Delete from './Delete';
 
