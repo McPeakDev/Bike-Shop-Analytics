@@ -25,7 +25,6 @@ import { Button, Form, Col, Toast} from 'react-bootstrap';
         {
             let chart = {categoryName: `${this.state.xItem} vs ${this.state.yItem}` , xCategory: this.state.xItem, xProperties: this.state.xItem, yCategory: this.state.yItem, yProperties: this.state.xItem, chartType: this.state.chartType, startRange: new Date(), endRange: new Date()};
             let json = await this.api.post("category","create", chart);
-            console.log(json)
             this.setState({status: json["categoryID"] !== undefined});
             await this.props.updateLinks()
         }
