@@ -34,7 +34,6 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
         this.refs.categories.value = 0;
         await this.componentWillMount()
         await this.props.updateLinks()
-
     }
 
     changeCategory = (event) =>
