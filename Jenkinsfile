@@ -147,15 +147,15 @@ pipeline {
 
   }
   environment {
-    Home = '/tmp',
+    Home = '/tmp'
     GIT_COMMIT_SHORT = sh(
           script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
           returnStdout: true
-        ),
+        )
     GIT_COMMITER = sh(
           script: "git show -s --pretty=%an",
           returnStdout: true
-        ),
+        )
   }
   triggers {
     cron('0 8 * * *')
