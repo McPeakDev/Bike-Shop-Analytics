@@ -1,5 +1,12 @@
 pipeline {
   agent none
+  
+  environment {
+    Home = '/tmp'
+    GIT_COMMIT_SHORT = sh "git rev-parse --short ${GIT_COMMIT}"
+    GIT_COMMITER = sh "git show -s --pretty=%an"
+  }
+  
   stages {
   stage('Build') {
       parallel {
@@ -149,11 +156,6 @@ pipeline {
           discordSend description: "Branch master at ${GIT_COMMIT_SHORT} ${currentBuild.currentResult}", footer: "Commiter: ${GIT_COMMITER}", link: "https://bikeshopmonitoring.duckdns.org/jenkins/blue/organizations/jenkins/bike-shop-analytics/detail/master/${BUILD_NUMBER}/pipeline", result: currentBuild.currentResult, title: "Jenkins Pipeline", webhookURL: WebHook
         }
     }
-  }
-  environment {
-    Home = '/tmp'
-    GIT_COMMIT_SHORT = sh "git rev-parse --short ${GIT_COMMIT}"
-    GIT_COMMITER = sh "git show -s --pretty=%an"
   }
   triggers {
     cron('0 8 * * *')
