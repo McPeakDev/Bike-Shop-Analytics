@@ -139,23 +139,21 @@ pipeline {
                  echo "API Tested!"'''
         }
         mstest testResultsFile:"BikeShopAnalyticsAPITest/TestResults/*.trx", keepLongStdio: true
-        withCredentials([string(credentialsId: 'Discord', variable: 'WebHook')]) {
-          discordSend description: "Branch master at ${GIT_COMMIT_SHORT} ${currentBuild.currentResult}", footer: "Commiter: ${GIT_COMMITER}", link: "https://bikeshopmonitoring.duckdns.org/jenkins/blue/organizations/jenkins/bike-shop-analytics/detail/master/${BUILD_NUMBER}/pipeline", result: currentBuild.currentResult, title: "Jenkins Pipeline", webhookURL: WebHook
-        }
       }
     }
 
   }
+  post {
+    always {
+        withCredentials([string(credentialsId: 'Discord', variable: 'WebHook')]) {
+          discordSend description: "Branch master at ${GIT_COMMIT_SHORT} ${currentBuild.currentResult}", footer: "Commiter: ${GIT_COMMITER}", link: "https://bikeshopmonitoring.duckdns.org/jenkins/blue/organizations/jenkins/bike-shop-analytics/detail/master/${BUILD_NUMBER}/pipeline", result: currentBuild.currentResult, title: "Jenkins Pipeline", webhookURL: WebHook
+        }
+    }
+  }
   environment {
     Home = '/tmp'
-    GIT_COMMIT_SHORT = sh(
-          script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
-          returnStdout: true
-        )
-    GIT_COMMITER = sh(
-          script: "git show -s --pretty=%an",
-          returnStdout: true
-        )
+    GIT_COMMIT_SHORT = sh "printf \$(git rev-parse --short ${GIT_COMMIT})"
+    GIT_COMMITER = sh "git show -s --pretty=%an"
   }
   triggers {
     cron('0 8 * * *')
