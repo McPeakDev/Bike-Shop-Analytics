@@ -114,7 +114,8 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
                                         <option value="Bikes">Bikes</option>    
                                         <option value="SalesOrder">Sales Orders</option>    
                                         <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
-                                        <option value="PurchaseOrders">PurchaseOrders</option> 
+                                        <option value="PurchaseOrders">PurchaseOrders</option>
+                                        <option value="PurchaseItems">PurchaseItems</option> 
                                     </Form.Control>
                                 </Form.Group>
                                 <Form.Group  as={Col}>
@@ -124,6 +125,7 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
                                         <option value="SalesOrder">Sales Orders</option>    
                                         <option value="ManufacturingTransactions">Manufacturing Transactions</option>    
                                         <option value="PurchaseOrders">PurchaseOrders</option> 
+                                        <option value="PurchaseItems">PurchaseItems</option> 
                                     </Form.Control>
                                 </Form.Group>              
                                 <Form.Group  as={Col}>
@@ -132,7 +134,6 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
                                         <option value="Bar">Bar</option>    
                                         <option value="Line">Line</option>    
                                         <option value="Pie">Pie</option>    
-                                        <option value="Polar">Polar</option>   
                                     </Form.Control>
                                 </Form.Group>              
                                 <div className="text-center">
