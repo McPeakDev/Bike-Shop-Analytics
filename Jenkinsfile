@@ -139,6 +139,9 @@ pipeline {
                  echo "API Tested!"'''
         }
         mstest testResultsFile:"BikeShopAnalyticsAPITest/TestResults/*.trx", keepLongStdio: true
+        withCredentials([string(credentialsId: 'Discord', variable: 'WebHook')]) {
+          discordSend description: "Jenkins Pipeline", footer: "Footer Text", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: WebHook
+        }
       }
     }
 
