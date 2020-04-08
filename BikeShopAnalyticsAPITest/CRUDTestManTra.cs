@@ -19,16 +19,15 @@ namespace BikeShopAnalyticsAPITest
 
             Admin admin = new Admin()
             {
-
-                Email = "test@test.com",
-                FirstName = "Unit",
-                MiddleName = "Test",
-                LastName = "Code",
-                UserName = "ManTest"
+                Email = "BJB@etsu.edu",
+                FirstName = "Billy",
+                MiddleName = "Joe",
+                LastName = "Bob",
+                UserName = "BillyJB"
             };
 
             adminBundle.Admin = admin;
-            adminBundle.Password = "123456789!";
+            adminBundle.Password = "asdfghij";
 
             Credentials creds = new Credentials()
             {
@@ -45,17 +44,10 @@ namespace BikeShopAnalyticsAPITest
                 Reference = 42
             };
 
-            //Create Admin
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(adminBundle), UnicodeEncoding.UTF8, "application/json");
-
-            var result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/admin/create/", content);
-
-            Assert.Equal("OK", result.StatusCode.ToString());
-
             //Login as Admin
-            content = new StringContent(JsonConvert.SerializeObject(creds), UnicodeEncoding.UTF8, "application/json");
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(creds), UnicodeEncoding.UTF8, "application/json");
 
-            result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/admin/login/", content);
+            var result = await client.PostAsync("https://bikeshopmonitoring.duckdns.org/api/admin/login/", content);
 
             var auth = JsonConvert.DeserializeObject<Auth>(await result.Content.ReadAsStringAsync());
 
@@ -94,11 +86,6 @@ namespace BikeShopAnalyticsAPITest
 
             //Delete ManufacturerTransaction
             result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/manufacturertransaction/delete/{manu.ManTraID}");
-
-            Assert.Equal("OK", result.StatusCode.ToString());
-
-            //Delete Test Admin before finish
-            result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/admin/delete/{admin.AdminID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
         }
