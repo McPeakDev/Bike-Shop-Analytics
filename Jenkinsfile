@@ -3,8 +3,8 @@ pipeline {
   
   environment {
     Home = '/tmp'
-    GIT_COMMIT_SHORT = $(git rev-parse --short ${GIT_COMMIT})
-    GIT_COMMITER = $(git show -s --pretty=%an)
+    GIT_COMMIT_SHORT = sh(script:"git rev-parse --short ${GIT_COMMIT}", returnStdout: true)
+    GIT_COMMITER = sh(script:"git show -s --pretty=%an", returnStdout: true)
   }
   
   stages {
