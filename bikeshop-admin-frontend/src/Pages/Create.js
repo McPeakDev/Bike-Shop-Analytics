@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Form, Col, Toast} from 'react-bootstrap';
-import { MultiSelect } from 'react-bootstrap-multiselect';
  
  class Create extends React.Component
  {
@@ -10,7 +9,7 @@ import { MultiSelect } from 'react-bootstrap-multiselect';
     {
         super(props);
         this.api = this.props.api;
-        this.state = { data: this.props.data, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false};
+        this.state = { data: this.props.data, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false, xCategories: []};
     }
 
     async componentWillMount()
@@ -24,8 +23,9 @@ import { MultiSelect } from 'react-bootstrap-multiselect';
         event.preventDefault();
         if(event.value !== "")
         {
-            let chart = {categoryName: `${this.state.xItem} vs ${this.state.yItem}` , plotItemOne: this.state.xItem, plotItemTwo: this.state.yItem, chartType: this.state.chartType};
+            let chart = {categoryName: `${this.state.xItem} vs ${this.state.yItem}` , xCategory: this.state.xItem, xProperties: this.state.xItem, yCategory: this.state.yItem, yProperties: this.state.xItem, chartType: this.state.chartType, startRange: new Date(), endRange: new Date()};
             let json = await this.api.post("category","create", chart);
+            console.log(json)
             this.setState({status: json["categoryID"] !== undefined});
             await this.props.updateLinks()
         }
@@ -33,7 +33,7 @@ import { MultiSelect } from 'react-bootstrap-multiselect';
         {
             this.refs.categories.value = 0;
         }
-        await this.componentWillMount();
+        await this.componentWillMount()
     }
 
     resetForm = (event) =>
@@ -50,34 +50,22 @@ import { MultiSelect } from 'react-bootstrap-multiselect';
     {
         event.preventDefault();
         let val = event.target.value
-        this.setState({xItem: val, xCategories: this.getSubCategories((await this.api.get(val, "ReadAll"))[0])});
+        //let x = this.getSubCategories((await this.api.get(val, "ReadAll"))[0]);
+        //console.log(x);
+        this.setState({xItem: val});//, xCategories: x});
     }
 
     handlePlotItemXProperties = async (event) =>
     {
         event.preventDefault();
-        let options = event.target.options
-        let xcats = [];
-        let val = event.target.value
-        for (let i = 0; i < options.length; i++) 
-        {
-            if(options[i].value === val)
-            {
-                options[i].selected = "selected"
-                console.log(options[i].selected)
-            }
-            xcats.push(options[i])
-        }
-        this.setState({xCategories: xcats})
-        console.log(this.state.xCategories)
-        //await this.componentWillMount();
+        this.state.xCategories.push(event.target.value)
     }
 
     handlePlotItemY = async (event) =>
     {
         event.preventDefault();
         var val = event.target.value
-        this.setState({yItem: val, yCategories: this.getSubCategories((await this.api.get(val, "ReadAll"))[0])});
+        this.setState({yItem: val});// yCategories: this.getSubCategories((await this.api.get(val, "ReadAll"))[0])});
     }
 
     handlePlotItemYProperties = (event) =>
@@ -122,12 +110,13 @@ import { MultiSelect } from 'react-bootstrap-multiselect';
     {
         if(data !== null && data !== undefined)
         {
-            let i = 0;
             let keys = Object.keys(data);
-            return keys.map((key) => 
+            let values = keys.map((key) => 
             {
-                return <option value={i++} key={key}>{key.capitalize()}</option>
+                return <option value={key} key={key}>{key.capitalize()}</option>
             });
+
+            return values
         }
         return
 
@@ -160,12 +149,14 @@ import { MultiSelect } from 'react-bootstrap-multiselect';
                                     <option value="PurchaseItems">PurchaseItems</option> 
                                 </Form.Control>
                             </Form.Group>
-                            {this.state.xCategories !== undefined &&
+                            {/* {this.state.xCategories.length > 0 &&
                                 <Form.Group  as={Col}>
-                                 <Form.Label className="text-white">X Properies to Graph</Form.Label>
-                                    <MultiSelect  data={this.state.xCategoriesS} onChange={this.handlePlotItemXProperties}/>
+                                  <Form.Label className="text-white">Y Properies to Graph</Form.Label>
+                                    <Form.Control multiple as="select" onChange={this.handlePlotItemXProperties}>
+                                        {this.state.xCategories}
+                                    </Form.Control>
                                 </Form.Group>
-                            }
+                            } */}
                             <Form.Group  as={Col}>
                                 <Form.Label className="text-white">Category for the Y Plane</Form.Label>
                                 <Form.Control as="select" value={this.state.yItem} onChange={this.handlePlotItemY}>
@@ -176,14 +167,14 @@ import { MultiSelect } from 'react-bootstrap-multiselect';
                                     <option value="PurchaseItems">PurchaseItems</option> 
                                 </Form.Control>
                             </Form.Group>
-                            {this.state.yCategories !== undefined &&
+                            {/* {this.state.yCategories !== undefined &&
                                 <Form.Group  as={Col}>
                                  <Form.Label className="text-white">Y Properies to Graph</Form.Label>
                                     <Form.Control multiple as="select" value={this.state.yCategories} onChange={this.handlePlotItemYProperties}>
                                         {this.getSubCategories(this.state.yCategories)}
                                     </Form.Control>
                                 </Form.Group>
-                            }              
+                            }               */}
                             <Form.Group  as={Col}>
                                 <Form.Label className="text-white">Chart Type</Form.Label>
                                 <Form.Control as="select" value={this.state.chartType} onChange={this.handleChartType}>

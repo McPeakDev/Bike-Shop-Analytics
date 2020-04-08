@@ -17,7 +17,7 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
         let cats = await this.api.get("category", "readall")
         if(cats.length > 0)
         {
-            this.setState( {data: cats, categoryID: cats[0].categoryID, xItem: cats[0].plotItemOne, yItem: cats[0].plotItemTwo, chartType: cats[0].chartType})
+            this.setState( {data: cats, categoryID: cats[0].categoryID, xItem: cats[0].xCategory, yItem: cats[0].yCategory, chartType: cats[0].chartType})
         }
         else
         {
@@ -28,7 +28,7 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
     updateCategory = async (event) =>
     {   
         event.preventDefault();
-        let chart = {categoryID: this.state.categoryID, categoryName: `${this.state.xItem} vs ${this.state.yItem}` , plotItemOne: this.state.xItem, plotItemTwo: this.state.yItem, chartType: this.state.chartType}
+        let chart = {categoryID: this.state.categoryID, categoryName: `${this.state.xItem} vs ${this.state.yItem}` , xCategory: this.state.xItem, xProperties: this.state.xItem, yCategory: this.state.yItem, yProperties: this.state.xItem, chartType: this.state.chartType, startRange: this.state.startRange, endRange: this.state.endRange}
         let json = await this.api.update("category", chart)
         this.setState({status: json.includes("Success!")});
         this.refs.categories.value = 0;
@@ -40,7 +40,7 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
     changeCategory = (event) =>
     {
         event.preventDefault();
-        this.setState({categoryID: this.state.data[event.target.value].categoryID, xItem: this.state.data[event.target.value].plotItemOne, yItem: this.state.data[event.target.value].plotItemTwo, chartType: this.state.data[event.target.value].chartType});
+        this.setState({categoryID: this.state.data[event.target.value].categoryID, xItem: this.state.data[event.target.value].xCategory, yItem: this.state.data[event.target.value].yCategory, chartType: this.state.data[event.target.value].chartType, startRange: this.state.data[event.target.value].startRange, endRange: this.state.data[event.target.value].endRange});
     }
 
     resetForm = (event) =>
