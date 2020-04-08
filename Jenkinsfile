@@ -3,8 +3,8 @@ pipeline {
   
   environment {
     Home = '/tmp'
-    GIT_COMMIT_SHORT = sh "git rev-parse --short ${GIT_COMMIT}"
-    GIT_COMMITER = sh "git show -s --pretty=%an"
+    GIT_COMMIT_SHORT = $(git rev-parse --short ${GIT_COMMIT})
+    GIT_COMMITER = $(git show -s --pretty=%an)
   }
   
   stages {
@@ -153,7 +153,7 @@ pipeline {
   post {
     always {
         withCredentials([string(credentialsId: 'Discord', variable: 'WebHook')]) {
-          discordSend description: "Branch master at ${GIT_COMMIT_SHORT} ${currentBuild.currentResult}", footer: "Commiter: ${GIT_COMMITER}", link: "https://bikeshopmonitoring.duckdns.org/jenkins/blue/organizations/jenkins/bike-shop-analytics/detail/master/${BUILD_NUMBER}/pipeline", result: currentBuild.currentResult, title: "Jenkins Pipeline", webhookURL: WebHook
+          discordSend description: "Branch master at ${env.GIT_COMMIT_SHORT} ${currentBuild.currentResult}", footer: "Commiter: ${env.GIT_COMMITER}", link: "https://bikeshopmonitoring.duckdns.org/jenkins/blue/organizations/jenkins/bike-shop-analytics/detail/master/${BUILD_NUMBER}/pipeline", result: currentBuild.currentResult, title: "Jenkins Pipeline", webhookURL: WebHook
         }
     }
   }
