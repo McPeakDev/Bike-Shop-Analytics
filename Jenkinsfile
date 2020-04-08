@@ -151,7 +151,7 @@ pipeline {
   post {
     always {
         withCredentials([string(credentialsId: 'Discord', variable: 'WebHook')]) {
-          discordSend description: "Branch master at ${sh(script:"git rev-parse --short ${GIT_COMMIT}", returnStdout: true)} ${currentBuild.currentResult}", footer: "Commiter: ${sh(script:"git show -s --pretty=%an", returnStdout: true)}", link: "https://bikeshopmonitoring.duckdns.org/jenkins/blue/organizations/jenkins/bike-shop-analytics/detail/master/${BUILD_NUMBER}/pipeline", result: currentBuild.currentResult, title: "Jenkins Pipeline", webhookURL: WebHook
+          discordSend description: "Branch master at ${sh(script:"git rev-parse --short ${env.GIT_COMMIT}", returnStdout: true)} ${currentBuild.currentResult}", footer: "Commiter: ${sh(script:"git show -s --pretty=%an", returnStdout: true)}", link: "https://bikeshopmonitoring.duckdns.org/jenkins/blue/organizations/jenkins/bike-shop-analytics/detail/master/${BUILD_NUMBER}/pipeline", result: currentBuild.currentResult, title: "Jenkins Pipeline", webhookURL: WebHook
         }
     }
   }
