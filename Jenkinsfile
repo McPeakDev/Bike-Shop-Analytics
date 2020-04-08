@@ -152,7 +152,7 @@ pipeline {
   }
   environment {
     Home = '/tmp'
-    GIT_COMMIT_SHORT = sh "printf \$(git rev-parse --short ${GIT_COMMIT})"
+    GIT_COMMIT_SHORT = sh "git rev-parse --short ${GIT_COMMIT}"
     GIT_COMMITER = sh "git show -s --pretty=%an"
   }
   triggers {
