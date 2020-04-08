@@ -140,14 +140,22 @@ pipeline {
         }
         mstest testResultsFile:"BikeShopAnalyticsAPITest/TestResults/*.trx", keepLongStdio: true
         withCredentials([string(credentialsId: 'Discord', variable: 'WebHook')]) {
-          discordSend description: "Jenkins Pipeline", footer: "Footer Text", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: WebHook
+          discordSend description: "Branch master at ${GIT_COMMIT_SHORT} ${currentBuild.currentResult}", footer: "Commiter: ${GIT_COMMITER}", link: "https://bikeshopmonitoring.duckdns.org/jenkins/blue/organizations/jenkins/bike-shop-analytics/detail/master/${BUILD_NUMBER}/pipeline", result: currentBuild.currentResult, title: Jenkins Pipeline, webhookURL: WebHook
         }
       }
     }
 
   }
   environment {
-    Home = '/tmp'
+    Home = '/tmp',
+    GIT_COMMIT_SHORT = sh(
+          script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
+          returnStdout: true
+        ),
+    GIT_COMMITER = sh(
+          script: "git show -s --pretty=%an",
+          returnStdout: true
+        ),
   }
   triggers {
     cron('0 8 * * *')
