@@ -1,5 +1,5 @@
 import React from 'react';
-import {Toast, Button, Form, Col} from 'react-bootstrap';
+import {Alert, Toast, Button, Form, Col} from 'react-bootstrap';
  
  class Update extends React.Component
  {
@@ -9,7 +9,7 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
     {
         super(props);
         this.api = this.props.api;
-        this.state = { data: this.props.data, categoryID: null, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false, xProperties: [], yProperties: []}
+        this.state = { data: this.props.data, categoryID: null, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false, xProperties: [], yProperties: [], error: 200}
     }
 
     async componentWillMount()
@@ -32,45 +32,61 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
 
     updateCategory = async (event) =>
     {   
-        event.preventDefault();
+        if(this.state.xProperties.length > 0 && this.state.yProperties.length > 0)
+        {
+            event.preventDefault();
 
-        let x = ""
-        let y = ""
+            let x = ""
+            let y = ""
 
-        this.state.xProperties.forEach(prop => {
-            if(prop !== "")
-            {
-                x += `${prop},`
-            }
-        });
+            this.state.xProperties.forEach(prop => {
+                if(prop !== "")
+                {
+                    x += `${prop},`
+                }
+            });
 
-        this.state.yProperties.forEach(prop => {
-            if(prop !== "")
-            {
-                y += `${prop},`
-            }
-        });
+            this.state.yProperties.forEach(prop => {
+                if(prop !== "")
+                {
+                    y += `${prop},`
+                }
+            });
 
-        let chart = {categoryID: this.state.categoryID, categoryName: `${this.state.xItem} vs ${this.state.yItem}` , xCategory: this.state.xItem, xProperties: x, yCategory: this.state.yItem, yProperties: y, chartType: this.state.chartType, startRange: this.state.startRange, endRange: this.state.endRange}
-        let json = await this.api.update("category", chart)
-        this.setState({status: json.includes("Success!")});
-        this.refs.categories.value = 0;
-        await this.componentWillMount()
-        await this.props.updateLinks()
+            let chart = {categoryID: this.state.categoryID, categoryName: `${this.state.xItem} vs ${this.state.yItem}` , xCategory: this.state.xItem, xProperties: x, yCategory: this.state.yItem, yProperties: y, chartType: this.state.chartType, startRange: this.state.startRange, endRange: this.state.endRange}
+            let json = await this.api.update("category", chart)
+            this.setState({status: json.includes("Success!")});
+            this.refs.categories.value = 0;
+            await this.props.updateLinks()
+        }
+        else
+        {
+            this.setState({error: 400})
+        }
+        //await this.componentWillMount()
     }
 
     changeCategory = (event) =>
     {
         event.preventDefault();
-        this.setProperties(this.state.data[event.target.value].categoryID, this.state.data[event.target.value].xCategory, this.state.data[event.target.value].yCategory, this.state.data[event.target.value].chartType, this.state.data)
+        let xProps = this.state.data[event.target.value].xProperties.split(",")
+        xProps.pop();
+        let yProps = this.state.data[event.target.value].yProperties.split(",")
+        yProps.pop();
+        this.setProperties(this.state.data[event.target.value].categoryID, this.state.data[event.target.value].xCategory, xProps, this.state.data[event.target.value].yCategory, yProps, this.state.data[event.target.value].chartType, this.state.data)
+
     }
 
     resetForm = (event) =>
     {
         event.preventDefault();
-        this.refs.categories.value = 0;
-        this.setState({xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false})
-    }
+
+        let xProps = this.state.data[0].xProperties.split(",")
+        xProps.pop();
+        let yProps = this.state.data[0].yProperties.split(",")
+        yProps.pop();
+
+        this.setProperties(this.state.data[0].categoryID, this.state.data[0].xCategory, xProps, this.state.data[0].yCategory, yProps, this.state.data[0].chartType, this.state.data)}
 
     handlePlotItemX = (event) =>
     {
@@ -120,6 +136,15 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
     {
         event.preventDefault();
         this.setState({chartType: event.target.value});
+    }
+
+    displayerrors()
+    {
+        if(this.state.error !== 200)
+        {
+            return <Alert dismissible variant="danger" onClose={() => this.setState({error: 200})}>Form is not complete</Alert>
+        }
+
     }
 
     conditionalReturnCategories()
@@ -195,9 +220,11 @@ import {Toast, Button, Form, Col} from 'react-bootstrap';
 
     render()
     {
+        console.log(this.state)
         return (
             <div>
                 <div>
+                    {this.displayerrors()}
                     <div className="row">
                         <div className="col-md-3 col-md-offset-3"></div>
                         <div className="col-md-6 col-md-offset-3">

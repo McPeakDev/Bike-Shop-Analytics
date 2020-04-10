@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Col, Toast} from 'react-bootstrap';
+import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
  
  class Create extends React.Component
  {
@@ -9,7 +9,7 @@ import { Button, Form, Col, Toast} from 'react-bootstrap';
     {
         super(props);
         this.api = this.props.api;
-        this.state = { data: this.props.data, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false, xProperties: [], yProperties: []};
+        this.state = { data: this.props.data, error: 200, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false, xProperties: [], yProperties: []};
     }
 
     async componentWillMount()
@@ -20,40 +20,55 @@ import { Button, Form, Col, Toast} from 'react-bootstrap';
 
     createCategory = async (event) =>
     {
-        event.preventDefault();
-        if(event.value !== "")
+        if(this.state.xProperties.length > 0 && this.state.yProperties.length > 0)
         {
-            let x = ""
-            let y = ""
+            event.preventDefault();
+            if(event.value !== "")
+            {
+                let x = ""
+                let y = ""
 
-            this.state.xProperties.forEach(prop => {
-                if(prop !== "")
-                {
-                    x += `${prop},`
-                }
-            });
+                this.state.xProperties.forEach(prop => {
+                    if(prop !== "")
+                    {
+                        x += `${prop},`
+                    }
+                });
 
-            this.state.yProperties.forEach(prop => {
-                if(prop !== "")
-                {
-                    y += `${prop},`
-                }
-            });
+                this.state.yProperties.forEach(prop => {
+                    if(prop !== "")
+                    {
+                        y += `${prop},`
+                    }
+                });
 
-            let chart = {categoryName: `${this.state.xItem} vs ${this.state.yItem}`, xCategory: this.state.xItem, xProperties: x, yCategory: this.state.yItem, yProperties: y, chartType: this.state.chartType, startRange: new Date(), endRange: new Date()};
-            
-            let json = await this.api.post("category","create", chart);
-            
-            this.setState({status: json["categoryID"] !== undefined});
-            
-            await this.props.updateLinks()
+                let chart = {categoryName: `${this.state.xItem} vs ${this.state.yItem}`, xCategory: this.state.xItem, xProperties: x, yCategory: this.state.yItem, yProperties: y, chartType: this.state.chartType, startRange: new Date(), endRange: new Date()};
+                
+                await this.api.post("category","create", chart);
+                
+                this.setProperties("Bike", "Bike", "Bar", this.state.data)
+                
+                await this.props.updateLinks()
+            }
+            if(this.state.data > 0)
+            {
+                this.refs.categories.value = 0;
+            }
         }
-        if(this.state.data > 0)
+        else
         {
-            this.refs.categories.value = 0;
+            this.setState({error: 400})
         }
         await this.componentWillMount();
-        this.setProperties("Bike", "Bike", "Bar", this.state.data)
+    }
+
+    displayerrors()
+    {
+        if(this.state.error !== 200)
+        {
+            return <Alert dismissible variant="danger" onClose={() => this.setState({error: 200})}>Form is not complete</Alert>
+        }
+
     }
 
     resetForm = (event) =>
@@ -196,6 +211,7 @@ import { Button, Form, Col, Toast} from 'react-bootstrap';
     {
         return (
             <div>
+                {this.displayerrors()}
                 <div className="row">
                     <div className="col-md-3 col-md-offset-3"></div>
                     <div className="col-md-6 col-md-offset-3">
