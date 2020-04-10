@@ -39,21 +39,14 @@ import { Button, Form, Jumbotron, Alert, Fade } from 'react-bootstrap';
     {
         event.preventDefault();
         let json = await this.api.post("Admin", "Login", {username: this.state.userName, password: this.state.password});
-        if(json !== undefined)
+        this.api.setToken(json["token"]);
+        if(this.api.getToken() !== undefined)
         {
-            this.api.setToken(json["token"]);
-            if (this.api.Token != null)
-            {
-                this.setState({data: await this.api.get("category", "readall"), error: 200, formShown: false});
-            }
-            else
-            {
-                this.setState({error: json["status"]});
-            }
+            this.setState({data: await this.api.get("category", "readall"), error: 200, formShown: false});
         }
         else
         {
-            this.setState({error: 500});
+            this.setState({error: json["status"]});
         }
     }
 
@@ -63,6 +56,7 @@ import { Button, Form, Jumbotron, Alert, Fade } from 'react-bootstrap';
         {
             return <Alert dismissible variant="danger" onClose={() => this.setState({error: 200})}>Wrong Username / Password Combination</Alert>
         }
+
     }
 
     resetForm = (event) =>

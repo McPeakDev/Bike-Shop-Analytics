@@ -19,6 +19,7 @@ import Delete from './Delete';
      async componentDidMount()
     {
         let cats = await this.api.get("category", "readall");
+        console.log(cats)
         if(cats.length > 0)
         {
             this.setState( {data: cats, linkStatus: true});
