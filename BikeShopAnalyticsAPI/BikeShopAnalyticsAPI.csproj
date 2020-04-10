@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>BikeShopAnalyticsAPI</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20200303184435_CreateIdentitySchema.cs" />

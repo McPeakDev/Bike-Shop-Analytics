@@ -37,7 +37,7 @@ namespace BikeShopAnalyticsAPITest
 
             PurchaseItem pitem = new PurchaseItem()
             {
-                PurchaseID = -1
+                PurchaseItemID = -1
             };
 
             //Login as Admin
@@ -61,7 +61,7 @@ namespace BikeShopAnalyticsAPITest
             Assert.NotEqual("OK", result.StatusCode.ToString());
 
             //Read PurchaseItem
-            result = await client.GetAsync($"https://bikeshopmonitoring.duckdns.org/api/purchaseitem/read/{pitem.PurchaseID}");
+            result = await client.GetAsync($"https://bikeshopmonitoring.duckdns.org/api/purchaseitem/read/{pitem.PurchaseItemID}");
 
             Assert.NotEqual("OK", result.StatusCode.ToString());
 
@@ -75,7 +75,7 @@ namespace BikeShopAnalyticsAPITest
             Assert.NotEqual("OK", result.StatusCode.ToString());
 
             //Delete PurchaseItem
-            result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/purchaseitem/delete/{pitem.PurchaseID}");
+            result = await client.DeleteAsync($"https://bikeshopmonitoring.duckdns.org/api/purchaseitem/delete/{pitem.PurchaseItemID}");
 
             Assert.NotEqual("OK", result.StatusCode.ToString());
         }

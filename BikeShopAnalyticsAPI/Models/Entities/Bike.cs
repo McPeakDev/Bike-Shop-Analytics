@@ -17,7 +17,7 @@ namespace BikeShopAnalyticsAPI.Models.Entities
         public string Name { get; set; }
 
         [Required]
-        public decimal SalesPrice { get; set; }
+        public decimal SalePrice { get; set; }
 
         /*  TODO: Implement
         public ModelType Type { get; set; }

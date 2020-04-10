@@ -52,7 +52,7 @@ namespace BikeShopAnalyticsAPITest
             Bike bike = new Bike()
             {
                 Name = "Test Bike",
-                SalesPrice = 42
+                SalePrice = 42
             };
 
             //Login as Admin

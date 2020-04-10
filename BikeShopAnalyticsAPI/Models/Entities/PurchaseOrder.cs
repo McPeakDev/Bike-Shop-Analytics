@@ -11,7 +11,7 @@ namespace BikeShopAnalyticsAPI.Models.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PurchaseID { get; set; }
+        public int PurchaseOrderID { get; set; }
 
         [Required]
         public uint EmployeeID { get; set; }
@@ -54,7 +54,7 @@ namespace BikeShopAnalyticsAPI.Models.Entities
             if (obj is PurchaseOrder)
             {
                 var objPurchaseOrder = obj as PurchaseOrder;
-                if (objPurchaseOrder.PurchaseID == PurchaseID && objPurchaseOrder.ManuID == ManuID)
+                if (objPurchaseOrder.PurchaseOrderID == PurchaseOrderID && objPurchaseOrder.ManuID == ManuID)
                 {
                     return true;
                 }

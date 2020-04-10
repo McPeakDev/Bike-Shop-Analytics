@@ -29,7 +29,7 @@ namespace BikeShopAnalytics.Controllers
         {
             if(await _authRepo.Read(a => a.Token == token) != null)
             {
-                return await _purchaseItemRepo.Read(so => so.PurchaseID == purchaseID);
+                return await _purchaseItemRepo.Read(so => so.PurchaseItemID == purchaseID);
             }
             return StatusCode(403);
         }
@@ -69,7 +69,7 @@ namespace BikeShopAnalytics.Controllers
         {
             if(await _authRepo.Read(a => a.Token == token) != null)
             {
-                var purchaseItem = await _purchaseItemRepo.Read(a => a.PurchaseID == purchaseID);
+                var purchaseItem = await _purchaseItemRepo.Read(a => a.PurchaseItemID == purchaseID);
 
                 if (!(purchaseItem is null))
                 {
