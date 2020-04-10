@@ -9,7 +9,7 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
     {
         super(props);
         this.api = this.props.api;
-        this.state = { data: this.props.data, error: 200, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false, xProperties: [], yProperties: []};
+        this.state = { data: this.props.data, error: 200, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false, xProperty: "", yProperties: []};
     }
 
     async componentWillMount()
@@ -20,20 +20,12 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
 
     createCategory = async (event) =>
     {
-        if(this.state.xProperties.length > 0 && this.state.yProperties.length > 0)
+        if(this.state.xProperty !== ""  && this.state.yProperties.length > 0)
         {
             event.preventDefault();
             if(event.value !== "")
             {
-                let x = ""
                 let y = ""
-
-                this.state.xProperties.forEach(prop => {
-                    if(prop !== "")
-                    {
-                        x += `${prop},`
-                    }
-                });
 
                 this.state.yProperties.forEach(prop => {
                     if(prop !== "")
@@ -42,7 +34,7 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
                     }
                 });
 
-                let chart = {categoryName: `${this.state.xItem} vs ${this.state.yItem}`, xCategory: this.state.xItem, xProperties: x, yCategory: this.state.yItem, yProperties: y, chartType: this.state.chartType, startRange: new Date(), endRange: new Date()};
+                let chart = {categoryName: `${this.state.xItem} vs ${this.state.yItem}`, xCategory: this.state.xItem, xProperties: this.state.xProperty, yCategory: this.state.yItem, yProperties: y, chartType: this.state.chartType, startRange: new Date(), endRange: new Date()};
                 
                 await this.api.post("category","create", chart);
                 
@@ -57,6 +49,7 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
         }
         else
         {
+            console.log(this.state.xProperty)
             this.setState({error: 400})
         }
         await this.componentWillMount();
@@ -91,14 +84,9 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
     {
         event.preventDefault();
         let val = event.target.value
-        if(!this.state.xProperties.includes(val))
+        if(this.state.xProperty !== null)
         {
-            this.state.xProperties.push(val)
-        }
-        else
-        {
-            let index = this.state.xProperties.indexOf(val)
-            this.state.xProperties[index] = ""
+            this.setState({xProperty: val})
         }
     }
 
@@ -155,18 +143,23 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
             let yProps = Object.keys(yInfo[0]);
 
 
-            for (let i = 0; i < xProps.length; i++) 
-            {   
-                if(!(yProps.includes(xProps[i])))
-                {
-                        xProps[i] = undefined
+            if(xVal !== yVal)
+            {
+                for (let i = 0; i < yProps.length; i++) 
+                {   
+                    if((xProps.includes(yProps[i])))
+                    {
+                            yProps[i] = undefined
+                    }
                 }
             }
+
+            console.log(yProps)
             
             let xCategories = this.getSubCategories(xProps)
             let yCategories = this.getSubCategories(yProps)
 
-            this.setState({data: data, xItem: xVal, yItem: yVal, chartType: chart, xCategories: xCategories, yCategories: yCategories, xProperties: [], yProperties: []});
+            this.setState({data: data, xItem: xVal, yItem: yVal, chartType: chart, xCategories: xCategories, yCategories: yCategories, xProperty: xProps[0], yProperties: []});
         }
     }
 
@@ -237,8 +230,8 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
                             </Form.Group>
                             {this.state.xCategories !== undefined &&
                                 <Form.Group  as={Col}>
-                                  <Form.Label className="text-white">X Properties to Graph</Form.Label>
-                                    <Form.Control multiple as="select" value={this.state.xProperties} onChange={this.handlePlotItemXProperties}>
+                                  <Form.Label className="text-white">X Property to Graph</Form.Label>
+                                    <Form.Control as="select" value={this.state.xProperty} onChange={this.handlePlotItemXProperties}>
                                         {this.state.xCategories}
                                     </Form.Control>
                                 </Form.Group>
