@@ -228,7 +228,7 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
                                     <option value="PurchaseItem">Purchase Items</option> 
                                 </Form.Control>
                             </Form.Group>
-                            {this.state.xCategories !== undefined &&
+                            {this.state.xCategories !== undefined && //If xCategories is set
                                 <Form.Group  as={Col}>
                                   <Form.Label className="text-white">X Property to Graph</Form.Label>
                                     <Form.Control as="select" value={this.state.xProperty} onChange={this.handlePlotItemXProperties}>
@@ -246,7 +246,7 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
                                     <option value="PurchaseItem">Purchase Items</option> 
                                 </Form.Control>
                             </Form.Group>
-                            {this.state.yCategories !== undefined &&
+                            {this.state.yCategories !== undefined && //If yCategories is set
                                 <Form.Group  as={Col}>
                                  <Form.Label className="text-white">Y Properties to Graph</Form.Label>
                                     <Form.Control multiple as="select" value={this.state.yProperties} onChange={this.handlePlotItemYProperties}>
