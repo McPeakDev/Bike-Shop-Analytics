@@ -142,19 +142,33 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
             let xProps = Object.keys(xInfo[0]);
             let yProps = Object.keys(yInfo[0]);
 
+            let invalidMappings = []
 
             if(xVal !== yVal)
             {
                 for (let i = 0; i < yProps.length; i++) 
                 {   
-                    if((xProps.includes(yProps[i])))
+                    if(!(xProps.includes(yProps[i])))
                     {
-                            yProps[i] = undefined
+                        invalidMappings.push(yProps[i])
                     }
+                    else
+                    {
+                        if(!yProps[i].includes("Price"))
+                        {
+                            yProps[i] = undefined
+                        }
+                    }
+                }
+
+                if(invalidMappings.length === yProps.length)
+                {
+                    yProps = undefined
                 }
             }
 
-            console.log(yProps)
+
+            console.log(invalidMappings)
             
             let xCategories = this.getSubCategories(xProps)
             let yCategories = this.getSubCategories(yProps)

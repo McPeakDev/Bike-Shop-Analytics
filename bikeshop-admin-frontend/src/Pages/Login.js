@@ -39,14 +39,14 @@ import { Button, Form, Jumbotron, Alert, Fade } from 'react-bootstrap';
     {
         event.preventDefault();
         let json = await this.api.post("Admin", "Login", {username: this.state.userName, password: this.state.password});
-        this.api.setToken(json["token"]);
-        if(this.api.getToken() !== undefined)
+        if(json !== undefined)
         {
+            this.api.setToken(json["token"]);
             this.setState({data: await this.api.get("category", "readall"), error: 200, formShown: false});
         }
         else
         {
-            this.setState({error: json["status"]});
+            this.setState({error: 500});
         }
     }
 

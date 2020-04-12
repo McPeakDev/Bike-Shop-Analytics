@@ -151,25 +151,45 @@ import {Alert, Toast, Button, Form, Col} from 'react-bootstrap';
             let xAllProps = Object.keys(xInfo[0]);
             let yAllProps = Object.keys(yInfo[0]);
 
-            for (let i = 0; i < yProps.length; i++) 
-            {   
-                if((yProps.includes(xProp)))
+            if(xVal !== yVal)
+            {
+                let invalidMappings = []
+                    
+                for (let i = 0; i < yAllProps.length; i++) 
+                {   
+                    if(!(xAllProps.includes(yAllProps[i])))
+                    {
+                        invalidMappings.push(yAllProps[i])
+                    }
+                    else
+                    {
+                        if(!yAllProps[i].includes("Price"))
+                        {
+                            yAllProps[i] = undefined
+                        }
+                    }
+                }
+
+                console.log(invalidMappings)
+                console.log(yAllProps)
+
+                if(invalidMappings.length === yAllProps.length)
                 {
-                        yProps[i] = undefined
+                    yAllProps = undefined
                 }
             }
 
-            if(this.state.xItem === this.state.yItem)
+            if(xVal === yVal)
             {
                 for (let i = 0; i < yAllProps.length; i++) 
                 {   
-                    if((xAllProps.includes(yAllProps[i])))
+                    if((!xAllProps.includes(yAllProps[i])))
                     {
                             yAllProps[i] = undefined
                     }
                 }
             }
-            console.log(yAllProps)
+
 
             let xCategories = this.getSubCategories(xAllProps)
             let yCategories = this.getSubCategories(yAllProps)
