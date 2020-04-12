@@ -291,7 +291,6 @@ import {Alert, Toast, Button, Form, Col} from 'react-bootstrap';
                                     <Form.Control as="select" value={this.state.chartType} onChange={this.handleChartType}>
                                         <option value="Bar">Bar</option>    
                                         <option value="Line">Line</option>    
-                                        <option value="Pie">Pie</option>    
                                     </Form.Control>
                                 </Form.Group>             
                                     <div className="text-center">
