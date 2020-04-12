@@ -49,7 +49,6 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
         }
         else
         {
-            console.log(this.state.xProperty)
             this.setState({error: 400})
         }
         await this.componentWillMount();
@@ -168,7 +167,6 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
             }
 
 
-            console.log(invalidMappings)
             
             let xCategories = this.getSubCategories(xProps)
             let yCategories = this.getSubCategories(yProps)

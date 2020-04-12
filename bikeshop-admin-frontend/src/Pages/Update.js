@@ -170,9 +170,6 @@ import {Alert, Toast, Button, Form, Col} from 'react-bootstrap';
                     }
                 }
 
-                console.log(invalidMappings)
-                console.log(yAllProps)
-
                 if(invalidMappings.length === yAllProps.length)
                 {
                     yAllProps = undefined
@@ -232,7 +229,6 @@ import {Alert, Toast, Button, Form, Col} from 'react-bootstrap';
 
     render()
     {
-        console.log(this.state)
         return (
             <div>
                 <div>
