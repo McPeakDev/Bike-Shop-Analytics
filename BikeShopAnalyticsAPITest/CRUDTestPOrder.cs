@@ -71,7 +71,7 @@ namespace BikeShopAnalyticsAPITest
             pOrder.PurchaseOrderID = poRead.PurchaseOrderID;
 
             //Read PurchaseOrder
-            result = await client.GetAsync($"https://bikeshopmonitoring.duckdns.org/api/purchaseorder/read{pOrder.PurchaseOrderID}");
+            result = await client.GetAsync($"https://bikeshopmonitoring.duckdns.org/api/purchaseorder/read/{pOrder.PurchaseOrderID}");
 
             Assert.Equal("OK", result.StatusCode.ToString());
 
