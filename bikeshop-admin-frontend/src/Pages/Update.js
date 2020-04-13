@@ -53,7 +53,7 @@ import {Alert, Toast, Button, Form, Col} from 'react-bootstrap';
         {
             this.setState({error: 400})
         }
-        //await this.componentWillMount()
+        await this.componentWillMount()
     }
 
     changeCategory = (event) =>
@@ -72,12 +72,14 @@ import {Alert, Toast, Button, Form, Col} from 'react-bootstrap';
         let yProps = this.state.data[0].yProperties.split(",")
         yProps.pop();
 
+        this.refs.categories.selectedIndex = 0
+
         this.setProperties(this.state.data[0].categoryID, this.state.data[0].xCategory, this.state.data[0].xProperties, this.state.data[0].yCategory, yProps, this.state.data[0].chartType, this.state.data)}
 
     handlePlotItemX = (event) =>
     {
         event.preventDefault();
-        this.setProperties(this.state.categoryID, event.target.value, this.state.xProperty, this.state.yItem, this.state.yProperties, this.state.chartType, this.state.data)
+        this.setProperties(this.state.categoryID, event.target.value, "", this.state.yItem, [], this.state.chartType, this.state.data)
     }
 
     handlePlotItemXProperties = async (event) =>
@@ -93,7 +95,7 @@ import {Alert, Toast, Button, Form, Col} from 'react-bootstrap';
     handlePlotItemY = (event) =>
     {
         event.preventDefault();
-        this.setProperties(this.state.categoryID, this.state.xItem, this.state.xProperty, event.target.value, this.state.yProperties, this.state.chartType, this.state.data)
+        this.setProperties(this.state.categoryID, this.state.xItem, this.state.xProperty, event.target.value, [], this.state.chartType, this.state.data)
     }
 
     handlePlotItemYProperties = (event) =>
@@ -141,6 +143,9 @@ import {Alert, Toast, Button, Form, Col} from 'react-bootstrap';
 
     async setProperties(id, xVal, xProp, yVal, yProps, chart, data)
     {
+        let xVals = []
+        let yVals = []
+
         let xInfo = await this.api.get(xVal, "ReadAll")
         let yInfo = await this.api.get(yVal, "ReadAll")
 
@@ -161,12 +166,21 @@ import {Alert, Toast, Button, Form, Col} from 'react-bootstrap';
                     {
                         invalidMappings.push(yAllProps[i])
                     }
+                    else if(yAllProps[i].includes("discount"))
+                    {
+                        yAllProps[i] = undefined
+                    }
+                }
+
+                for (let i = 0; i < xAllProps.length; i++) 
+                {   
+                    if(xAllProps[i].includes("discount"))
+                    {
+                        xAllProps[i] = undefined
+                    }
                     else
                     {
-                        if(!yAllProps[i].includes("Price"))
-                        {
-                            yAllProps[i] = undefined
-                        }
+                        xVals.push(xAllProps[i])
                     }
                 }
 
@@ -191,7 +205,7 @@ import {Alert, Toast, Button, Form, Col} from 'react-bootstrap';
             let xCategories = this.getSubCategories(xAllProps)
             let yCategories = this.getSubCategories(yAllProps)
 
-            this.setState({categoryID: id, data: data, xItem: xVal, yItem: yVal, chartType: chart, xCategories: xCategories, yCategories: yCategories, xProperty: xProp, yProperties: yProps});
+            this.setState({categoryID: id, data: data, xItem: xVal, yItem: yVal, chartType: chart, xCategories: xCategories, yCategories: yCategories, xProperty: xProp === "" ? xAllProps[0] : xProp, yProperties: yProps});
         }
     }
 

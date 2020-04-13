@@ -1,6 +1,6 @@
 import React from 'react';
 import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
- 
+
  class Create extends React.Component
  {
     api = null;
@@ -9,7 +9,7 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
     {
         super(props);
         this.api = this.props.api;
-        this.state = { data: this.props.data, error: 200, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false, xProperty: "", yProperties: []};
+        this.state = { data: this.props.data, error: 200, xItem: "Bike", yItem: "Bike", chartType: "Bar", status: false, xProperty: "Name", yProperties: []};
     }
 
     async componentWillMount()
@@ -35,11 +35,13 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
                 });
 
                 let chart = {categoryName: `${this.state.xItem} vs ${this.state.yItem}`, xCategory: this.state.xItem, xProperties: this.state.xProperty, yCategory: this.state.yItem, yProperties: y, chartType: this.state.chartType, startRange: new Date(), endRange: new Date()};
-                
+
                 await this.api.post("category","create", chart);
-                
+
                 this.setProperties("Bike", "Bike", "Bar", this.state.data)
-                
+
+                this.setState({status: true})
+
                 await this.props.updateLinks()
             }
             if(this.state.data > 0)
@@ -109,7 +111,7 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
             let props =  this.state.yProperties;
             props[index] = ""
             this.setState({yProperties: props})
-        }        
+        }
     }
 
     handleChartType = (event) =>
@@ -137,41 +139,60 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
 
         if(xInfo !== undefined && yInfo !== undefined)
         {
+            let xVals = []
 
             let xProps = Object.keys(xInfo[0]);
             let yProps = Object.keys(yInfo[0]);
 
             let invalidMappings = []
+            let count = 0 
 
             if(xVal !== yVal)
             {
-                for (let i = 0; i < yProps.length; i++) 
-                {   
+                for (let i = 0; i < yProps.length; i++)
+                {
                     if(!(xProps.includes(yProps[i])))
                     {
                         invalidMappings.push(yProps[i])
                     }
+                    else if(yProps[i].includes("discount"))
+                    {
+                        yProps[i] = undefined
+                    }
+
+                }
+
+                for (let i = 0; i < xProps.length; i++)
+                {
+                    if(xProps[i].includes("discount"))
+                    {
+                        xProps[i] = undefined
+                    }
                     else
                     {
-                        if(!yProps[i].includes("Price"))
-                        {
-                            yProps[i] = undefined
-                        }
+                        xVals.push(xProps[i])
                     }
                 }
 
-                if(invalidMappings.length === yProps.length)
+                for (let i = yProps.length - 1; i > 0; i--) 
+                {
+                    if(yProps[i] === undefined)
+                    {
+                        count++
+                    }    
+                }
+
+                if(invalidMappings.length + count === yProps.length)
                 {
                     yProps = undefined
                 }
             }
 
 
-            
             let xCategories = this.getSubCategories(xProps)
             let yCategories = this.getSubCategories(yProps)
 
-            this.setState({data: data, xItem: xVal, yItem: yVal, chartType: chart, xCategories: xCategories, yCategories: yCategories, xProperty: xProps[0], yProperties: []});
+            this.setState({data: data, xItem: xVal, yItem: yVal, chartType: chart, xCategories: xCategories, yCategories: yCategories, xProperty: xVals[0], yProperties: []});
         }
     }
 
@@ -181,7 +202,7 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
         {
             let i = 0;
             let keys = Object.keys(data);
-            return keys.map((key) => 
+            return keys.map((key) =>
             {
                 let objKeys = Object.keys(data[key]);
                 return <option value={i++} key={key}>{data[key][objKeys[1]].capitalize()}</option>
@@ -195,7 +216,7 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
     {
         if(data !== null && data !== undefined)
         {
-            let values = data.map((key) => 
+            let values = data.map((key) =>
             {
                 if(key !== undefined)
                 {
@@ -224,7 +245,7 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
                         <h1 className="text-white text-center"> Create</h1>
                         <p className="text-white text-center">=============================</p>
                         {this.conditionalReturnCategories()}
-                    </div>           
+                    </div>
                 </div>
                 <div className="row">
                     <div className="col-md-4 col-md-offset-3"></div>
@@ -233,11 +254,11 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
                             <Form.Group  as={Col}>
                                 <Form.Label className="text-white">Category X</Form.Label>
                                 <Form.Control as="select" value={this.state.xItem} onChange={this.handlePlotItemX}>
-                                    <option value="Bike">Bikes</option>    
-                                    <option value="SalesOrder">Sales Orders</option>    
-                                    <option value="ManufacturerTransaction">Manufacturer Transactions</option>    
-                                    <option value="PurchaseOrder">Purchase Orders</option> 
-                                    <option value="PurchaseItem">Purchase Items</option> 
+                                    <option value="Bike">Bikes</option>
+                                    <option value="SalesOrder">Sales Orders</option>
+                                    <option value="ManufacturerTransaction">Manufacturer Transactions</option>
+                                    <option value="PurchaseOrder">Purchase Orders</option>
+                                    <option value="PurchaseItem">Purchase Items</option>
                                 </Form.Control>
                             </Form.Group>
                             {this.state.xCategories !== undefined && //If xCategories is set
@@ -251,11 +272,11 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
                             <Form.Group  as={Col}>
                                 <Form.Label className="text-white">Category Y</Form.Label>
                                 <Form.Control as="select" value={this.state.yItem} onChange={this.handlePlotItemY}>
-                                    <option value="Bike">Bikes</option>    
-                                    <option value="SalesOrder">Sales Orders</option>    
-                                    <option value="ManufacturerTransaction">Manufacturer Transactions</option>   
-                                    <option value="PurchaseOrder">Purchase Orders</option> 
-                                    <option value="PurchaseItem">Purchase Items</option> 
+                                    <option value="Bike">Bikes</option>
+                                    <option value="SalesOrder">Sales Orders</option>
+                                    <option value="ManufacturerTransaction">Manufacturer Transactions</option>
+                                    <option value="PurchaseOrder">Purchase Orders</option>
+                                    <option value="PurchaseItem">Purchase Items</option>
                                 </Form.Control>
                             </Form.Group>
                             {this.state.yCategories !== undefined && //If yCategories is set
@@ -265,15 +286,15 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
                                         {this.state.yCategories}
                                     </Form.Control>
                                 </Form.Group>
-                            }              
+                            }
                             <Form.Group  as={Col}>
                                 <Form.Label className="text-white">Chart Type</Form.Label>
                                 <Form.Control as="select" value={this.state.chartType} onChange={this.handleChartType}>
-                                    <option value="Bar">Bar</option>    
-                                    <option value="Line">Line</option>    
+                                    <option value="Bar">Bar</option>
+                                    <option value="Line">Line</option>
                                 </Form.Control>
                             </Form.Group>
-                            <div className="text-center">              
+                            <div className="text-center">
                                 <Button type="button"  onClick={this.createCategory}>Submit</Button>{' '}
                                 <Button type="button" variant="secondary"  onClick={this.resetForm}>Reset</Button>
                             </div>
