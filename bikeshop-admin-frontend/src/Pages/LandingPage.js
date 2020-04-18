@@ -25,7 +25,7 @@ import Delete from './Delete';
         }
         else
         {
-            this.setState( {data: cats, linkStatus: false});
+            this.setState( {data: cats, linkStatus: false, link: "Create"});
         }        
     }
 
@@ -70,42 +70,32 @@ import Delete from './Delete';
 
     render() 
     {
-        if(this.state.linkStatus)
-        {
-            return (
-                <div>
-                    {this.navbar()}
-                    <Fade onExited={() =>  this.setState({ link: this.state.nextLink, shown: true })} in={this.state.shown}>                
-                        <div>
-                            {this.state.link === "Create" &&
-                                    <div>
-                                        <Create api={this.api} updateLinks={this.updateData} data={this.state.data}/>
-                                    </div> 
-                            }
-                            {this.state.link === "Update" &&
-                                    <div>
-                                        <Update api={this.api} updateLinks={this.updateData} data={this.state.data}/>
-                                    </div> 
-                            }
-                            {this.state.link === "Delete" &&
-                                    <div>
-                                        <Delete api={this.api} updateLinks={this.updateData} data={this.state.data}/>
-                                    </div> 
-                            }
-                        </div>
-                    </Fade>
-                </div>
-            );
-        }
-        else
-        {
-            return (
-                <div>
-                    {this.navbar()}
-                    <Create api={this.api} updateLinks={this.updateData} data={this.state.data}/>
-                </div> 
-            );
-        }
+        return (
+            <div>
+                {this.navbar()}
+                <Fade onExited={() =>  this.setState({ link: this.state.nextLink, shown: true })} in={this.state.shown}>                
+                    <div>
+                        {this.state.link === "Create" &&
+                                <div>
+                                    <Create api={this.api} updateLinks={this.updateData} data={this.state.data}/>
+                                </div> 
+                        }
+                        {this.state.link === "Update" &&
+                                <div>
+                                    <Update api={this.api} updateLinks={this.updateData} data={this.state.data}/>
+                                </div> 
+                        }
+                        {this.state.link === "Delete" &&
+                                <div>
+                                    <Delete api={this.api} updateLinks={this.updateData} data={this.state.data}/>
+                                </div> 
+                        }
+                        }
+                    </div>
+                </Fade>
+            </div>
+        );
+
     }
 }
 
