@@ -156,6 +156,6 @@ pipeline {
     }
   }
   triggers {
-    cron('0 8 * * *')
+    pollSCM('H 12 * * *')
   }
 }
