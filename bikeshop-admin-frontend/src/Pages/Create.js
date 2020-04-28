@@ -155,7 +155,7 @@ import {Alert, Button, Form, Col, Toast} from 'react-bootstrap';
                     {
                         invalidMappings.push(yProps[i])
                     }
-                    else if(yProps[i].includes("discount"))
+                    else if(yProps[i].includes("discount") || (xVal.includes("Order") && yVal.includes("Order")))
                     {
                         yProps[i] = undefined
                     }

@@ -90,7 +90,6 @@ import Delete from './Delete';
                                     <Delete api={this.api} updateLinks={this.updateData} data={this.state.data}/>
                                 </div> 
                         }
-                        }
                     </div>
                 </Fade>
             </div>

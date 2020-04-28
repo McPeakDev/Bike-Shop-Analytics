@@ -162,6 +162,7 @@ import {Alert, Toast, Button, Form, Col} from 'react-bootstrap';
                     
                 for (let i = 0; i < yAllProps.length; i++) 
                 {   
+
                     if(!(xAllProps.includes(yAllProps[i])))
                     {
                         invalidMappings.push(yAllProps[i])
@@ -184,7 +185,7 @@ import {Alert, Toast, Button, Form, Col} from 'react-bootstrap';
                     }
                 }
 
-                if(invalidMappings.length === yAllProps.length)
+                if(invalidMappings.length === yAllProps.length ||  (xVal.includes("Order") && yVal.includes("Order")))
                 {
                     yAllProps = undefined
                 }
