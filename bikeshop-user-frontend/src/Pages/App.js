@@ -122,7 +122,7 @@ class App extends Component {
         mapProp = this.state.validMappings[i]
         break;
       }
-      else if(this.state.validMappings[i].includes("Date"))
+      if(this.state.validMappings[i].includes("Date"))
       {
         mapProp = this.state.validMappings[i]
         break;      
@@ -140,10 +140,13 @@ class App extends Component {
       {
         if(this.state.obj.y[j][mapProp] === this.state.obj.x[i][mapProp])
         {
-          if(mapProp.includes("Date"))
+          if(typeof(this.state.obj.x[i][xProp]) === typeof(""))
           {
-            let index = this.state.obj.x[i][xProp].indexOf("T")
-            xVals.push(this.state.obj.x[i][xProp].slice(0, index))
+            if(this.state.obj.x[i][xProp].includes("T"))
+            {
+              let index = this.state.obj.x[i][xProp].indexOf("T")
+              xVals.push(this.state.obj.x[i][xProp].slice(0, index))
+            }
           }
           else
           {
